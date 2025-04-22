@@ -9,4 +9,4 @@ assignees: gunhee0421
 
 ## 내용
 
-- 할일
+- [ ] 할일
