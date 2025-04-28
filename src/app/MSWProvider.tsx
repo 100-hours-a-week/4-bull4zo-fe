@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const initMsw = async () => {
   if (import.meta.env.DEV && import.meta.env.VITE_PUBLIC_MSW === 'enable') {
@@ -9,7 +9,7 @@ export const initMsw = async () => {
   }
 }
 
-export function MSWProvider({ children }: { children: React.ReactNode }) {
+export const MSWProvider = ({ children }: { children: React.ReactNode }) => {
   const [mswReady, setMswReady] = useState(false)
 
   useEffect(() => {

@@ -13,7 +13,7 @@ async function fetchUsers(): Promise<User[]> {
   return res.json()
 }
 
-export default function HomePage() {
+const HomePage = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['users'],
     queryFn: fetchUsers,
@@ -35,3 +35,4 @@ export default function HomePage() {
     </div>
   )
 }
+export default HomePage

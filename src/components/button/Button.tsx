@@ -1,5 +1,3 @@
-// src/components/Button.tsx
-
 interface ButtonProps {
   label: string
   onClick?: () => void
