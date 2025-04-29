@@ -12,7 +12,7 @@ const LoginPage = () => {
     if (isLogin) {
       router('/')
     }
-  }, [])
+  }, [router, isLogin])
 
   return (
     <div className="flex flex-col items-center justify-center h-[80vh] gap-[10vh]">
