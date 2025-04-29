@@ -1,6 +1,5 @@
-import { ClipboardPlus, Flame, User, Vote } from 'lucide-react'
-
 import React from 'react'
+import { ClipboardPlus, Flame, User, Vote } from 'lucide-react'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
 
 interface NavigationItemProps {

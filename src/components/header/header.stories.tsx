@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import { MemoryRouter } from 'react-router-dom'
-import Header from './header'
+import type { Meta, StoryObj } from '@storybook/react'
 import { useUserStore } from '@/stores/userStore'
+import Header from './header'
 
 const meta: Meta<typeof Header> = {
   title: 'Components/Header',

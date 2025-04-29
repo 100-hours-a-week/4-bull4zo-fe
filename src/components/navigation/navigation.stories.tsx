@@ -1,8 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react'
-
 import { MemoryRouter } from 'react-router-dom'
-import Navigation from './navigation'
+import type { Meta, StoryObj } from '@storybook/react'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
+import Navigation from './navigation'
 
 const meta: Meta<typeof Navigation> = {
   title: 'Components/Navigation',

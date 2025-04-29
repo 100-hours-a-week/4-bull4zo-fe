@@ -1,7 +1,7 @@
-import { Bell } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '../ui/button'
+import { Bell } from 'lucide-react'
 import { useUserStore } from '@/stores/userStore'
+import { Button } from '../ui/button'
 
 const Header = () => {
   const router = useNavigate()

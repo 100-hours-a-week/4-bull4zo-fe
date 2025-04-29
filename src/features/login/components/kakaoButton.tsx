@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import { axiosInstance } from '@/api/axios'
+import KAKAOICON from '@/assets/kako_icon.svg'
+import { useUserStore } from '@/stores/userStore'
 import { Icon } from '../../../components/Icon/icon'
 import { Button } from '../../../components/ui/button'
-import { useUserStore } from '@/stores/userStore'
-import KAKAOICON from '@/assets/kako_icon.svg'
-import { axiosInstance } from '@/api/axios'
 
 const KakaoButton = () => {
   const router = useNavigate()

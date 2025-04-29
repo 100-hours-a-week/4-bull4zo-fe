@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw'
+import { HttpResponse, http } from 'msw'
 
 export const authHandlers = [
   // 로그인 핸들러

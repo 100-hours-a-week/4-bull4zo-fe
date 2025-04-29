@@ -1,7 +1,7 @@
-import { Meta, StoryObj } from '@storybook/react'
 import { MemoryRouter } from 'react-router-dom'
-import KakaoButton from './kakaoButton'
+import { Meta, StoryObj } from '@storybook/react'
 import { useUserStore } from '@/stores/userStore'
+import KakaoButton from './kakaoButton'
 
 const meta: Meta<typeof KakaoButton> = {
   title: 'Components/KakaoButton',
