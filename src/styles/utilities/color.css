@@ -1,4 +1,7 @@
 @layer utilities {
+  .bg-gray {
+    background-color: #f2f2f2;
+  }
   .bg-primary {
     background-color: hsl(var(--primary));
   }

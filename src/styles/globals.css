@@ -4,6 +4,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
+  html,
+  body,
+  #root {
+    min-height: 100vh;
+  }
+
   :root {
     --primary: 45 100% 60%;
     --primary-foreground: 210 40% 98%;
