@@ -13,7 +13,7 @@ const KakaoButton = () => {
 
   const handleKakaoLogin = async () => {
     try {
-      const kakaoAuthCode = import.meta.env.VITE_KAKAO_AUTH_CODE
+      const kakaoAuthCode = import.meta.env.VITE_KAKAO_AUTH_CODE || ''
 
       const response = await axiosInstance.post('/api/v1/auth/login', {
         provider: 'kakao',
