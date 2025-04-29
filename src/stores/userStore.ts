@@ -1,13 +1,19 @@
 import { create } from 'zustand'
 
-interface UserState {
-  id: string
-  name: string
+interface UserStore {
+  isLogin: boolean
+  accessToken: string
+  // eslint-disable-next-line no-unused-vars
+  setIsLogin: (isLogin: boolean) => void
+  // eslint-disable-next-line no-unused-vars
+  setAccessToken: (token: string) => void
+  logout: () => void
 }
 
-export const useUserStore = create<UserState>((set) => ({
-  id: '1',
-  name: 'logan',
-  setId: (id: string) => set({ id }),
-  setName: (name: string) => set({ name }),
+export const useUserStore = create<UserStore>((set) => ({
+  isLogin: false,
+  accessToken: '',
+  setIsLogin: (isLogin) => set({ isLogin }),
+  setAccessToken: (token) => set({ accessToken: token }),
+  logout: () => set({ isLogin: false, accessToken: '' }),
 }))
