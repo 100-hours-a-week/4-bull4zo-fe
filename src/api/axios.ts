@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useUserStore } from '@/stores/userStore'
 
 // auth 인증 없이 사용하는 axios 인스턴스
 export const axiosInstance = axios.create({
@@ -16,6 +17,6 @@ export const authAxiosInstance = axios.create({
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    Authorization: `Bearer ${useUserStore.getState().accessToken}`,
   },
 })
