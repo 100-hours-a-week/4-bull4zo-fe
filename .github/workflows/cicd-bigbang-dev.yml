@@ -1,0 +1,59 @@
+name: React BigBang CI/CD - Dev V1
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build with Vite (with env)
+      run: pnpm build
+      env:
+        VITE_API_URL: ${{ secrets.VITE_API_URL }}
+        VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
+        VITE_KAKAO_AUTH_CLIENT_ID: ${{ secrets.VITE_KAKAO_AUTH_CLIENT_ID }}
+        VITE_KAKAO_AUTH_URL: ${{ secrets.VITE_KAKAO_AUTH_URL }}
+        VITE_PUBLIC_MSW: ${{ secrets.VITE_PUBLIC_MSW }}
+
+    - name: Decode GCP service account key
+      run: echo "${{ secrets.GCP_CICD_SSH_KEY }}" | base64 --decode > $HOME/gcp-key.json
+
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_CICD_SSH_KEY }}
+
+    - name: Setup gcloud CLI
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Deploy to GCS
+      run: |
+        gsutil -m rsync -r -d dist gs://${{ secrets.GCS_BUCKET_NAME }}
+        gsutil web set -m index.html -e index.html gs://${{ secrets.GCS_BUCKET_NAME }}
+
+    - name: Invalidate Cloud CDN cache
+      run: |
+        gcloud compute url-maps invalidate-cdn-cache ${{ secrets.GCP_URL_MAP_NAME }} \
+          --path "/*" \
+          --project=${{ secrets.GCP_PROJECT_ID }}

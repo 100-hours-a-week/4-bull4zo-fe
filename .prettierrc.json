@@ -5,5 +5,10 @@
   "singleQuote": true,
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
-  "printWidth": 100
+  "printWidth": 100,
+
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": ["^react", "^@?\\w", "^(@|@src)(/.*|$)", "^[./]"],
+  "importOrderSeparation": false,
+  "importOrderSortSpecifiers": true
 }

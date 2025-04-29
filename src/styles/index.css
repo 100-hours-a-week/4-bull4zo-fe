@@ -1,0 +1,9 @@
+@import '@/styles/utilities/color.css';
+@import '@/styles/utilities/font.css';
+@import '@/styles/utilities/shadow.css';
+
+@layer utilities {
+  .screen-minus-header-nav {
+    height: calc(100vh - 8.5rem);
+  }
+}

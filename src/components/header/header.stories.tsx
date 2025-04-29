@@ -1,0 +1,37 @@
+import { MemoryRouter } from 'react-router-dom'
+import type { Meta, StoryObj } from '@storybook/react'
+import { useUserStore } from '@/stores/userStore'
+import Header from './header'
+
+const meta: Meta<typeof Header> = {
+  title: 'Components/Header',
+  component: Header,
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
+}
+export default meta
+
+type Story = StoryObj<typeof Header>
+
+const mockLoginState = (isLogin: boolean) => {
+  useUserStore.setState({ isLogin })
+}
+
+export const LoggedOut: Story = {
+  render: () => {
+    mockLoginState(false)
+    return <Header />
+  },
+}
+
+export const LoggedIn: Story = {
+  render: () => {
+    mockLoginState(true)
+    return <Header />
+  },
+}
