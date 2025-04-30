@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 export const VoteCard = (props: Vote) => {
   return (
     <Card
-      className={`px-4 py-9 w-[20rem] h-[30rem] ${props.imageUrl === '' && 'bg-primary'} text-white rounded-[3.125rem] shadow-card`}
+      className={`px-4 py-9 w-[20rem] h-[30rem] ${props.imageUrl === '' ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
       style={
         props.imageUrl
           ? {
