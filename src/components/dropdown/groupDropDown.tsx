@@ -55,10 +55,6 @@ export const GroupDropDown = () => {
 
   const selectedGroup = groups.find((g) => g.groupId === selectedId)
 
-  useEffect(() => {
-    console.log(hasNextPage)
-  }, [hasNextPage])
-
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
