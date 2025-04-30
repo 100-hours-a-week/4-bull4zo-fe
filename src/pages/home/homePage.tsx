@@ -1,10 +1,9 @@
+import { GroupDropDown } from '@/components/dropdown/groupDropDown'
+import { useUserStore } from '@/stores/userStore'
+
 const HomePage = () => {
-  return (
-    <div>
-      <h1>Welcome to the Home Page</h1>
-      <p>This is the main content of the home page.</p>
-      <h1>Welcome to the Home Page</h1>
-    </div>
-  )
+  const isLogin = useUserStore((state) => state.isLogin)
+
+  return <article className="">{isLogin && <GroupDropDown />}</article>
 }
 export default HomePage
