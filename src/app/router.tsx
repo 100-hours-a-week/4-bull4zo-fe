@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
-import HomePage from '@/pages/home/homePage'
-import LoginPage from '@/pages/login/loginPage'
+import HomePage from '@/features/home/pages/homePage'
+import AuthCallback from '@/features/login/pages/authCallback'
+import LoginPage from '@/features/login/pages/loginPage'
 import { AppLayout } from './AppLayout'
 
 export const router = createBrowserRouter([
@@ -17,5 +18,9 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/auth/callback',
+    element: <AuthCallback />,
   },
 ])
