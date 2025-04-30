@@ -20,7 +20,7 @@ export const GroupDropDown = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      setGroups(data.pages.flatMap((page) => page.data.groups))
+      setGroups(data.pages.flatMap((page) => page.data?.groups ?? []))
     }
   }, [isSuccess, data, setGroups])
 

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { Group } from '@/api/services/user/group/model'
 
 interface GroupStore {
   selectedId: number
@@ -8,10 +9,6 @@ interface GroupStore {
   // eslint-disable-next-line no-unused-vars
   setGroups: (groups: Group[]) => void
   reset: () => void
-}
-interface Group {
-  groupId: number
-  name: string
 }
 
 export const useGroupStore = create<GroupStore>((set) => ({

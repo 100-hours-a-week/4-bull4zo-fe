@@ -1,11 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { MyGroupNamesResponse } from './model'
 import { groupService } from './service'
 
 export const useInfiniteGroupListQuery = (size: number = 10) => {
-  return useInfiniteQuery({
+  return useInfiniteQuery<MyGroupNamesResponse, AxiosError>({
     queryKey: ['groupNameList'],
-    queryFn: ({ pageParam = undefined }: { pageParam: string | undefined }) =>
-      groupService.groupNameList(size, pageParam),
+    queryFn: ({ pageParam }) => groupService.groupNameList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
       return lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined
     },
