@@ -1,6 +1,5 @@
 import { RouterProvider } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import '@/styles/index.css'
 import '@/styles/layout.css'
 import { AppProvider } from './app/AppProvider'
 import { router } from './app/router'

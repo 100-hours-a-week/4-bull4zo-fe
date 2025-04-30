@@ -17,6 +17,13 @@ export const authAxiosInstance = axios.create({
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${useUserStore.getState().accessToken}`,
   },
+})
+
+authAxiosInstance.interceptors.request.use((config) => {
+  const token = useUserStore.getState().accessToken
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
