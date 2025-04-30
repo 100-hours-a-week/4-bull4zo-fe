@@ -4,6 +4,6 @@ import { useUserStore } from '@/stores/userStore'
 const HomePage = () => {
   const isLogin = useUserStore((state) => state.isLogin)
 
-  return <article className="">{isLogin && <GroupDropDown />}</article>
+  return <article className="px-5 py-4">{isLogin && <GroupDropDown />}</article>
 }
 export default HomePage
