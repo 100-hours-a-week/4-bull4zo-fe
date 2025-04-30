@@ -6,7 +6,7 @@ export const AppLayout = () => {
   return (
     <>
       <Header />
-      <main className="pb-[4.25rem]">
+      <main className="py-[4.25rem]">
         <Outlet />
       </main>
       <Navigation />
