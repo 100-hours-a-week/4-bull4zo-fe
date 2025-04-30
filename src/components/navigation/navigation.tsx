@@ -37,7 +37,7 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
 
 const Navigation = () => {
   return (
-    <nav className="flex flex-row items-center justify-around w-full h-[4rem] absolute bottom-0 left-0">
+    <nav className="flex flex-row items-center justify-around max-w-[575px] w-full h-[4rem] fixed bottom-0 z-30 bg-white">
       <NavigationItem icon={<Flame />} label="home" />
       <NavigationItem icon={<ClipboardPlus />} label="make" />
       <NavigationItem icon={<Vote />} label="research" />
