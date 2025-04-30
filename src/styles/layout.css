@@ -1,10 +1,12 @@
 html {
   background-color: rgb(227, 227, 227);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 body {
-  margin: auto;
   max-width: 575px;
-  background-color: white;
+  width: 100%;
   font-family: 'PyeojinGothic';
-  position: relative;
+  background-color: white;
 }
