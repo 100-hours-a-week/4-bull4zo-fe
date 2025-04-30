@@ -2,6 +2,8 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 interface IconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  src: string
+  alt: string
   size?: number | string // size를 숫자(px) 또는 문자열(예: 2rem)로 받음
 }
 
