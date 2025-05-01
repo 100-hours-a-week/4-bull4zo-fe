@@ -29,7 +29,7 @@ const HomePage = () => {
     return <Modal />
   }
   // 로딩 카드
-  if (isLogin || isFetching) {
+  if (isFetching) {
     return (
       <div className="flex h-full justify-center items-center">
         <LoadingCard />
