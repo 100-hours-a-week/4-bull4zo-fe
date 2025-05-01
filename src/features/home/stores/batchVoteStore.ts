@@ -1,18 +1,18 @@
 import { create } from 'zustand'
 
-type VoteChoice = '찬성' | '반대' | '기권'
+export type VoteChoice = '찬성' | '반대' | '기권' | null
 
-interface Vote {
+export interface VoteStore {
   voteId: number
   voteChoice: VoteChoice
 }
 interface VoteBatchStore {
   groupId: number
-  selectVote: Vote[]
+  selectVote: VoteStore[]
   // eslint-disable-next-line no-unused-vars
   setGroupId: (id: number) => void
   // eslint-disable-next-line no-unused-vars
-  addVote: (vote: Vote) => void
+  addVote: (vote: VoteStore) => void
   resetVotes: () => void
 }
 
