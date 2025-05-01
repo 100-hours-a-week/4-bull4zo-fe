@@ -2,7 +2,7 @@ import { HttpResponse, http } from 'msw'
 
 export const authHandlers = [
   // 로그인 핸들러
-  http.post('/api/v1/auth/login', async ({ request }) => {
+  http.post('/api/v1/auth/login/oauth', async ({ request }) => {
     const { provider, code } = (await request.json()) as { provider: string; code: string }
 
     if (provider === 'kakao' && code) {

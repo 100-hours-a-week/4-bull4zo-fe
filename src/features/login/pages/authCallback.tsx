@@ -23,7 +23,7 @@ const AuthCallback = () => {
 
   const handleKakaoLogin = async (kakaoAuthCode: string) => {
     try {
-      const response = await axiosInstance.post('/api/v1/auth/login', {
+      const response = await axiosInstance.post('/api/v1/auth/login/oauth', {
         provider: 'kakao',
         code: kakaoAuthCode,
       })
