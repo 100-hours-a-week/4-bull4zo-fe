@@ -17,7 +17,7 @@ const HomePage = () => {
 
   const { isOpen, openModal } = useModalStore()
 
-  const FetchNextPage = () => {
+  const customFetchNextPage = () => {
     if (!isLogin) {
       openModal(<NoVoteAvailAbleModal />)
       return
@@ -55,7 +55,7 @@ const HomePage = () => {
         <div className=" w-full h-full">
           <VoteSwiperFramer
             pages={data.pages}
-            fetchNextPage={FetchNextPage}
+            fetchNextPage={customFetchNextPage}
             hasNextPage={hasNextPage}
             isFetchingNextPage={isFetchingNextPage}
           />
