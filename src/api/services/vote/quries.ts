@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { DuringVoteDataResponse, UseInfiniteVotesQueryOptions } from './model'
 import { voteService } from './service'
@@ -23,5 +23,10 @@ export const useInfiniteVotesQuery = ({
       lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined,
     staleTime: 1000 * 60 * 5,
     initialPageParam: undefined,
+  })
+}
+export const useSubmitVoteMutation = () => {
+  return useMutation({
+    mutationFn: voteService.submitVote,
   })
 }

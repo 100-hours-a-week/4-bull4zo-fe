@@ -32,3 +32,8 @@ export interface UseInfiniteVotesRequest {
   size?: number
   cursor: string | undefined
 }
+
+export interface submitVoteRequest {
+  voteId: number
+  userResponse: number
+}

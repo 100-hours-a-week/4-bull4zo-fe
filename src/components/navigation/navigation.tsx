@@ -1,6 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ClipboardPlus, Flame, User, Vote } from 'lucide-react'
+import { useModalStore } from '@/stores/modalStore'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
+import { useUserStore } from '@/stores/userStore'
+import { LoginRequiredCard } from '../modal/loginRequiredModal'
 
 interface NavigationItemProps {
   icon: React.ReactNode
@@ -10,12 +14,25 @@ interface NavigationItemProps {
 const NavigationItem = ({ icon, label }: NavigationItemProps) => {
   const tab = useNavigationStore((state) => state.tab)
   const setTab = useNavigationStore((state) => state.setTab)
+  const navigation = useNavigate()
+
+  const { isLogin } = useUserStore()
+  const { openModal } = useModalStore()
 
   const selected = tab === label
 
+  const onClick = () => {
+    if (!isLogin) {
+      openModal(<LoginRequiredCard />)
+    } else {
+      setTab(label)
+      navigation(`/${label}`)
+    }
+  }
+
   return (
     <button
-      onClick={() => setTab(label)}
+      onClick={onClick}
       className="flex flex-col items-center justify-center flex-1 gap-3 my-3"
     >
       <div className="relative flex items-center justify-center">
