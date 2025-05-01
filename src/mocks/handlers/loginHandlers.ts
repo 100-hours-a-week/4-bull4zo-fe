@@ -5,7 +5,7 @@ export const authHandlers = [
   http.post('/api/v1/auth/login', async ({ request }) => {
     const { provider, code } = (await request.json()) as { provider: string; code: string }
 
-    if (provider === 'kakao' && code === 'kakao-auth-code') {
+    if (provider === 'kakao' && code) {
       return HttpResponse.json(
         {
           message: 'SUCCESS',
