@@ -13,7 +13,6 @@ interface NavigationItemProps {
 
 const NavigationItem = ({ icon, label }: NavigationItemProps) => {
   const tab = useNavigationStore((state) => state.tab)
-  const setTab = useNavigationStore((state) => state.setTab)
   const navigation = useNavigate()
 
   const { isLogin } = useUserStore()
@@ -25,12 +24,7 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
     if (!isLogin) {
       openModal(<LoginRequiredCard />)
     } else {
-      setTab(label)
-      if (label === 'home') {
-        navigation('/')
-      } else {
-        navigation(`/${label}`)
-      }
+      navigation(`/${label}`)
     }
   }
 
@@ -62,7 +56,7 @@ const Navigation = () => {
       <NavigationItem icon={<Flame />} label="home" />
       <NavigationItem icon={<ClipboardPlus />} label="make" />
       <NavigationItem icon={<Vote />} label="research" />
-      <NavigationItem icon={<User />} label="my" />
+      <NavigationItem icon={<User />} label="user" />
     </nav>
   )
 }
