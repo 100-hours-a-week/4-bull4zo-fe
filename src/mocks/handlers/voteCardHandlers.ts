@@ -218,4 +218,15 @@ export const votesHandlers = [
       { status: 200 },
     )
   }),
+  http.post(`api/v1/votes`, async ({ request }) => {
+    const body = await request.json()
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: body,
+      },
+      { status: 200 },
+    )
+  }),
 ]
