@@ -26,14 +26,18 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
       openModal(<LoginRequiredCard />)
     } else {
       setTab(label)
-      navigation(`/${label}`)
+      if (label === 'home') {
+        navigation('/')
+      } else {
+        navigation(`/${label}`)
+      }
     }
   }
 
   return (
     <button
       onClick={onClick}
-      className="flex flex-col items-center justify-center flex-1 gap-3 my-3"
+      className="flex flex-col items-center cursor-pointer justify-center flex-1 gap-3 my-3"
     >
       <div className="relative flex items-center justify-center">
         <div

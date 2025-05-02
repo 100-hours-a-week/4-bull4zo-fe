@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useUserInfoQuery } from '@/api/services/user/quries'
 import { useInfiniteVotesQuery } from '@/api/services/vote/quries'
 import { VoteNoMoreCard } from '@/components/card/voteNoMoreCard'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
@@ -10,10 +12,11 @@ import { useUserStore } from '@/stores/userStore'
 import VoteSwiperFramer from '../components/voteSwiper_framer'
 
 const HomePage = () => {
-  const isLogin = useUserStore((state) => state.isLogin)
+  const { isLogin, setNickName } = useUserStore()
   const groupId = useGroupStore((state) => state.selectedId)
   const { data, isSuccess, isFetching, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteVotesQuery({ groupId, isLogin })
+  const { data: user } = useUserInfoQuery()
 
   const { isOpen, openModal } = useModalStore()
 
@@ -24,6 +27,10 @@ const HomePage = () => {
     }
     fetchNextPage()
   }
+
+  useEffect(() => {
+    setNickName(user?.data?.nickname || '')
+  }, [user, setNickName])
 
   if (isOpen) {
     return <Modal />

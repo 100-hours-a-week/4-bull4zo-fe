@@ -37,3 +37,10 @@ export interface submitVoteRequest {
   voteId: number
   userResponse: number
 }
+
+export interface CreateVotePayload {
+  groupId: number
+  content: string
+  imageUrl?: string
+  closedAt: string
+}

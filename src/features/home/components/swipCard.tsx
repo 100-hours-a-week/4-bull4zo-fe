@@ -86,7 +86,7 @@ const SwipeCard = ({
       drag={isTop ? true : false}
       dragConstraints={false}
       dragMomentum={false}
-      onDragEnd={(event, info) => {
+      onDragEnd={(_event, info) => {
         if (!isTop) return
 
         const offsetX = info.offset.x
