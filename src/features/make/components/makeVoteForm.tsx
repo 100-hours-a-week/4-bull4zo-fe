@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { VoteCardPreviewModal } from '@/features/make/components/voteCardPreviewModal'
-import { getGlobalTime2LocalTime } from '@/lib/globalTime2LocalTime'
+import { convertGlobalTime2LocalTime } from '@/lib/globalTime2LocalTime'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
@@ -29,7 +29,7 @@ export const MakeVoteForm = () => {
       groupId: selectedId,
       content: '',
       image: undefined,
-      closedAt: getGlobalTime2LocalTime({ days: 1 }),
+      closedAt: convertGlobalTime2LocalTime({ days: 1 }),
     },
     mode: 'onChange',
   })
