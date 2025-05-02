@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import HomePage from '@/features/home/pages/homePage'
 import AuthCallback from '@/features/login/pages/authCallback'
 import LoginPage from '@/features/login/pages/loginPage'
+import MakePage from '@/features/make/pages/makePage'
 import { AppLayout } from './AppLayout'
 
 export const router = createBrowserRouter([
@@ -12,6 +13,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: '/make',
+        element: <MakePage />,
       },
     ],
   },
