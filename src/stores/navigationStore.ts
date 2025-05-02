@@ -1,16 +1,37 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
-export type Tab = 'home' | 'make' | 'research' | 'my'
+export type Tab = 'home' | 'make' | 'research' | 'user'
 
 interface NavigationStore {
   tab: Tab
   // eslint-disable-next-line no-unused-vars
-  setTab: (tab: Tab) => void
+  setTab: (path: string) => void
   reset: () => void
 }
 
-export const useNavigationStore = create<NavigationStore>((set) => ({
-  tab: 'home',
-  setTab: (tab) => set({ tab }),
-  reset: () => set({ tab: 'home' }),
-}))
+export const useNavigationStore = create<NavigationStore>()(
+  persist(
+    (set) => ({
+      tab: 'home',
+      setTab: (path) => {
+        const pathToTab: Record<string, Tab> = {
+          '/home': 'home',
+          '/make': 'make',
+          '/research': 'research',
+          '/user': 'user',
+        }
+        const matchingRoute = Object.keys(pathToTab).find((route) => path.startsWith(route))
+        const tab = matchingRoute ? pathToTab[matchingRoute] : 'home'
+
+        console.log(path, matchingRoute, tab)
+
+        set({ tab })
+      },
+      reset: () => set({ tab: 'home' }),
+    }),
+    {
+      name: 'home',
+    },
+  ),
+)
