@@ -10,7 +10,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (isLogin) {
-      router('/')
+      router('/home')
     }
   }, [router, isLogin])
 

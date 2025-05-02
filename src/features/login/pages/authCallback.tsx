@@ -33,7 +33,7 @@ const AuthCallback = () => {
       setIsLogin(true)
       setAccessToken(accessToken)
 
-      navigate('/')
+      navigate('/home')
     } catch (e) {
       const message = e instanceof Error ? e.message : '로그인에 실패했습니다.'
       toast('로그인에 실패했습니다. 다시 시도해주세요!', {
@@ -48,7 +48,7 @@ const AuthCallback = () => {
     }
   }
 
-  return <div>로딩 중...</div>
+  return <div></div>
 }
 
 export default AuthCallback

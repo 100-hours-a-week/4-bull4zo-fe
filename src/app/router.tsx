@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { Navigate, createBrowserRouter } from 'react-router-dom'
 import HomePage from '@/features/home/pages/homePage'
 import AuthCallback from '@/features/login/pages/authCallback'
 import LoginPage from '@/features/login/pages/loginPage'
@@ -12,6 +12,14 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
+        element: <Navigate to="/home" replace />,
+      },
+      {
+        path: '/auth/callback',
+        element: <AuthCallback />,
+      },
+      {
+        path: '/home',
         element: <HomePage />,
       },
       {
@@ -23,9 +31,5 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
-  },
-  {
-    path: '/auth/callback',
-    element: <AuthCallback />,
   },
 ])
