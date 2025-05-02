@@ -24,7 +24,7 @@ export const useNavigationStore = create<NavigationStore>()(
         const matchingRoute = Object.keys(pathToTab).find((route) => path.startsWith(route))
         const tab = matchingRoute ? pathToTab[matchingRoute] : 'home'
 
-        console.log(path, matchingRoute, tab)
+        // Debugging log removed
 
         set({ tab })
       },
