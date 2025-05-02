@@ -1,5 +1,10 @@
 import { authAxiosInstance } from '@/api/axios'
-import { DuringVoteDataResponse, UseInfiniteVotesRequest, submitVoteRequest } from './model'
+import {
+  CreateVotePayload,
+  DuringVoteDataResponse,
+  UseInfiniteVotesRequest,
+  submitVoteRequest,
+} from './model'
 
 export const voteService = {
   async getVotes({
@@ -16,7 +21,13 @@ export const voteService = {
     return (await authAxiosInstance.get(`/api/v1/votes?${params.toString()}`)).data
   },
   async submitVote({ voteId, userResponse }: submitVoteRequest) {
-    const response = await authAxiosInstance.post(`/api/v1/votes/${voteId}/submit`, { userResponse })
+    const response = await authAxiosInstance.post(`/api/v1/votes/${voteId}/submit`, {
+      userResponse,
+    })
     return response.data
+  },
+  async createVote(payload: CreateVotePayload) {
+    const response = await authAxiosInstance.post(`/api/v1/votes`, payload)
+    return response.data.data as { voteId: number }
   },
 }

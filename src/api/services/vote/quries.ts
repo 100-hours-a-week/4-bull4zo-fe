@@ -3,6 +3,7 @@ import { AxiosError } from 'axios'
 import { DuringVoteDataResponse, UseInfiniteVotesQueryOptions } from './model'
 import { voteService } from './service'
 
+// 진행중인 투표 무한 스크롤
 export const useInfiniteVotesQuery = ({
   groupId,
   size = 10,
@@ -25,8 +26,15 @@ export const useInfiniteVotesQuery = ({
     initialPageParam: undefined,
   })
 }
+// 투표 참여
 export const useSubmitVoteMutation = () => {
   return useMutation({
     mutationFn: voteService.submitVote,
+  })
+}
+// 투표 생성
+export const useCreateVoteMutation = () => {
+  return useMutation({
+    mutationFn: voteService.createVote,
   })
 }
