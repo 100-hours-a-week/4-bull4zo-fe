@@ -3,8 +3,8 @@ import { MakeVoteForm } from '../components/makeVoteForm'
 
 const MakePage = () => {
   return (
-    <article className="overflow-hidden h-full w-full relative">
-      <div className="absolute z-10 left-4 top-3">
+    <article className="h-full w-full relative overflow-y-auto">
+      <div className="pl-4 py-3">
         <GroupDropDown />
       </div>
       <MakeVoteForm />

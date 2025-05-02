@@ -61,7 +61,7 @@ export const MakeVoteForm = () => {
   }
 
   return (
-    <div className="h-full w-full px-5 pt-15 overflow-y-auto">
+    <div className="h-[90%] w-full px-5">
       <Form {...form}>
         <form
           className="flex flex-col justify-around h-full"
