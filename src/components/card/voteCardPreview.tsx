@@ -1,0 +1,70 @@
+import { useEffect, useState } from 'react'
+import META_ICON from '@/assets/meta_icon.png'
+import formatTime from '@/lib/formatTime'
+import { useUserStore } from '@/stores/userStore'
+import { Icon } from '../Icon/icon'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+
+type Props = {
+  content: string
+  image?: File
+  closedAt: string
+}
+
+const usePreviewImageUrl = (file?: File) => {
+  const [url, setUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!file) {
+      setUrl(null)
+      return
+    }
+    const objectUrl = URL.createObjectURL(file)
+    setUrl(objectUrl)
+
+    return () => URL.revokeObjectURL(objectUrl)
+  }, [file])
+
+  return url
+}
+
+export const VoteCardPreview = ({ content, image, closedAt }: Props) => {
+  const { nickname } = useUserStore()
+  const imageUrl = usePreviewImageUrl(image)
+  const [isImageValid, setIsImageValid] = useState(false)
+
+  useEffect(() => {
+    if (!imageUrl) return setIsImageValid(false)
+
+    const img = new Image()
+    img.src = imageUrl
+    img.onload = () => setIsImageValid(true)
+    img.onerror = () => setIsImageValid(false)
+  }, [imageUrl])
+
+  return (
+    <Card
+      className={`px-4 py-9 w-[20rem] h-[30rem] ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
+      style={
+        isImageValid
+          ? {
+              backgroundImage: `url(${imageUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }
+          : undefined
+      }
+    >
+      <CardHeader className="flex flex-row justify-between px-0">
+        <div className="flex flex-row gap-1">
+          <CardTitle className="font-unbounded text-2xl">{nickname}</CardTitle>
+          <Icon src={META_ICON} alt="공인 뱃지" size={20} />
+        </div>
+        <span className="text-xs pr-2">{formatTime(closedAt)}</span>
+      </CardHeader>
+      <CardContent className="flex justify-center items-center h-full overflow-y-auto">
+        <p className="text-2xl">{content || '내용을 입력하세요.'}</p>
+      </CardContent>
+    </Card>
+  )
+}
