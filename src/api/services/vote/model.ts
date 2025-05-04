@@ -44,3 +44,35 @@ export interface CreateVotePayload {
   imageUrl?: string
   closedAt: string
 }
+
+export interface ParticipatedVotesQueryOptions {
+  groupId: number | undefined
+  size?: number
+}
+
+export interface ParticipatedVoteList {
+  votes: ParticipatedVote[]
+  nextCursor: string
+  hasNext: boolean
+  size: number
+}
+
+export interface ParticipatedVote {
+  voteId: number
+  groupId: number
+  content: string
+  voteStatus?: ParticipatedVoteStatus
+  createdAt: string
+  closedAt: string
+  results: ParticipatedVoteResult[]
+}
+
+export type ParticipatedVoteStatus = 'OPEN' | 'CLOSED' | 'REJECTED' | 'PENDING'
+
+export interface ParticipatedVoteResult {
+  optionNumber: number
+  count: number
+  ratio: number // 0 ~ 100
+}
+
+export type ParticipatedVotesResponse = ApiResponse<ParticipatedVoteList>
