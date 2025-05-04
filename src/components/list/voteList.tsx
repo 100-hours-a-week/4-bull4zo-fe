@@ -37,7 +37,7 @@ export const VoteList = ({
     return () => {
       if (target) observer.unobserve(target)
     }
-  })
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage])
 
   return (
     <ul className="flex flex-col gap-4 px-2 pt-2">

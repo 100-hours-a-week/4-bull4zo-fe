@@ -30,7 +30,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
           className="absolute right-0 top-0 h-full bg-red-500"
           style={{ width: `${vote.results?.find((r) => r.optionNumber === 2)?.ratio}%` }}
         >
-          <ResultLabel>찬성</ResultLabel>
+          <ResultLabel>반대</ResultLabel>
         </div>
       </div>
     </li>
