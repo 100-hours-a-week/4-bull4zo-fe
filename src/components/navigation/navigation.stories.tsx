@@ -44,7 +44,7 @@ export const ResearchSelected: Story = {
 
 export const MySelected: Story = {
   render: () => {
-    setSelectedTab('my')
+    setSelectedTab('user')
     return <Navigation />
   },
 }
