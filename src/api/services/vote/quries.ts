@@ -1,6 +1,11 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { DuringVoteDataResponse, UseInfiniteVotesQueryOptions } from './model'
+import {
+  DuringVoteDataResponse,
+  ParticipatedVotesQueryOptions,
+  ParticipatedVotesResponse,
+  UseInfiniteVotesQueryOptions,
+} from './model'
 import { voteService } from './service'
 
 // 진행중인 투표 무한 스크롤
@@ -36,5 +41,35 @@ export const useSubmitVoteMutation = () => {
 export const useCreateVoteMutation = () => {
   return useMutation({
     mutationFn: voteService.createVote,
+  })
+}
+// 참여한 투표 조회
+export const useParticipatedVotesInfinityQuery = ({
+  groupId,
+  size = 10,
+}: ParticipatedVotesQueryOptions) => {
+  return useInfiniteQuery<ParticipatedVotesResponse, AxiosError>({
+    queryKey: ['participatedVotes', groupId],
+    queryFn: ({ pageParam }) =>
+      voteService.getParticipatedVotes({ groupId, cursor: pageParam as string | undefined, size }),
+    getNextPageParam: (lastPage) =>
+      lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined,
+    staleTime: 1000 * 60 * 5,
+    initialPageParam: undefined,
+  })
+}
+// 생성한 투표 조회
+export const useCreateVotesInfinityQuery = ({
+  groupId,
+  size = 10,
+}: ParticipatedVotesQueryOptions) => {
+  return useInfiniteQuery<ParticipatedVotesResponse, AxiosError>({
+    queryKey: ['createdVotes', groupId],
+    queryFn: ({ pageParam }) =>
+      voteService.getCreatedVotes({ groupId, cursor: pageParam as string | undefined, size }),
+    getNextPageParam: (lastPage) =>
+      lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined,
+    staleTime: 1000 * 60 * 5,
+    initialPageParam: undefined,
   })
 }
