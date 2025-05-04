@@ -229,4 +229,110 @@ export const votesHandlers = [
       { status: 200 },
     )
   }),
+  http.get('/api/v1/votes/submit', ({ request }) => {
+    const url = new URL(request.url)
+    const groupId = url.searchParams.get('groupId') ?? 'all'
+    const size = Number(url.searchParams.get('size')) || 10
+
+    const allVotes = Array.from({ length: 15 }).map((_, i) => {
+      const minRatio = 10
+      const yesRatio = Math.floor(Math.random() * (100 - minRatio * 2)) + minRatio
+      const noRatio = 100 - yesRatio
+
+      return {
+        voteId: 100 + i,
+        groupId: Number(groupId) === 1 ? (i % 3) + 1 : Number(groupId),
+        content: `샘플 투표 질문 ${i + 1}`,
+        createdAt: `2025-04-${String(10 + i).padStart(2, '0')}T12:00:00`,
+        closedAt: `2025-04-${String(11 + i).padStart(2, '0')}T18:00:00`,
+        results: [
+          {
+            optionNumber: 1,
+            count: Math.floor(Math.random() * 50),
+            ratio: yesRatio,
+          },
+          {
+            optionNumber: 2,
+            count: Math.floor(Math.random() * 50),
+            ratio: noRatio,
+          },
+        ],
+      }
+    })
+
+    const votes = allVotes.slice(0, size)
+
+    const last = votes[votes.length - 1]
+
+    const nextCursor = last ? `${last.closedAt}_${last.voteId}` : null
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          votes,
+          nextCursor,
+          hasNext: allVotes.length > size,
+          size: votes.length,
+        },
+      },
+      { status: 200 },
+    )
+  }),
+  http.get('/api/v1/votes/mine', ({ request }) => {
+    const url = new URL(request.url)
+    const groupId = url.searchParams.get('groupId') ?? 'all'
+    const size = Number(url.searchParams.get('size')) || 10
+
+    const allVotes = Array.from({ length: 15 }).map((_, i) => {
+      const minRatio = 10
+      const yesRatio = Math.floor(Math.random() * (100 - minRatio * 2)) + minRatio
+      const noRatio = 100 - yesRatio
+
+      // voteStatus 랜덤 추가
+      const statusArray = ['PENDING', 'REJECTED', 'OPEN', 'CLOSED'] as const
+      const voteStatus = statusArray[Math.floor(Math.random() * statusArray.length)]
+
+      return {
+        voteId: 100 + i,
+        groupId: Number(groupId) === 1 ? (i % 3) + 1 : Number(groupId),
+        content: `내가 만든 투표 질문 ${i + 1}`,
+        voteStatus,
+        createdAt: `2025-04-${String(10 + i).padStart(2, '0')}T12:00:00`,
+        closedAt: `2025-04-${String(11 + i).padStart(2, '0')}T18:00:00`,
+        results:
+          voteStatus === 'PENDING' || voteStatus === 'REJECTED'
+            ? null
+            : [
+                {
+                  optionNumber: 1,
+                  count: Math.floor(Math.random() * 50),
+                  ratio: yesRatio,
+                },
+                {
+                  optionNumber: 2,
+                  count: Math.floor(Math.random() * 50),
+                  ratio: noRatio,
+                },
+              ],
+      }
+    })
+
+    const resultVotes = allVotes.slice(0, size)
+    const last = resultVotes[resultVotes.length - 1]
+    const nextCursor = last ? `${last.createdAt}_${last.voteId}` : null
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          votes: resultVotes,
+          nextCursor,
+          hasNext: allVotes.length > size,
+          size: resultVotes.length,
+        },
+      },
+      { status: 200 },
+    )
+  }),
 ]
