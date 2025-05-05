@@ -57,8 +57,8 @@ export const UserCard = () => {
   }
 
   return (
-    <Card className="px-5 py-5 w-full bg-primary text-black rounded-2xl shadow-box">
-      <CardHeader>
+    <Card className="px-5 py-5 w-full bg-primary text-black rounded-2xl shadow-box border-2">
+      <CardHeader className="px-4">
         {isEditing ? (
           <Form {...form}>
             <form
@@ -103,7 +103,7 @@ export const UserCard = () => {
         )}
       </CardHeader>
 
-      <CardContent className="flex justify-end items-center h-full gap-2">
+      <CardContent className="flex justify-end items-center h-full gap-2 px-4">
         <Button onClick={() => logoutHandler()} className="bg-emerald-400 text-white">
           로그아웃
         </Button>
