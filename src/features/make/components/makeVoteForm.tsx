@@ -62,10 +62,10 @@ export const MakeVoteForm = () => {
   }, [selectedId, form])
 
   return (
-    <div className="h-[90%] w-full px-5">
+    <div className="w-full px-5">
       <Form {...form}>
         <form
-          className="flex flex-col justify-around h-full"
+          className="flex flex-col justify-around h-full gap-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField

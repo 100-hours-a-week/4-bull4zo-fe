@@ -7,7 +7,7 @@ const UserPage = () => {
   const { isOpen } = useModalStore()
 
   return (
-    <article className="px-5 py-5 pb-20 bg-white">
+    <article className="px-5 py-5">
       <UserCard />
       <UserGroupList />
       {isOpen && <Modal />}

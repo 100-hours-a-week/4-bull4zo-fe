@@ -74,7 +74,7 @@ const SwipeCard = ({
 
   return (
     <motion.div
-      className=" absolute flex items-center justify-center"
+      className=" absolute flex items-center h-full w-full justify-center"
       style={{
         x,
         y,
