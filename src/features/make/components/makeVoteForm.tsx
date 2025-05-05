@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight } from 'lucide-react'
 import { Modal } from '@/components/modal/modal'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
@@ -12,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { VoteCardPreviewModal } from '@/features/make/components/voteCardPreviewModal'
 import { convertGlobalTime2LocalTime } from '@/lib/globalTime2LocalTime'
@@ -30,6 +32,7 @@ export const MakeVoteForm = () => {
       content: '',
       image: undefined,
       closedAt: convertGlobalTime2LocalTime({ days: 1 }),
+      anonymous: false,
     },
     mode: 'onChange',
   })
@@ -39,6 +42,7 @@ export const MakeVoteForm = () => {
     const content = form.getValues('content')
     const image = form.getValues('image')
     const closedAt = form.getValues('closedAt')
+    const anonymous = form.getValues('anonymous')
 
     openModal(
       <VoteCardPreviewModal
@@ -46,6 +50,7 @@ export const MakeVoteForm = () => {
         content={content}
         image={image}
         closedAt={closedAt}
+        anonymous={anonymous}
       />,
     )
   }
@@ -88,6 +93,27 @@ export const MakeVoteForm = () => {
                     {field.value?.length || 0}/255
                   </span>
                 </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="anonymous"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-semibold">익명 투표 여부</FormLabel>
+                <FormControl>
+                  <div className="flex gap-2">
+                    <Checkbox
+                      className="w-6 h-6"
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                    <Label className="text-xl font-unbounded">
+                      {!field.value ? '실명' : '익명'}
+                    </Label>
+                  </div>
+                </FormControl>
               </FormItem>
             )}
           />

@@ -8,5 +8,6 @@ export const voteSchema = z.object({
     '지원 형식: JPEG, PNG (최대 10MB)',
   ),
   closedAt: z.string().min(1, '종료시간을 선택해주세요.'),
+  anonymous: z.boolean(),
 })
 export type VoteSchema = z.infer<typeof voteSchema>
