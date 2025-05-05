@@ -5,8 +5,6 @@ export const researchHandlers = [
     const voteId = params.voteId as string
     const authHeader = request.headers.get('Authorization')
 
-    console.log(authHeader, voteId)
-
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return HttpResponse.json({ message: 'NO_TOKEN', data: null }, { status: 401 })
     }
