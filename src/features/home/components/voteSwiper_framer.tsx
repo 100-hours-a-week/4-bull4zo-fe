@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { DuringVoteDataResponse, Vote } from '@/api/services/vote/model'
+import { Vote, VoteData } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
@@ -9,7 +9,7 @@ import { VoteChoice, useVoteBatchStore } from '../stores/batchVoteStore'
 import SwipeCard from './swipCard'
 
 type Props = {
-  pages: DuringVoteDataResponse[]
+  pages: VoteData[]
   fetchNextPage: () => void
   hasNextPage: boolean
   isFetchingNextPage: boolean
@@ -22,7 +22,7 @@ export const VoteSwiperFramer = ({
   isFetchingNextPage,
 }: Props) => {
   const votes = pages
-    .flatMap((page) => page.data?.votes ?? [])
+    .flatMap((page) => page?.votes ?? [])
     .filter((v): v is Vote => v !== undefined && v !== null)
   const { isLogin } = useUserStore()
   const { openModal } = useModalStore()

@@ -1,5 +1,3 @@
-import { ApiResponse } from '@/lib/type'
-
 export interface GroupName {
   groupId: number
   name: string
@@ -28,5 +26,3 @@ export interface MyGroupList {
   hasNext: boolean
   size: number
 }
-
-export type MyGroupNamesResponse = ApiResponse<MyGroupNamesData>

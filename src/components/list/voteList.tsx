@@ -15,7 +15,7 @@ export const VoteList = ({
   hasNextPage,
   isFetchingNextPage,
 }: VoteListProps) => {
-  const votes = data?.pages.flatMap((page) => page.data?.votes) ?? []
+  const votes = data?.pages.flatMap((page) => page.votes) ?? []
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 

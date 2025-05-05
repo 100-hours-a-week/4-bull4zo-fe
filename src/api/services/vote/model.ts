@@ -1,5 +1,3 @@
-import { ApiResponse } from '@/lib/type'
-
 export type VoteType = 'USER' | 'AI' | 'EVENT'
 
 export interface Vote {
@@ -19,7 +17,6 @@ export interface VoteData {
   hasNext: boolean
   size: number
 }
-export type DuringVoteDataResponse = ApiResponse<VoteData>
 
 export interface UseInfiniteVotesQueryOptions {
   groupId?: number
@@ -75,8 +72,6 @@ export interface ParticipatedVoteResult {
   count: number
   ratio: number // 0 ~ 100
 }
-
-export type ParticipatedVotesResponse = ApiResponse<ParticipatedVoteList>
 
 export interface VoteDetail {
   voteId: number

@@ -61,10 +61,6 @@ export const MakeVoteForm = () => {
     }
   }, [selectedId, form])
 
-  if (isOpen) {
-    return <Modal />
-  }
-
   return (
     <div className="h-[90%] w-full px-5">
       <Form {...form}>
@@ -211,6 +207,7 @@ export const MakeVoteForm = () => {
           </div>
         </form>
       </Form>
+      {isOpen && <Modal />}
     </div>
   )
 }

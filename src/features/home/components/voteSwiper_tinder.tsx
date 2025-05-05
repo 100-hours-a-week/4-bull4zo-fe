@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 import TinderCard from 'react-tinder-card'
-import { DuringVoteDataResponse } from '@/api/services/vote/model'
+import { VoteData } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 import { VoteCard } from '@/components/card/voteCard'
 import { VoteEndCard } from '@/components/card/voteEndCard'
@@ -8,16 +8,15 @@ import { useUserStore } from '@/stores/userStore'
 import { useVoteBatchStore } from '../stores/batchVoteStore'
 
 // react-tinder-card로 애니메이션은 자연스럽지만 라벨 표시 불가능
-
 type Props = {
-  pages: DuringVoteDataResponse[]
+  pages: VoteData[]
   fetchNextPage: () => void
   hasNextPage: boolean
   isFetchingNextPage: boolean
 }
 
 const VoteSwiperTinder = ({ pages, fetchNextPage, hasNextPage, isFetchingNextPage }: Props) => {
-  const votes = pages.flatMap((page) => page.data?.votes).reverse()
+  const votes = pages.flatMap((page) => page.votes).reverse()
   const { isLogin } = useUserStore()
 
   const { addVote, selectVote, resetVotes } = useVoteBatchStore()

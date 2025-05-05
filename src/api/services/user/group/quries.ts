@@ -1,15 +1,15 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { MyGroupList, MyGroupNamesResponse } from './model'
+import { MyGroupList, MyGroupNamesData } from './model'
 import { groupService } from './service'
 
 // 그룹 이름 무한스크롤 조회
-export const useInfiniteGroupListQuery = (size: number = 10) => {
-  return useInfiniteQuery<MyGroupNamesResponse, AxiosError>({
+export const useInfiniteGroupNameListQuery = (size: number = 10) => {
+  return useInfiniteQuery<MyGroupNamesData, AxiosError>({
     queryKey: ['groupNameList'],
     queryFn: ({ pageParam }) => groupService.groupNameList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
-      return lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined
+      return lastPage?.hasNext ? lastPage.nextCursor : undefined
     },
     staleTime: 1000 * 60 * 15,
     initialPageParam: undefined,

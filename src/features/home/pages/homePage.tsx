@@ -29,12 +29,9 @@ const HomePage = () => {
   }
 
   useEffect(() => {
-    setNickName(user?.data?.nickname || '')
+    setNickName(user?.nickname || '')
   }, [user, setNickName])
 
-  if (isOpen) {
-    return <Modal />
-  }
   // 로딩 카드
   if (isFetching) {
     return (
@@ -68,6 +65,7 @@ const HomePage = () => {
           />
         </div>
       )}
+      {isOpen && <Modal />}
     </article>
   )
 }

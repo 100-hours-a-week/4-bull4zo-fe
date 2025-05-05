@@ -1,9 +1,9 @@
 import { authAxiosInstance } from '@/api/axios'
-import { UserInfo, UserInfoResponse } from './model'
+import { UserInfo } from './model'
 
 export const userService = {
-  async getUserInfo(): Promise<UserInfoResponse> {
-    return (await authAxiosInstance.get(`/api/v1/user`)).data
+  async getUserInfo(): Promise<UserInfo> {
+    return (await authAxiosInstance.get(`/api/v1/user`)).data.data
   },
   async updateUser(payload: UserInfo): Promise<UserInfo> {
     const response = await authAxiosInstance.patch(`/api/v1/user`, payload)
