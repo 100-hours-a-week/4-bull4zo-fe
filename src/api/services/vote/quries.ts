@@ -1,10 +1,12 @@
-import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
   DuringVoteDataResponse,
   ParticipatedVotesQueryOptions,
   ParticipatedVotesResponse,
   UseInfiniteVotesQueryOptions,
+  VoteDetail,
+  voteDetailResult,
 } from './model'
 import { voteService } from './service'
 
@@ -71,5 +73,23 @@ export const useCreateVotesInfinityQuery = ({
       lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined,
     staleTime: 1000 * 60 * 5,
     initialPageParam: undefined,
+  })
+}
+// 투표 상세 내용 조회
+export const useVoteDetailInfo = (voteId: string) => {
+  return useQuery<VoteDetail>({
+    queryKey: ['voteDetail', voteId],
+    queryFn: () => voteService.getVote(voteId),
+    enabled: !!voteId,
+    staleTime: 1000 * 60 * 1,
+  })
+}
+// 투표 상세 결과 조회
+export const useVoteDetailResults = (voteId: string) => {
+  return useQuery<voteDetailResult>({
+    queryKey: ['voteResult', voteId],
+    queryFn: () => voteService.getVoteResult(voteId),
+    enabled: !!voteId,
+    staleTime: 1000 * 60 * 1,
   })
 }

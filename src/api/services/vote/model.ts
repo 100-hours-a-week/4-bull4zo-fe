@@ -77,3 +77,20 @@ export interface ParticipatedVoteResult {
 }
 
 export type ParticipatedVotesResponse = ApiResponse<ParticipatedVoteList>
+
+export interface VoteDetail {
+  voteId: number
+  groupId: number
+  authorNickname: string
+  content: string
+  imageUrl: string
+  createdAt: string
+  closedAt: string
+}
+
+export interface voteDetailResult {
+  voteId: number
+  userResponse: number | null
+  totalCount: number
+  results: ParticipatedVoteResult[]
+}

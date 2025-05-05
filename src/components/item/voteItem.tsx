@@ -9,8 +9,11 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
 
   return (
     <li
-      onClick={() => navigation(`/research/${vote.voteId}`)}
-      className={`flex flex-col px-2 py-3 border-[0.125rem] rounded-2xl gap-2 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200' : ''}`}
+      onClick={() => {
+        if (vote.voteStatus === 'PENDING' || vote.voteStatus === 'REJECTED') return
+        navigation(`/research/${vote.voteId}`)
+      }}
+      className={`flex flex-col px-2 py-3 border-[0.125rem] rounded-2xl gap-2 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-help' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <div className="flex flex-row items-center justify-between relative">
         <Label className="font-bold line-clamp-2">{vote.content}</Label>
@@ -69,11 +72,11 @@ const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status 
           e.preventDefault()
           setOpen(!open)
         }}
-        className="flex h-full justify-center items-center text-zinc-500"
+        className="flex h-full justify-center items-center text-zinc-500 cursor-help"
       >
         검토중
         <div className="flex h-3 w-3 rounded-full bg-zinc-400 text-[0.625rem] justify-center items-center text-white font-bold">
-          <span>?</span>
+          <span className=" translate-y-[0.0625rem]">?</span>
         </div>
         {open && <StatusTooltip />}
       </Label>

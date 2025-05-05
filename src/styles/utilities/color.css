@@ -29,6 +29,9 @@
 }
 
 @layer utilities {
+  .text-gray {
+    color: #18191f73;
+  }
   .text-primary {
     color: hsl(var(--primary));
   }

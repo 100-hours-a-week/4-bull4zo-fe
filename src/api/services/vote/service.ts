@@ -4,7 +4,9 @@ import {
   DuringVoteDataResponse,
   ParticipatedVotesResponse,
   UseInfiniteVotesRequest,
+  VoteDetail,
   submitVoteRequest,
+  voteDetailResult,
 } from './model'
 
 export const voteService = {
@@ -56,5 +58,13 @@ export const voteService = {
     if (size) params.append('size', size.toString())
 
     return (await authAxiosInstance.get(`/api/v1/votes/mine?${params.toString()}`)).data
+  },
+  async getVote(voteId: string): Promise<VoteDetail> {
+    const response = await authAxiosInstance.get(`api/v1/votes/${voteId}`)
+    return response.data.data
+  },
+  async getVoteResult(voteId: string): Promise<voteDetailResult> {
+    const response = await authAxiosInstance.get(`api/v1/votes/${voteId}/result`)
+    return response.data.data
   },
 }
