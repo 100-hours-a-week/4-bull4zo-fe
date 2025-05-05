@@ -10,9 +10,10 @@ type Props = {
   content: string
   image?: File
   closedAt: string
+  anonymous: boolean
 }
 
-export const VoteCardPreviewModal = ({ groupId, content, image, closedAt }: Props) => {
+export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonymous }: Props) => {
   const navigation = useNavigate()
 
   const { closeModal } = useModalStore()
@@ -20,7 +21,7 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt }: Prop
 
   const onSubmit = () => {
     mutate(
-      { groupId, content, imageUrl: '', closedAt },
+      { groupId, content, imageUrl: '', closedAt, anonymous },
       {
         onSuccess: () => {
           navigation('/research')
@@ -35,7 +36,7 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt }: Prop
 
   return (
     <div className="flex flex-col justify-center items-center h-full">
-      <VoteCardPreview content={content} image={image} closedAt={closedAt} />
+      <VoteCardPreview content={content} image={image} closedAt={closedAt} anonymous={anonymous} />
       <div className="flex gap-4 mt-4">
         <Button onClick={() => closeModal()}>닫기</Button>
         <Button onClick={onSubmit}>등록</Button>

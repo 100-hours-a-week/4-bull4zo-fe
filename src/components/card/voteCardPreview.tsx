@@ -9,6 +9,7 @@ type Props = {
   content: string
   image?: File
   closedAt: string
+  anonymous: boolean
 }
 
 const usePreviewImageUrl = (file?: File) => {
@@ -28,7 +29,7 @@ const usePreviewImageUrl = (file?: File) => {
   return url
 }
 
-export const VoteCardPreview = ({ content, image, closedAt }: Props) => {
+export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) => {
   const { nickname } = useUserStore()
   const imageUrl = usePreviewImageUrl(image)
   const [isImageValid, setIsImageValid] = useState(false)
@@ -56,10 +57,16 @@ export const VoteCardPreview = ({ content, image, closedAt }: Props) => {
       }
     >
       <CardHeader className="flex flex-row justify-between px-0">
-        <div className="flex flex-row gap-1">
-          <CardTitle className="font-unbounded text-2xl">{nickname}</CardTitle>
-          <Icon src={META_ICON} alt="공인 뱃지" size={20} />
-        </div>
+        {!anonymous ? (
+          <div className="flex flex-row gap-1">
+            <CardTitle className="font-unbounded text-2xl">{nickname}</CardTitle>
+            <Icon src={META_ICON} alt="공인 뱃지" size={20} />
+          </div>
+        ) : (
+          <div className="flex flex-row gap-1">
+            <CardTitle className="font-unbounded text-2xl">익명</CardTitle>
+          </div>
+        )}
         <span className="text-xs pr-2">{formatTime(closedAt)}</span>
       </CardHeader>
       <CardContent className="flex justify-center items-center h-full overflow-y-auto">

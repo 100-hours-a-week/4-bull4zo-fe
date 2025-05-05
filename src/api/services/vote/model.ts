@@ -43,6 +43,7 @@ export interface CreateVotePayload {
   content: string
   imageUrl?: string
   closedAt: string
+  anonymous: boolean
 }
 
 export interface ParticipatedVotesQueryOptions {
