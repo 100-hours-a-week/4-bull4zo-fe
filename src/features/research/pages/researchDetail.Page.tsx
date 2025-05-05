@@ -40,7 +40,7 @@ const ResearchDetailPage = () => {
               className="absolute left-0 top-0 h-full bg-green-500 text-white pl-2 flex flex-col justify-center"
               style={{ width: `${voteResult?.results[0]?.ratio}%` }}
             >
-              <Label className="font-bold">No</Label>
+              <Label className="font-bold">Yes</Label>
               <Label>
                 {voteResult?.results[0]?.ratio}% {voteResult?.results[0]?.count}표
               </Label>
