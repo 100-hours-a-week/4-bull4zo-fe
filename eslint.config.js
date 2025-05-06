@@ -51,7 +51,7 @@ export default tseslint.config(
       '@typescript-eslint/explicit-function-return-type': 'off',
       eqeqeq: 'error',
       'prefer-const': 'error',
-      'import/order': 'warn',
+      'import/order': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
     },
