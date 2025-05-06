@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import { useInfiniteGroupListQuery } from '@/api/services/user/group/quries'
+import { useInfiniteGroupNameListQuery } from '@/api/services/user/group/quries'
 import { useGroupStore } from '@/stores/groupStore'
 import { Button } from '../ui/button'
 import {
@@ -16,11 +16,11 @@ export const GroupDropDown = () => {
   const [open, setOpen] = useState(false)
 
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteGroupListQuery()
+    useInfiniteGroupNameListQuery()
 
   useEffect(() => {
     if (isSuccess && data) {
-      setGroups(data.pages.flatMap((page) => page.data?.groups ?? []))
+      setGroups(data.pages.flatMap((page) => page.groups ?? []))
     }
   }, [isSuccess, data, setGroups])
 

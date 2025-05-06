@@ -1,21 +1,21 @@
 import { useEffect, useRef } from 'react'
-import { useParticipatedVotesInfinityQuery } from '@/api/services/vote/quries'
-import { VoteItem } from '../item/voteItem'
+import { useInfiniteGroupsQuery } from '@/api/services/user/group/quries'
+import { GroupCard } from '../card/groupCard'
 
-type VoteListProps = {
-  data: ReturnType<typeof useParticipatedVotesInfinityQuery>['data']
+type GroupListProps = {
+  data: ReturnType<typeof useInfiniteGroupsQuery>['data']
   fetchNextPage: () => void
   hasNextPage: boolean
   isFetchingNextPage: boolean
 }
 
-export const VoteList = ({
+export const GroupList = ({
   data,
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
-}: VoteListProps) => {
-  const votes = data?.pages.flatMap((page) => page.votes) ?? []
+}: GroupListProps) => {
+  const groups = data?.pages.flatMap((page) => page.groups) ?? []
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 
@@ -28,21 +28,20 @@ export const VoteList = ({
           fetchNextPage()
         }
       },
-      { rootMargin: '100px' },
+      { rootMargin: '200px' },
     )
-
     const target = loadMoreRef.current
     if (target) observer.observe(target)
 
     return () => {
       if (target) observer.unobserve(target)
     }
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage])
+  })
 
   return (
-    <ul className="flex flex-col gap-4 px-2 pt-2">
-      {votes.map((vote) => (
-        <VoteItem key={vote?.voteId} {...vote} />
+    <ul className="flex flex-col gap-4 px-2 pt-5">
+      {groups.map((group) => (
+        <GroupCard key={group.groupId} {...group} />
       ))}
       <div ref={loadMoreRef} className="h-1" />
     </ul>

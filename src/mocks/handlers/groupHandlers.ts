@@ -51,4 +51,114 @@ export const groupHandlers = [
       },
     })
   }),
+  http.get('/api/v1/user/groups', ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return HttpResponse.json(
+        {
+          message: 'NO_TOKEN',
+          data: null,
+        },
+        { status: 401 },
+      )
+    }
+
+    const url = new URL(request.url)
+    const cursor = url.searchParams.get('cursor')
+    const sizeParam = url.searchParams.get('size')
+    const size = sizeParam ? parseInt(sizeParam) : 10
+
+    const allGroups = Array.from({ length: 15 }, (_, i) => ({
+      groupId: i + 3,
+      name: `그룹${i + 1}`,
+      description: `테스트 그룹 ${i + 1} 설명입니다.`,
+      imageUrl: '',
+      inviteCode: `CODE${i + 1}`,
+      role: i % 3 === 0 ? 'OWNER' : i % 3 === 1 ? 'MANAGER' : 'MEMBER',
+    }))
+
+    let startIndex = 0
+    if (cursor) {
+      const index = allGroups.findIndex((group) => `${group.name}_${group.groupId}` === cursor)
+      if (index === -1) {
+        return HttpResponse.json({ message: 'INVALID_CURSOR_FORMAT', data: null }, { status: 400 })
+      }
+      startIndex = index + 1
+    }
+
+    const paginated = allGroups.slice(startIndex, startIndex + size)
+    const last = paginated.at(-1)
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groups: paginated,
+        nextCursor: last ? `${last.name}_${last.groupId}` : null,
+        hasNext: startIndex + size < allGroups.length,
+        size: paginated.length,
+      },
+    })
+  }),
+  http.post('/api/v1/groups/join', async ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return HttpResponse.json({ message: 'NO_TOKEN', data: null }, { status: 401 })
+    }
+
+    type JoinRequestBody = {
+      inviteCode: string
+    }
+
+    const body = (await request.json()) as JoinRequestBody
+    const inviteCode = body.inviteCode
+
+    if (inviteCode) {
+      return HttpResponse.json(
+        {
+          message: 'SUCCESS',
+          data: {
+            groupId: 7,
+            groupName: '카테부',
+            role: 'MEMBER',
+          },
+        },
+        { status: 201 },
+      )
+    }
+
+    return HttpResponse.json({ message: 'INVITE_CODE_NOT_FOUND', data: null }, { status: 404 })
+  }),
+  http.post('/api/v1/groups', async ({ request }) => {
+    const authHeader = request.headers.get('Authorization')
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return HttpResponse.json({ message: 'NO_TOKEN', data: null }, { status: 401 })
+    }
+
+    type CreateGroupRequest = {
+      name: string
+      description: string
+      imageUrl: string
+    }
+
+    const body = (await request.json()) as CreateGroupRequest
+    const { name, description, imageUrl } = body
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          groupId: 17,
+          name,
+          description,
+          imageUrl,
+          inviteCode: 'ABC123',
+          createdAt: new Date().toISOString(),
+        },
+      },
+      { status: 201 },
+    )
+  }),
 ]

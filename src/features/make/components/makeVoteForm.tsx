@@ -61,15 +61,11 @@ export const MakeVoteForm = () => {
     }
   }, [selectedId, form])
 
-  if (isOpen) {
-    return <Modal />
-  }
-
   return (
-    <div className="h-[90%] w-full px-5">
+    <div className="w-full px-5">
       <Form {...form}>
         <form
-          className="flex flex-col justify-around h-full"
+          className="flex flex-col justify-around h-full gap-4"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
@@ -80,7 +76,7 @@ export const MakeVoteForm = () => {
                 <FormLabel className="font-semibold">투표 내용</FormLabel>
                 <FormControl>
                   <Textarea
-                    className="border-0 bg-primary rounded-[1.25rem] min-w-[20rem] shadow-card h-[18rem] p-4 resize-none"
+                    className="border-0 text-[0.875rem] bg-primary rounded-[1.25rem] min-w-[20rem] shadow-card h-[18rem] p-4 resize-none"
                     {...field}
                     value={field.value ?? ''}
                     placeholder="내용을 입력하세요."
@@ -109,7 +105,7 @@ export const MakeVoteForm = () => {
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                    <Label className="text-xl font-unbounded">
+                    <Label className="text-xl font-semibold font-unbounded">
                       {!field.value ? '실명' : '익명'}
                     </Label>
                   </div>
@@ -203,7 +199,8 @@ export const MakeVoteForm = () => {
           <div className="w-full items-center flex justify-end">
             <Button
               type="submit"
-              className="w-full h-full max-w-[6rem] py-1 text-lg font-semibold mt-4"
+              disabled={!form.formState.isValid}
+              className={`w-full h-full max-w-[6rem] py-1 text-lg font-semibold mt-4 ${form.formState.isValid && 'bg-secondary text-white'}`}
             >
               등록
               <ChevronRight />
@@ -211,6 +208,7 @@ export const MakeVoteForm = () => {
           </div>
         </form>
       </Form>
+      {isOpen && <Modal />}
     </div>
   )
 }

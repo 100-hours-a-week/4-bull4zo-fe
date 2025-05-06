@@ -26,7 +26,7 @@ export const ResearchList = () => {
     index === 0 ? participatedQuery.isFetchingNextPage : myVotesQuery.isFetchingNextPage
 
   return (
-    <section className="px-4 py-2 bg-white pb-20">
+    <section className="px-4 py-2">
       <div className="flex items-center justify-center gap-2">
         <Label
           onClick={() => setIndex(0)}

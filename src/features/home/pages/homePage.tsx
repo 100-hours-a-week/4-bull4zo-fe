@@ -29,12 +29,9 @@ const HomePage = () => {
   }
 
   useEffect(() => {
-    setNickName(user?.data?.nickname || '')
+    setNickName(user?.nickname || '')
   }, [user, setNickName])
 
-  if (isOpen) {
-    return <Modal />
-  }
   // 로딩 카드
   if (isFetching) {
     return (
@@ -52,7 +49,7 @@ const HomePage = () => {
     )
   }
   return (
-    <article className=" overflow-hidden h-full relative">
+    <article className="overflow-y-auto relative screen-minus-header-nav">
       {isLogin && (
         <div className="absolute z-10 left-4 top-3">
           <GroupDropDown />
@@ -68,6 +65,7 @@ const HomePage = () => {
           />
         </div>
       )}
+      {isOpen && <Modal />}
     </article>
   )
 }

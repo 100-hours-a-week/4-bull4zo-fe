@@ -1,13 +1,13 @@
 import { create } from 'zustand'
-import { Group } from '@/api/services/user/group/model'
+import { GroupName } from '@/api/services/user/group/model'
 
 interface GroupStore {
   selectedId: number
-  groups: Group[]
+  groups: GroupName[]
   // eslint-disable-next-line no-unused-vars
   setId: (selectedId: number) => void
   // eslint-disable-next-line no-unused-vars
-  setGroups: (groups: Group[]) => void
+  setGroups: (groups: GroupName[]) => void
   reset: () => void
 }
 

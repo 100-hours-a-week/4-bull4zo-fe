@@ -21,7 +21,7 @@ export const AppLayout = () => {
   return (
     <>
       <Header />
-      <main className="py-[4.25rem] h-screen">
+      <main className="py-[4.25rem] min-h-screen bg-white">
         <Outlet />
       </main>
       <Navigation />
