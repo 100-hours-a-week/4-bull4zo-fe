@@ -8,7 +8,7 @@ export const GroupCard = (group: Partial<Group>) => {
       <CardHeader className="flex flex-row justify-between px-4">
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 border rounded-[1rem] bg-gray-200 overflow-hidden flex items-center justify-center relative">
-            {group.imageUrl && <img src={group.imageUrl} />}
+            {group.imageUrl && <img src={group.imageUrl} alt={group.name || 'Group image'} />}
           </div>
           <h1 className="font-bold text-[1.125rem]">{group.name}</h1>
         </div>
