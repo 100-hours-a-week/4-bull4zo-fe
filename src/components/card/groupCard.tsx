@@ -6,8 +6,10 @@ export const GroupCard = (group: Partial<Group>) => {
   return (
     <Card className="flex flex-col rounded-2xl shadow-box border-2 min-h-54">
       <CardHeader className="flex flex-row justify-between px-4">
-        <div>
-          <img src={group.imageUrl} />
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 border rounded-[1rem] bg-gray-200 overflow-hidden flex items-center justify-center relative">
+            {group.imageUrl && <img src={group.imageUrl} />}
+          </div>
           <h1 className="font-bold text-[1.125rem]">{group.name}</h1>
         </div>
         <EllipsisVertical />
