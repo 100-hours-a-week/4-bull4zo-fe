@@ -1,5 +1,12 @@
 import { authAxiosInstance } from '@/api/axios'
-import { MyGroupList, MyGroupNamesData } from './model'
+import {
+  CreateGroupData,
+  CreateGroupPayload,
+  InviteCodePayload,
+  InviteGroupData,
+  MyGroupList,
+  MyGroupNamesData,
+} from './model'
 
 export const groupService = {
   async groupNameList(size: number, cursor?: string): Promise<MyGroupNamesData> {
@@ -15,6 +22,14 @@ export const groupService = {
     if (cursor) params.append('cursor', cursor)
 
     const response = await authAxiosInstance.get(`/api/v1/user/groups?${params.toString()}`)
+    return response.data.data
+  },
+  async joinGroup(payload: InviteCodePayload): Promise<InviteGroupData> {
+    const response = await authAxiosInstance.post(`/api/v1/groups/join`, payload)
+    return response.data.data
+  },
+  async createGroup(payload: CreateGroupPayload): Promise<CreateGroupData> {
+    const response = await authAxiosInstance.post(`/api/v1/groups`, payload)
     return response.data.data
   },
 }

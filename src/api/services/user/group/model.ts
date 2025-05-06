@@ -26,3 +26,28 @@ export interface MyGroupList {
   hasNext: boolean
   size: number
 }
+
+export interface InviteCodePayload {
+  inviteCode: string
+}
+
+export interface InviteGroupData {
+  groupId: number
+  groupName: string
+  role: GroupRole
+}
+
+export interface CreateGroupPayload {
+  name: string
+  description: string
+  imageUrl: string
+}
+
+export interface CreateGroupData {
+  groupId: number
+  name: string
+  description: string
+  imageUrl: string
+  inviteCode: string
+  createdAt: string
+}

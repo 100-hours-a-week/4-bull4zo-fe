@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { MyGroupList, MyGroupNamesData } from './model'
 import { groupService } from './service'
@@ -25,5 +25,17 @@ export const useInfiniteGroupsQuery = (size: number = 10) => {
     },
     initialPageParam: undefined,
     staleTime: 1000 * 60 * 15,
+  })
+}
+// 초대 코드로 그룹 가입
+export const useInviteCodeMutation = () => {
+  return useMutation({
+    mutationFn: groupService.joinGroup,
+  })
+}
+// 그룹 생성
+export const useCreateGroupMutation = () => {
+  return useMutation({
+    mutationFn: groupService.createGroup,
   })
 }
