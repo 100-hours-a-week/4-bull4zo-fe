@@ -35,7 +35,7 @@ const HomePage = () => {
   // 로딩 카드
   if (isFetching) {
     return (
-      <div className="flex h-full justify-center items-center">
+      <div className="flex screen-minus-header-nav justify-center items-center">
         <LoadingCard />
       </div>
     )
@@ -43,7 +43,7 @@ const HomePage = () => {
   // 더 이상 진행할 카드가 없는 경우 (에러)
   if (isError) {
     return (
-      <div className="flex h-full justify-center items-center">
+      <div className="flex screen-minus-header-nav justify-center items-center">
         <VoteNoMoreCard />
       </div>
     )
