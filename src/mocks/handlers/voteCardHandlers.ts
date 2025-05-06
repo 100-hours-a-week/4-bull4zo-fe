@@ -11,13 +11,6 @@ export const votesHandlers = [
     const isGuest = !authHeader
     const finalGroupId = isGuest ? '1' : groupId
 
-    if (
-      cursor &&
-      !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}_\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(cursor)
-    ) {
-      return HttpResponse.json({ message: 'INVALID_CURSOR_FORMAT', data: null }, { status: 400 })
-    }
-
     const votes = [
       {
         voteId: 101,
@@ -197,13 +190,27 @@ export const votesHandlers = [
       },
     ]
 
+    let startIndex = 0
+    if (cursor) {
+      const index = votes.findIndex((vote) => {
+        return `${vote.createdAt}_${vote.voteId}` === cursor
+      })
+      if (index === -1) {
+        return HttpResponse.json({ message: 'INVALID_CURSOR_FORMAT', data: null }, { status: 400 })
+      }
+      startIndex = index + 1
+    }
+
+    const paginated = votes.slice(startIndex, startIndex + size)
+    const last = paginated.at(-1)
+
     const response = {
       message: 'SUCCESS',
       data: {
-        votes: votes.slice(0, size),
-        nextCursor: votes.length > size ? '2025-04-24T12:00:00_2025-04-22T10:00:00' : null,
-        hasNext: votes.length > size,
-        size: Math.min(size, votes.length),
+        votes: paginated,
+        nextCursor: last ? `${last.createdAt}_${last.voteId}` : null,
+        hasNext: startIndex + size < votes.length,
+        size: paginated.length,
       },
     }
 
