@@ -1,10 +1,10 @@
 import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
-  DuringVoteDataResponse,
+  ParticipatedVoteList,
   ParticipatedVotesQueryOptions,
-  ParticipatedVotesResponse,
   UseInfiniteVotesQueryOptions,
+  VoteData,
   VoteDetail,
   voteDetailResult,
 } from './model'
@@ -19,7 +19,7 @@ export const useInfiniteVotesQuery = ({
   const effectiveSize = isLogin ? size : 3
   const effectiveGroupId = isLogin ? groupId : 1
 
-  return useInfiniteQuery<DuringVoteDataResponse, AxiosError>({
+  return useInfiniteQuery<VoteData, AxiosError>({
     queryKey: ['votes', effectiveGroupId, effectiveSize],
     queryFn: ({ pageParam }) =>
       voteService.getVotes({
@@ -27,8 +27,7 @@ export const useInfiniteVotesQuery = ({
         size: effectiveSize,
         cursor: pageParam as string | undefined,
       }),
-    getNextPageParam: (lastPage) =>
-      lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined,
+    getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
     staleTime: 1000 * 60 * 5,
     initialPageParam: undefined,
   })
@@ -50,12 +49,11 @@ export const useParticipatedVotesInfinityQuery = ({
   groupId,
   size = 10,
 }: ParticipatedVotesQueryOptions) => {
-  return useInfiniteQuery<ParticipatedVotesResponse, AxiosError>({
+  return useInfiniteQuery<ParticipatedVoteList, AxiosError>({
     queryKey: ['participatedVotes', groupId],
     queryFn: ({ pageParam }) =>
       voteService.getParticipatedVotes({ groupId, cursor: pageParam as string | undefined, size }),
-    getNextPageParam: (lastPage) =>
-      lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined,
+    getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
     staleTime: 1000 * 60 * 5,
     initialPageParam: undefined,
   })
@@ -65,12 +63,11 @@ export const useCreateVotesInfinityQuery = ({
   groupId,
   size = 10,
 }: ParticipatedVotesQueryOptions) => {
-  return useInfiniteQuery<ParticipatedVotesResponse, AxiosError>({
+  return useInfiniteQuery<ParticipatedVoteList, AxiosError>({
     queryKey: ['createdVotes', groupId],
     queryFn: ({ pageParam }) =>
       voteService.getCreatedVotes({ groupId, cursor: pageParam as string | undefined, size }),
-    getNextPageParam: (lastPage) =>
-      lastPage?.data?.hasNext ? lastPage.data.nextCursor : undefined,
+    getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
     staleTime: 1000 * 60 * 5,
     initialPageParam: undefined,
   })
