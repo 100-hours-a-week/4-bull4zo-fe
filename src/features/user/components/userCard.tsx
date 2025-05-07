@@ -78,6 +78,10 @@ export const UserCard = () => {
                               form.handleSubmit(onSubmit)()
                             }
                           }}
+                          onChange={(e) => {
+                            const onlyLetters = e.target.value.replace(/[^a-zA-Z가-힣]/g, '')
+                            field.onChange(onlyLetters)
+                          }}
                         />
                         <Check
                           onClick={() => form.handleSubmit(onSubmit)()}
@@ -98,7 +102,6 @@ export const UserCard = () => {
           </div>
         )}
       </CardHeader>
-
       <CardContent className="flex justify-end items-center h-full gap-2 px-4">
         <Button onClick={() => logoutHandler()} className="bg-emerald-400 text-white">
           로그아웃

@@ -70,12 +70,13 @@ export const AddGroupModal = () => {
                     <div className="flex gap-2">
                       <FormControl>
                         <Input
-                          placeholder="초대코드 입력"
+                          placeholder="그룹 참여"
                           {...field}
                           maxLength={8}
                           className="flex-1 bg-white rounded-[0.75rem]"
                           onChange={(e) => {
-                            field.onChange(e.target.value.toUpperCase().replace(/\s/g, ''))
+                            const onlyLetters = e.target.value.replace(/[^a-zA-Z가-힣]/g, '')
+                            field.onChange(onlyLetters)
                           }}
                         />
                       </FormControl>
@@ -84,7 +85,7 @@ export const AddGroupModal = () => {
                         type="submit"
                         className={`px-4 ${isValid ? 'bg-primary text-white' : 'bg-gray-400 text-gray-200'}`}
                       >
-                        전송
+                        가입
                       </Button>
                     </div>
                     <FormMessage />
@@ -94,7 +95,10 @@ export const AddGroupModal = () => {
             </form>
           </Form>
         </div>
-        <div className="w-full flex justify-around">
+        <div className="w-full flex flex-col justify-center gap-2">
+          <Button className="px-7" onClick={onNewGroupHandler}>
+            새 그룹 생성
+          </Button>
           <Button
             className="px-7"
             onClick={() => {
@@ -102,9 +106,6 @@ export const AddGroupModal = () => {
             }}
           >
             취소
-          </Button>
-          <Button className="px-7" onClick={onNewGroupHandler}>
-            새 그룹 생성
           </Button>
         </div>
       </CardContent>
