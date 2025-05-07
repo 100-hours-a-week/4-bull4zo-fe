@@ -71,18 +71,20 @@ export const VoteSwiperFramer = ({
 
   useEffect(() => {
     return () => {
-      const sendRemainingVotes = async () => {
-        if (selectVoteRef.current.length > 0) {
-          await Promise.all(
-            selectVoteRef.current.map(({ voteId, voteChoice }) => {
-              const userResponse = voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2
-              return mutateAsyncRef.current({ voteId, userResponse })
-            }),
-          )
-          resetVotes()
+      if (isLogin) {
+        const sendRemainingVotes = async () => {
+          if (selectVoteRef.current.length > 0) {
+            await Promise.all(
+              selectVoteRef.current.map(({ voteId, voteChoice }) => {
+                const userResponse = voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2
+                return mutateAsyncRef.current({ voteId, userResponse })
+              }),
+            )
+            resetVotes()
+          }
         }
+        sendRemainingVotes()
       }
-      sendRemainingVotes()
     }
   }, [])
 

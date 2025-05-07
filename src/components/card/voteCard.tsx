@@ -32,7 +32,9 @@ export const VoteCard = (props: Partial<Vote>) => {
     >
       <CardHeader className="flex flex-row justify-between px-0">
         <div className="flex flex-row gap-1">
-          <CardTitle className="font-unbounded text-2xl">{props.authorNickname}</CardTitle>
+          <CardTitle className="font-unbounded text-xl line-clamp-1">
+            {props.authorNickname}
+          </CardTitle>
           {props.adminVote === 0 && <Icon src={META_ICON} alt="공인 뱃지" size={20} />}
         </div>
         <span className="text-xs pr-2">{formatTime(props.closedAt as string)}</span>
