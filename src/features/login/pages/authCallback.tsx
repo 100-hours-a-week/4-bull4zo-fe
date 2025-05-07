@@ -23,10 +23,18 @@ const AuthCallback = () => {
 
   const handleKakaoLogin = async (kakaoAuthCode: string) => {
     try {
-      const response = await axiosInstance.post('/api/v1/auth/login/oauth', {
-        provider: 'kakao',
-        code: kakaoAuthCode,
-      })
+      const response = await axiosInstance.post(
+        '/api/v1/auth/login/oauth',
+        {
+          provider: 'kakao',
+          code: kakaoAuthCode,
+        },
+        {
+          headers: {
+            'X-Redirect-Uri': import.meta.env.VITE_BASE_URL + '/auth/callback',
+          },
+        },
+      )
 
       const { accessToken } = response.data.data
 
@@ -35,9 +43,8 @@ const AuthCallback = () => {
 
       navigate('/home')
     } catch (e) {
-      const message = e instanceof Error ? e.message : '로그인에 실패했습니다.'
+      console.log(e)
       toast('로그인에 실패했습니다. 다시 시도해주세요!', {
-        description: message,
         action: {
           label: '확인',
           onClick: () => {

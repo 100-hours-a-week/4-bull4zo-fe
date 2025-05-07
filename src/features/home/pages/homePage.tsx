@@ -4,7 +4,6 @@ import { useInfiniteVotesQuery } from '@/api/services/vote/quries'
 import { VoteNoMoreCard } from '@/components/card/voteNoMoreCard'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
 import { LoadingCard } from '@/components/loading/loadingCard'
-import { Modal } from '@/components/modal/modal'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
@@ -18,7 +17,7 @@ const HomePage = () => {
     useInfiniteVotesQuery({ groupId, isLogin })
   const { data: user } = useUserInfoQuery({ enabled: isLogin })
 
-  const { isOpen, openModal } = useModalStore()
+  const { openModal } = useModalStore()
 
   const customFetchNextPage = () => {
     if (!isLogin) {
@@ -40,7 +39,7 @@ const HomePage = () => {
       </div>
     )
   }
-  // 더 이상 진행할 카드가 없는 경우 (에러)
+  // 더 이상 진행할 카드가 없는 경우 (에러 && 로그인 상황)
   if (isError) {
     return (
       <div className="flex screen-minus-header-nav justify-center items-center">
@@ -48,6 +47,7 @@ const HomePage = () => {
       </div>
     )
   }
+
   return (
     <article className="overflow-hidden relative screen-minus-header-nav">
       {isLogin && (
@@ -65,7 +65,6 @@ const HomePage = () => {
           />
         </div>
       )}
-      {isOpen && <Modal />}
     </article>
   )
 }

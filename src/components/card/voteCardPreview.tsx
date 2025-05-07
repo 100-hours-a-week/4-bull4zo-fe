@@ -45,7 +45,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
 
   return (
     <Card
-      className={`px-4 py-9 w-[90%] md:w-[70%] h-[30rem] max-h-[75%] ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
+      className={` px-4 py-9 w-[90%] md:w-[70%] h-[30rem] max-h-[75%] ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
       style={
         isImageValid
           ? {
@@ -59,7 +59,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
       <CardHeader className="flex flex-row justify-between px-0">
         {!anonymous ? (
           <div className="flex flex-row gap-1">
-            <CardTitle className="font-unbounded text-2xl">{nickname}</CardTitle>
+            <CardTitle className="font-unbounded text-xl line-clamp-1">{nickname}</CardTitle>
             <Icon src={META_ICON} alt="공인 뱃지" size={20} />
           </div>
         ) : (
@@ -67,10 +67,10 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
             <CardTitle className="font-unbounded text-2xl">익명</CardTitle>
           </div>
         )}
-        <span className="text-xs pr-2">{formatTime(closedAt)}</span>
+        <span className="text-xs pr-2 min-w-20">{formatTime(closedAt)}</span>
       </CardHeader>
       <CardContent className="flex justify-center items-center h-full overflow-y-auto">
-        <p className="text-2xl">{content || '내용을 입력하세요.'}</p>
+        <p className="text-2xl whitespace-pre-line">{content || '내용을 입력하세요.'}</p>
       </CardContent>
     </Card>
   )

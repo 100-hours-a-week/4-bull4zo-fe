@@ -1,11 +1,9 @@
 import { useNavigate } from 'react-router-dom'
-import { useModalStore } from '@/stores/modalStore'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const NoVoteAvailAbleModal = () => {
   const navigation = useNavigate()
-  const { closeModal } = useModalStore()
 
   return (
     <Card
@@ -28,7 +26,7 @@ export const NoVoteAvailAbleModal = () => {
           <Button
             className="px-7"
             onClick={() => {
-              closeModal()
+              window.location.reload()
             }}
           >
             취소
@@ -37,7 +35,6 @@ export const NoVoteAvailAbleModal = () => {
             className="px-5"
             onClick={() => {
               navigation('/login')
-              closeModal()
             }}
           >
             로그인

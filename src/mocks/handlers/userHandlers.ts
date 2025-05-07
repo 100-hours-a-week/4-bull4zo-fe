@@ -101,4 +101,30 @@ export const userHandlers = [
       { status: 200 },
     )
   }),
+  http.post('/api/v1/auth/token/refresh', ({ request }) => {
+    const cookieHeader = request.headers.get('cookie') || 'refreshToken=aaa'
+    const hasRefreshToken = /refreshToken=([^;]+)/.test(cookieHeader)
+
+    if (!hasRefreshToken) {
+      return HttpResponse.json(
+        {
+          message: 'NO_TOKEN',
+          data: null,
+        },
+        { status: 401 },
+      )
+    }
+
+    // refreshToken 있으면 accessToken 발급
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          accessToken: 'mock-access-token-123456',
+          expiresIn: 3600,
+        },
+      },
+      { status: 200 },
+    )
+  }),
 ]
