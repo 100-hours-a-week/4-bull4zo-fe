@@ -70,7 +70,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
         <span className="text-xs pr-2 min-w-20">{formatTime(closedAt)}</span>
       </CardHeader>
       <CardContent className="flex justify-center items-center h-full overflow-y-auto">
-        <p className="text-2xl">{content || '내용을 입력하세요.'}</p>
+        <p className="text-2xl whitespace-pre-line">{content || '내용을 입력하세요.'}</p>
       </CardContent>
     </Card>
   )

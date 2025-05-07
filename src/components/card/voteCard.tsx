@@ -40,7 +40,7 @@ export const VoteCard = (props: Partial<Vote>) => {
         <span className="text-xs pr-2">{formatTime(props.closedAt as string)}</span>
       </CardHeader>
       <CardContent className="flex justify-center items-center h-full overflow-y-auto">
-        <p className="text-2xl">{props.content}</p>
+        <p className="text-2xl whitespace-pre-line">{props.content}</p>
       </CardContent>
     </Card>
   )
