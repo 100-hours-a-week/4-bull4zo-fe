@@ -45,7 +45,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
 
   return (
     <Card
-      className={`px-4 py-9 w-[20rem] h-[30rem] ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
+      className={`px-4 py-9 w-[90%] md:w-[70%] h-[30rem] max-h-[75%] ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
       style={
         isImageValid
           ? {
