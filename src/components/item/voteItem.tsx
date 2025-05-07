@@ -16,13 +16,13 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
         if (vote.voteStatus === 'PENDING' || vote.voteStatus === 'REJECTED') return
         navigation(`/research/${vote.voteId}`)
       }}
-      className={`flex flex-col px-2 py-3 border-[0.125rem] rounded-2xl gap-2 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-help' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
+      className={`flex flex-col px-4 py-6 border-[0.125rem] rounded-2xl gap-4 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-help' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <div className="flex flex-row items-center justify-between relative">
-        <Label className="font-bold line-clamp-2">{vote.content}</Label>
+        <Label className="font-bold text-lg line-clamp-1">{vote.content}</Label>
         {vote.voteStatus && <VoteStatusLabel status={vote.voteStatus} />}
       </div>
-      <div className="flex items-center justify-end text-xs font-bold">
+      <div className="flex items-center justify-end text-xs">
         {formatTime(vote.closedAt as string)}
       </div>
       <div
