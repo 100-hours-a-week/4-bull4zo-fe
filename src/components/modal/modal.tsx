@@ -23,7 +23,10 @@ export const Modal = () => {
       aria-modal="true"
       role="dialog"
     >
-      <div className=" p-6 rounded-lg relative z-60" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="p-6 w-full max-w-[575px] flex items-center justify-center rounded-lg relative z-60"
+        onClick={(e) => e.stopPropagation()}
+      >
         {modalContent}
       </div>
     </div>

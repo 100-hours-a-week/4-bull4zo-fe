@@ -31,7 +31,7 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
   }
 
   return (
-    <div className="flex flex-col justify-center items-center h-full">
+    <div className="flex flex-col w-full justify-center items-center h-full">
       <VoteCardPreview content={content} image={image} closedAt={closedAt} anonymous={anonymous} />
       <div className="flex gap-4 mt-4">
         <Button onClick={() => closeModal()}>닫기</Button>
