@@ -70,7 +70,9 @@ export const AddGroupModal = () => {
                           maxLength={8}
                           className="flex-1 bg-white rounded-[0.75rem]"
                           onChange={(e) => {
-                            const onlyLetters = e.target.value.replace(/[^a-zA-Z가-힣]/g, '')
+                            const onlyLetters = e.target.value
+                              .replace(/[^a-zA-Z]/g, '')
+                              .toUpperCase()
                             field.onChange(onlyLetters)
                           }}
                         />

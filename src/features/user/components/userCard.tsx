@@ -53,13 +53,13 @@ export const UserCard = () => {
   }
 
   return (
-    <Card className="px-5 py-5 w-full bg-primary text-black rounded-2xl shadow-box border-2">
-      <CardHeader className="px-4">
+    <Card className="relative px-5 py-5 w-full bg-primary text-black rounded-2xl shadow-box border-2 h-40">
+      <CardHeader className="px-4 relative h-full">
         {isEditing ? (
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className={`flex flex-row justify-between items-center w-full px-2 py-2 rounded gap-2`}
+              className="absolute top-1 left-1 right-6 flex flex-row justify-between items-center w-auto gap-2"
             >
               <FormField
                 control={form.control}
@@ -67,10 +67,11 @@ export const UserCard = () => {
                 render={({ field }) => (
                   <FormItem className="flex-1">
                     <FormControl>
-                      <div className="relative">
+                      <div className="relative text-2xl">
                         <Input
                           {...field}
-                          className="w-full text-2xl font-unbounded"
+                          className="w-full h-14 font-unbounded"
+                          style={{ fontSize: '1.5rem', fontWeight: 'bold' }}
                           autoFocus
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
@@ -88,7 +89,7 @@ export const UserCard = () => {
                         />
                         <Check
                           onClick={() => form.handleSubmit(onSubmit)()}
-                          className="absolute top-2 right-2 cursor-pointer w-5 h-5 shrink-0"
+                          className="absolute top-4 right-3 cursor-pointer w-6 h-6 shrink-0"
                         />
                       </div>
                     </FormControl>
@@ -99,13 +100,14 @@ export const UserCard = () => {
             </form>
           </Form>
         ) : (
-          <div className="flex justify-between items-center w-full py-[0.675rem]">
+          <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
             <CardTitle className="font-unbounded text-2xl">{nickname}</CardTitle>
             <PencilLine onClick={() => setIsEditing(true)} className="cursor-pointer w-5 h-5" />
           </div>
         )}
       </CardHeader>
-      <CardContent className="flex justify-end items-center h-full gap-2 px-4">
+
+      <CardContent className="absolute bottom-4 right-4 flex gap-2">
         <Button onClick={() => logoutHandler()} className="bg-emerald-400 text-white">
           로그아웃
         </Button>
