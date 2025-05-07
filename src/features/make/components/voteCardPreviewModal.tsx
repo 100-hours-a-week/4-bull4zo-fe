@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { useCreateVoteMutation } from '@/api/services/vote/quries'
 import { useModalStore } from '@/stores/modalStore'
 import { VoteCardPreview } from '../../../components/card/voteCardPreview'
@@ -23,11 +24,12 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
       { groupId, content, imageUrl: '', closedAt, anonymous },
       {
         onSuccess: () => {
+          toast('투표를 등록했습니다.')
           navigation('/research')
+          closeModal()
         },
       },
     )
-    closeModal()
   }
 
   return (
