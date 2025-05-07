@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Vote, VoteData } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 import DisLikeIcon from '@/assets/dislike.svg'
@@ -9,6 +9,7 @@ import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
 import { useModalStore } from '@/stores/modalStore'
 import { useUserStore } from '@/stores/userStore'
 import { VoteChoice, useVoteBatchStore } from '../stores/batchVoteStore'
+import { useVoteCardStore } from '../stores/voteCardStore'
 import SwipeCard from './swipCard'
 
 type Props = {
@@ -27,38 +28,24 @@ export const VoteSwiperFramer = ({
   const { isLogin } = useUserStore()
   const { openModal } = useModalStore()
 
+  const { cards: cardList, appendCards } = useVoteCardStore()
+
   const { addVote, selectVote, resetVotes } = useVoteBatchStore()
   const { mutateAsync } = useSubmitVoteMutation()
 
-  const [initialized, setInitialized] = useState(false)
-
   // 남은 카드들을 관리
-  const [cardList, setCardList] = useState<Vote[]>([])
   const [swipeDir, setSwipeDir] = useState<VoteChoice>(null)
 
   useEffect(() => {
     const lastPage = pages[pages.length - 1]
     const newVotes = (lastPage?.votes ?? []).filter((v): v is Vote => v !== undefined && v !== null)
 
-    setCardList((prev) => {
-      if (pages.length === 1) {
-        return newVotes
-      }
-      const prevPage = pages[pages.length - 2]
-      const prevVotes = (prevPage?.votes ?? []).filter(
-        (v): v is Vote => v !== undefined && v !== null,
-      )
-      const lastThree = prevVotes.slice(-3)
-
-      const existingIds = new Set(prev.map((v) => v.voteId))
-      const combinedVotes = [...lastThree, ...newVotes]
-      const uniqueVotes = combinedVotes.filter((v) => !existingIds.has(v.voteId))
-
-      return [...prev, ...uniqueVotes]
-    })
-
-    if (newVotes.length > 0) setInitialized(true)
-  }, [pages])
+    if (cardList.length === 0) {
+      appendCards(newVotes)
+    } else if (pages.length > 1) {
+      appendCards(newVotes)
+    }
+  }, [pages, appendCards, cardList.length])
 
   // 5개 모이면 자동 제출
   const submitVotes = useCallback(async () => {
@@ -70,6 +57,35 @@ export const VoteSwiperFramer = ({
     )
   }, [selectVote, mutateAsync])
 
+  // unmount시 자동 요청 전송을 위한 ref
+  const selectVoteRef = useRef(selectVote)
+  const mutateAsyncRef = useRef(mutateAsync)
+
+  useEffect(() => {
+    selectVoteRef.current = selectVote
+  }, [selectVote])
+
+  useEffect(() => {
+    mutateAsyncRef.current = mutateAsync
+  }, [mutateAsync])
+
+  useEffect(() => {
+    return () => {
+      const sendRemainingVotes = async () => {
+        if (selectVoteRef.current.length > 0) {
+          await Promise.all(
+            selectVoteRef.current.map(({ voteId, voteChoice }) => {
+              const userResponse = voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2
+              return mutateAsyncRef.current({ voteId, userResponse })
+            }),
+          )
+          resetVotes()
+        }
+      }
+      sendRemainingVotes()
+    }
+  }, [])
+
   useEffect(() => {
     if (selectVote.length >= 5) {
       submitVotes()
@@ -77,16 +93,25 @@ export const VoteSwiperFramer = ({
     }
   }, [selectVote, submitVotes, resetVotes])
 
-  // 카드 1장 남으면 fetchNextPage()
+  // 카드 3장 남으면 fetchNextPage()
   useEffect(() => {
-    if (!initialized) return
+    console.log('useEffect 실행됨', {
+      length: cardList.length,
+      hasNextPage,
+      isLogin,
+      isFetchingNextPage,
+      // initialized,
+    })
+
+    // if (!initialized) return
 
     if (!isLogin && cardList.length === 0) {
       openModal(<NoVoteAvailAbleModal />)
     } else if (cardList.length <= 3 && isLogin && hasNextPage && !isFetchingNextPage) {
+      console.log('fetchNextPage 호출!')
       fetchNextPage()
     }
-  }, [cardList, hasNextPage, isFetchingNextPage, fetchNextPage, isLogin, openModal, initialized])
+  }, [cardList, hasNextPage, isFetchingNextPage, fetchNextPage, isLogin, openModal])
 
   if (cardList.length === 0)
     return (
@@ -118,8 +143,6 @@ export const VoteSwiperFramer = ({
             vote={vote}
             isTop={isTop}
             index={index}
-            cardList={cardList}
-            setCardList={setCardList}
             setSwipeDir={setSwipeDir}
             addVote={addVote}
           />

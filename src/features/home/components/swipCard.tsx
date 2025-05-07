@@ -3,31 +3,26 @@ import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { Vote } from '@/api/services/vote/model'
 import { VoteCard } from '@/components/card/voteCard'
 import { VoteChoice, VoteStore } from '../stores/batchVoteStore'
+import { useVoteCardStore } from '../stores/voteCardStore'
 
 type SwipeCardProps = {
   vote: Partial<Vote>
   isTop: boolean
   index: number
-  cardList: Vote[]
-  setCardList: React.Dispatch<React.SetStateAction<Vote[]>>
   // eslint-disable-next-line no-unused-vars
   setSwipeDir: (dir: VoteChoice) => void
   // eslint-disable-next-line no-unused-vars
   addVote: (vote: VoteStore) => void
 }
 
-const SwipeCard = ({
-  vote,
-  isTop,
-  index,
-  cardList,
-  setCardList,
-  setSwipeDir,
-  addVote,
-}: SwipeCardProps) => {
+const SwipeCard = React.memo((props: SwipeCardProps) => {
+  const { vote, isTop, index, setSwipeDir, addVote } = props
+
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const rotate = useTransform(x, [-300, 300], [-20, 20])
+
+  const { cards: cardList, removeCard } = useVoteCardStore()
 
   // drag 중 라벨 업데이트
   useEffect(() => {
@@ -67,7 +62,7 @@ const SwipeCard = ({
     animate(y, targetY, { duration: 0.3 })
 
     setTimeout(() => {
-      setCardList((prev) => prev.filter((v) => v.voteId !== vote.voteId))
+      removeCard(vote.voteId as number)
       setSwipeDir(null)
     }, 100)
   }
@@ -106,6 +101,6 @@ const SwipeCard = ({
       <VoteCard {...vote} />
     </motion.div>
   )
-}
+})
 
 export default SwipeCard
