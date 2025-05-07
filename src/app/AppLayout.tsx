@@ -12,7 +12,7 @@ export const AppLayout = () => {
   const location = useLocation()
   const navigation = useNavigate()
   const { setTab } = useNavigationStore()
-  const { isLogin, setAccessToken, accessToken } = useUserStore()
+  const { isLogin, setIsLogin, setAccessToken, accessToken } = useUserStore()
   const { isOpen } = useModalStore()
 
   useEffect(() => {
@@ -27,7 +27,11 @@ export const AppLayout = () => {
       if (!accessToken) {
         try {
           const newAccessToken = await userService.refreshAccessToken()
-          setAccessToken(newAccessToken)
+
+          console.log(newAccessToken.accessToken)
+
+          setIsLogin(true)
+          setAccessToken(newAccessToken.accessToken)
           // eslint-disable-next-line no-unused-vars
         } catch (e) {
           navigation('/home')
