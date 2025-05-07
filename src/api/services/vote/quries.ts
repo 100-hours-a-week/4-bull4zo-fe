@@ -20,7 +20,7 @@ export const useInfiniteVotesQuery = ({
   const effectiveGroupId = isLogin ? groupId : 1
 
   return useInfiniteQuery<VoteData, AxiosError>({
-    queryKey: ['votes', effectiveGroupId, effectiveSize],
+    queryKey: ['votes'],
     queryFn: ({ pageParam }) =>
       voteService.getVotes({
         groupId: effectiveGroupId,
