@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
 import { useCreateGroupMutation } from '@/api/services/user/group/quries'
 import { InviteCodeCheckModal } from '@/components/modal/inviteCodeCheckModal'
-import { Modal } from '@/components/modal/modal'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -31,7 +30,7 @@ export const CreateGroupForm = () => {
     mode: 'onChange',
   })
 
-  const { isOpen, openModal } = useModalStore()
+  const { openModal } = useModalStore()
 
   const { mutate } = useCreateGroupMutation()
 
@@ -147,7 +146,6 @@ export const CreateGroupForm = () => {
           </Button>
         </div>
       </form>
-      {isOpen && <Modal />}
     </Form>
   )
 }

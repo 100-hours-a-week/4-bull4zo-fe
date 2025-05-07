@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight } from 'lucide-react'
-import { Modal } from '@/components/modal/modal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -23,7 +22,7 @@ import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 
 export const MakeVoteForm = () => {
   const { selectedId } = useGroupStore()
-  const { isOpen, openModal } = useModalStore()
+  const { openModal } = useModalStore()
 
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),
@@ -208,7 +207,6 @@ export const MakeVoteForm = () => {
           </div>
         </form>
       </Form>
-      {isOpen && <Modal />}
     </div>
   )
 }

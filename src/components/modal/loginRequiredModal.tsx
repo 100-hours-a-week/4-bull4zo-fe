@@ -23,8 +23,8 @@ export const LoginRequiredCard = () => {
         <Button
           className="px-5"
           onClick={() => {
-            navigation('/login')
             closeModal()
+            navigation('/login')
           }}
         >
           로그인
