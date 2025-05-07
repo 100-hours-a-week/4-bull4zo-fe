@@ -3,9 +3,12 @@ import { ChevronLeft } from 'lucide-react'
 import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/quries'
 import { Label } from '@/components/ui/label'
 import formatTime from '@/lib/formatTime'
+import { useGroupStore } from '@/stores/groupStore'
 
 const ResearchDetailPage = () => {
   const navigation = useNavigate()
+
+  const { groups } = useGroupStore()
 
   const { voteId } = useParams()
   const { data: voteDetail, isLoading: detailLoading } = useVoteDetailInfo(voteId as string)
@@ -18,7 +21,9 @@ const ResearchDetailPage = () => {
       <ChevronLeft onClick={() => navigation(-1)} className="mx-7 mt-5" />
       <section className="mx-9 pb-8">
         <div className="mt-4">
-          <h1 className="text-xs font-semibold">{voteDetail?.groupId}</h1>
+          <h1 className="text-xs font-semibold">
+            {groups.find((f) => f.groupId === voteDetail?.groupId)?.name}
+          </h1>
           <p className="mt-2 text-[1.125rem] font-bold">{voteDetail?.content}</p>
           <p className="mt-3">{voteDetail?.authorNickname}</p>
         </div>
@@ -27,7 +32,7 @@ const ResearchDetailPage = () => {
           <div className="relative h-12 w-full rounded bg-gray-200 overflow-hidden">
             <div
               className="absolute left-0 top-0 h-full bg-red-500 text-white pl-2 flex flex-col justify-center"
-              style={{ width: `${voteResult?.results[1]?.ratio}%` }}
+              style={{ width: `${Math.round(voteResult?.results[1]?.ratio as number)}%` }}
             >
               <Label className="font-bold">No</Label>
               <Label>
@@ -38,7 +43,7 @@ const ResearchDetailPage = () => {
           <div className="relative h-12 w-full rounded bg-gray-200 overflow-hidden">
             <div
               className="absolute left-0 top-0 h-full bg-green-500 text-white pl-2 flex flex-col justify-center"
-              style={{ width: `${voteResult?.results[0]?.ratio}%` }}
+              style={{ width: `${Math.round(voteResult?.results[0]?.ratio as number)}%` }}
             >
               <Label className="font-bold">Yes</Label>
               <Label>
