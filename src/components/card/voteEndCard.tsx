@@ -7,7 +7,7 @@ export const VoteEndCard = () => {
 
   return (
     <Card
-      className={`px-4 py-9 w-[20rem] h-[30rem] flex justify-center bg-primary text-white rounded-[3.125rem] shadow-card relative`}
+      className={`px-4 py-9 w-[90%] md:w-[70%] h-[30rem] max-h-[75%] flex justify-center bg-primary text-white rounded-[3.125rem] shadow-card relative`}
     >
       <CardHeader className="flex flex-col justify-between w-full items-center px-0 text-black">
         <div className="flex flex-row gap-1 ">
@@ -15,7 +15,7 @@ export const VoteEndCard = () => {
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-around items-center text-black">
-        <div className="w-full flex justify-around">
+        <div className="w-full flex justify-center gap-4">
           <Button
             className="px-7"
             onClick={() => {
