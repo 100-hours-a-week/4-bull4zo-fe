@@ -105,8 +105,6 @@ export const userHandlers = [
     const cookieHeader = request.headers.get('cookie') || 'refreshToken=aaa'
     const hasRefreshToken = /refreshToken=([^;]+)/.test(cookieHeader)
 
-    console.log(cookieHeader, hasRefreshToken)
-
     if (!hasRefreshToken) {
       return HttpResponse.json(
         {

@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom'
+import { useUserStore } from '@/stores/userStore'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const VoteNoMoreCard = () => {
   const navigation = useNavigate()
+  const { isLogin } = useUserStore()
 
   return (
     <Card
@@ -11,7 +13,7 @@ export const VoteNoMoreCard = () => {
     >
       <CardHeader className="flex flex-col justify-between w-full items-center px-0 text-black">
         <div className="flex flex-row gap-1 ">
-          <CardTitle className="font-unbounded text-2xl">
+          <CardTitle className="font-unbounded text-2xl text-center">
             지금은 잠잠하네요... <br /> 새로운 투표가 없습니다.
           </CardTitle>
         </div>
@@ -20,6 +22,7 @@ export const VoteNoMoreCard = () => {
         <div className="w-full flex justify-around">
           <Button
             className="px-5"
+            disabled={!isLogin}
             onClick={() => {
               navigation('/make')
             }}
