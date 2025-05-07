@@ -26,7 +26,7 @@ export const VoteSwiperFramer = ({
   isFetchingNextPage,
 }: Props) => {
   const { isLogin } = useUserStore()
-  const { openModal } = useModalStore()
+  const { isOpen, openModal } = useModalStore()
 
   const { cards: cardList, appendCards } = useVoteCardStore()
 
@@ -93,25 +93,26 @@ export const VoteSwiperFramer = ({
     }
   }, [selectVote, submitVotes, resetVotes])
 
+  const [isInitializing, setIsInitializing] = useState(true)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsInitializing(false)
+    }, 0)
+
+    return () => clearTimeout(timeout)
+  }, [])
+
   // 카드 3장 남으면 fetchNextPage()
   useEffect(() => {
-    console.log('useEffect 실행됨', {
-      length: cardList.length,
-      hasNextPage,
-      isLogin,
-      isFetchingNextPage,
-      // initialized,
-    })
+    if (isInitializing) return
 
-    // if (!initialized) return
-
-    if (!isLogin && cardList.length === 0) {
+    if (!isLogin && cardList.length === 0 && !isOpen) {
       openModal(<NoVoteAvailAbleModal />)
     } else if (cardList.length <= 3 && isLogin && hasNextPage && !isFetchingNextPage) {
-      console.log('fetchNextPage 호출!')
       fetchNextPage()
     }
-  }, [cardList, hasNextPage, isFetchingNextPage, fetchNextPage, isLogin, openModal])
+  }, [cardList, hasNextPage, isFetchingNextPage, fetchNextPage, isLogin, openModal, isInitializing])
 
   if (cardList.length === 0)
     return (
