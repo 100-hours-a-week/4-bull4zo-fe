@@ -23,10 +23,18 @@ const AuthCallback = () => {
 
   const handleKakaoLogin = async (kakaoAuthCode: string) => {
     try {
-      const response = await axiosInstance.post('/api/v1/auth/login/oauth', {
-        provider: 'kakao',
-        code: kakaoAuthCode,
-      })
+      const response = await axiosInstance.post(
+        '/api/v1/auth/login/oauth',
+        {
+          provider: 'kakao',
+          code: kakaoAuthCode,
+        },
+        {
+          headers: {
+            'X-Redirect-Uri': import.meta.env.VITE_BASE_URL + '/auth/callback',
+          },
+        },
+      )
 
       const { accessToken } = response.data.data
 
