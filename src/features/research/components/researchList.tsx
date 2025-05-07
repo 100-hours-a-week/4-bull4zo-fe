@@ -27,7 +27,7 @@ export const ResearchList = () => {
 
   return (
     <section className="px-4 py-2">
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-4 mb-4">
         <Label
           onClick={() => setIndex(0)}
           className={`text-2xl flex items-center justify-end font-unbounded cursor-pointer w-35 ${index === 0 ? 'font-bold' : 'font-light'}`}
