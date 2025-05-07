@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 export const createGroupSchema = z.object({
-  name: z.string().min(2, '2 ~ 12자를 입력해주세요.').max(12, '2 ~ 12자를 입력해주세요.'),
+  name: z.string().min(2, '최소 2자 이상의 문자열입니다.').max(12, '최대 12자의 문자열입니다.'),
   description: z.string().min(2, '2 ~ 50자를 입력해주세요.').max(50, '2 ~ 50자를 입력해주세요.'),
   image: z
     .any()
