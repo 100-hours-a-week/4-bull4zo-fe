@@ -11,13 +11,6 @@ export const votesHandlers = [
     const isGuest = !authHeader
     const finalGroupId = isGuest ? '1' : groupId
 
-    if (
-      cursor &&
-      !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}_\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/.test(cursor)
-    ) {
-      return HttpResponse.json({ message: 'INVALID_CURSOR_FORMAT', data: null }, { status: 400 })
-    }
-
     const votes = [
       {
         voteId: 101,
@@ -195,15 +188,209 @@ export const votesHandlers = [
         adminVote: 1,
         voteType: 'USER',
       },
+      {
+        voteId: 116,
+        groupId: Number(finalGroupId),
+        authorNickname: '김민수',
+        content: '최고의 주말 드라마는?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T10:00:00',
+        closedAt: '2025-04-25T10:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 117,
+        groupId: Number(finalGroupId),
+        authorNickname: '이지은',
+        content: '이번 여름에 읽을만한 책 추천!',
+        imageUrl:
+          'https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T11:00:00',
+        closedAt: '2025-04-25T11:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 118,
+        groupId: Number(finalGroupId),
+        authorNickname: '박서준',
+        content: '서울에서 가장 맛있는 냉면집은?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1606857521015-7f1e73a4d46b?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T12:00:00',
+        closedAt: '2025-04-25T12:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 119,
+        groupId: Number(finalGroupId),
+        authorNickname: '윤아',
+        content: '이번 주 핫한 영화는?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1581905764498-9c97c8a0d5ee?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T13:00:00',
+        closedAt: '2025-04-25T13:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 120,
+        groupId: Number(finalGroupId),
+        authorNickname: '정국',
+        content: '최고의 운동 루틴은?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1558611848-73f7eb4001a1?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T14:00:00',
+        closedAt: '2025-04-25T14:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 121,
+        groupId: Number(finalGroupId),
+        authorNickname: '수지',
+        content: '서울 근교 당일치기 여행 추천?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T15:00:00',
+        closedAt: '2025-04-25T15:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 122,
+        groupId: Number(finalGroupId),
+        authorNickname: '박보검',
+        content: '최고의 디저트 카페는?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1590080876060-4ce0a5a01e57?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T16:00:00',
+        closedAt: '2025-04-25T16:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 123,
+        groupId: Number(finalGroupId),
+        authorNickname: '아이유',
+        content: '올해 가장 기대되는 콘서트는?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T17:00:00',
+        closedAt: '2025-04-25T17:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 124,
+        groupId: Number(finalGroupId),
+        authorNickname: '강다니엘',
+        content: '최고의 모바일 게임은?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1593642634443-44adaa06623a?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T18:00:00',
+        closedAt: '2025-04-25T18:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 125,
+        groupId: Number(finalGroupId),
+        authorNickname: '김연아',
+        content: '겨울 스포츠 추천!',
+        imageUrl:
+          'https://images.unsplash.com/photo-1549924231-f129b911e442?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T19:00:00',
+        closedAt: '2025-04-25T19:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 126,
+        groupId: Number(finalGroupId),
+        authorNickname: '송중기',
+        content: '재미있는 보드게임 추천?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1581091870621-5a00a6cc04b7?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T20:00:00',
+        closedAt: '2025-04-25T20:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 127,
+        groupId: Number(finalGroupId),
+        authorNickname: '장원영',
+        content: '최고의 패션 브랜드는?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1561808844-798d8d72f950?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T21:00:00',
+        closedAt: '2025-04-25T21:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 128,
+        groupId: Number(finalGroupId),
+        authorNickname: '박지훈',
+        content: '새로운 취미 추천?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1549921296-3a6bca12343d?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T22:00:00',
+        closedAt: '2025-04-25T22:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 129,
+        groupId: Number(finalGroupId),
+        authorNickname: '설현',
+        content: '최고의 카페 거리 추천?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-22T23:00:00',
+        closedAt: '2025-04-25T23:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
+      {
+        voteId: 130,
+        groupId: Number(finalGroupId),
+        authorNickname: '차은우',
+        content: '올해 가장 기대되는 신제품은?',
+        imageUrl:
+          'https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=1600&q=80',
+        createdAt: '2025-04-23T00:00:00',
+        closedAt: '2025-04-26T00:00:00',
+        adminVote: 0,
+        voteType: 'USER',
+      },
     ]
+
+    let startIndex = 0
+    if (cursor) {
+      const index = votes.findIndex((vote) => {
+        return `${vote.createdAt}_${vote.voteId}` === cursor
+      })
+      if (index === -1) {
+        return HttpResponse.json({ message: 'INVALID_CURSOR_FORMAT', data: null }, { status: 400 })
+      }
+      startIndex = index + 1
+    }
+
+    const paginated = votes.slice(startIndex, startIndex + size)
+    const last = paginated.at(-1)
 
     const response = {
       message: 'SUCCESS',
       data: {
-        votes: votes.slice(0, size),
-        nextCursor: votes.length > size ? '2025-04-24T12:00:00_2025-04-22T10:00:00' : null,
-        hasNext: votes.length > size,
-        size: Math.min(size, votes.length),
+        votes: paginated,
+        nextCursor: last ? `${last.createdAt}_${last.voteId}` : null,
+        hasNext: startIndex + size < votes.length,
+        size: paginated.length,
       },
     }
 

@@ -5,6 +5,7 @@ import { useModalStore } from '@/stores/modalStore'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
 import { LoginRequiredCard } from '../modal/loginRequiredModal'
+import { Modal } from '../modal/modal'
 
 interface NavigationItemProps {
   icon: React.ReactNode
@@ -51,12 +52,15 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
 }
 
 const Navigation = () => {
+  const { isOpen } = useModalStore()
+
   return (
     <nav className="flex flex-row items-center justify-around max-w-[575px] w-full h-[4rem] fixed bottom-0 z-30 bg-white">
       <NavigationItem icon={<Flame />} label="home" />
       <NavigationItem icon={<ClipboardPlus />} label="make" />
       <NavigationItem icon={<Vote />} label="research" />
       <NavigationItem icon={<User />} label="user" />
+      {isOpen && <Modal />}
     </nav>
   )
 }
