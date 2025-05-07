@@ -16,7 +16,7 @@ const HomePage = () => {
   const groupId = useGroupStore((state) => state.selectedId)
   const { data, isSuccess, isFetching, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteVotesQuery({ groupId, isLogin })
-  const { data: user } = useUserInfoQuery()
+  const { data: user } = useUserInfoQuery({ enabled: isLogin })
 
   const { isOpen, openModal } = useModalStore()
 

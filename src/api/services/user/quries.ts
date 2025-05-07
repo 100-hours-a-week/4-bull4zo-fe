@@ -1,13 +1,17 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { UseQueryOptions, useMutation, useQuery } from '@tanstack/react-query'
+import { UserInfo } from './model'
 import { userService } from './service'
 
 // 유저 정보 조회
-export const useUserInfoQuery = () => {
+export const useUserInfoQuery = (
+  options?: Omit<UseQueryOptions<UserInfo, Error>, 'queryKey' | 'queryFn'>,
+) => {
   return useQuery({
     queryKey: ['user'],
     queryFn: userService.getUserInfo,
     staleTime: 1000 * 60 * 5,
     retry: 1,
+    ...options,
   })
 }
 // 유저 정보 수정
