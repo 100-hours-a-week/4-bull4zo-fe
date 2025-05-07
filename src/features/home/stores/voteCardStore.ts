@@ -8,6 +8,7 @@ type VoteCardStore = {
   appendCards: (newVotes: Vote[]) => void
   // eslint-disable-next-line no-unused-vars
   removeCard: (voteId: number) => void
+  reset: () => void
 }
 
 export const useVoteCardStore = create<VoteCardStore>((set) => ({
@@ -39,4 +40,5 @@ export const useVoteCardStore = create<VoteCardStore>((set) => ({
         removedIds: newRemoved,
       }
     }),
+  reset: () => set({ cards: [], removedIds: new Set<number>() }),
 }))

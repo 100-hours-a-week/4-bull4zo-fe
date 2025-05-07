@@ -72,10 +72,10 @@ export const MakeVoteForm = () => {
             name="content"
             render={({ field }) => (
               <FormItem className=" relative">
-                <FormLabel className="font-semibold">투표 내용</FormLabel>
+                <FormLabel className="font-semibold text-lg">투표 내용</FormLabel>
                 <FormControl>
                   <Textarea
-                    className="border-0 text-[0.875rem] bg-primary rounded-[1.25rem] min-w-[20rem] shadow-card h-[18rem] p-4 resize-none"
+                    className="border-0 text-[0.875rem] rounded-[1.25rem] min-w-[20rem] shadow-card h-[18rem] p-4 resize-none border-solid border-black border-2"
                     {...field}
                     value={field.value ?? ''}
                     placeholder="내용을 입력하세요."
@@ -96,15 +96,15 @@ export const MakeVoteForm = () => {
             name="anonymous"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-semibold">익명 투표 여부</FormLabel>
+                <FormLabel className="font-semibold text-lg">익명 투표 여부</FormLabel>
                 <FormControl>
                   <div className="flex gap-2">
                     <Checkbox
-                      className="w-6 h-6"
+                      className="w-5 h-5"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                    <Label className="text-xl font-semibold font-unbounded">
+                    <Label className="font-semibold font-unbounded">
                       {!field.value ? '실명' : '익명'}
                     </Label>
                   </div>
@@ -183,10 +183,10 @@ export const MakeVoteForm = () => {
             name="closedAt"
             render={({ field }) => (
               <FormItem className=" relative">
-                <FormLabel className="font-semibold">투표 종료 시간</FormLabel>
+                <FormLabel className="font-semibold text-lg">투표 종료 시간</FormLabel>
                 <FormControl>
                   <input
-                    className="text-xl rounded-[0.75rem] bg-gray px-8 py-3"
+                    className="rounded-[0.75rem] bg-gray px-8 py-3"
                     {...field}
                     type="datetime-local"
                   />
@@ -199,7 +199,7 @@ export const MakeVoteForm = () => {
             <Button
               type="submit"
               disabled={!form.formState.isValid}
-              className={`w-full h-full max-w-[6rem] py-1 text-lg font-semibold mt-4 ${form.formState.isValid && 'bg-secondary text-white'}`}
+              className={`w-full h-full max-w-[6rem] py-2 text-lg font-semibold mt-4 ${form.formState.isValid && 'bg-primary text-white'}`}
             >
               등록
               <ChevronRight />

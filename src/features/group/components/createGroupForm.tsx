@@ -41,8 +41,8 @@ export const CreateGroupForm = () => {
     mutate(
       { name: values.name, description: values.description, imageUrl: '' },
       {
-        onSuccess: () => {
-          openModal(<InviteCodeCheckModal />)
+        onSuccess: (data) => {
+          openModal(<InviteCodeCheckModal code={data.inviteCode} />)
         },
       },
     )
@@ -52,7 +52,7 @@ export const CreateGroupForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex-1 flex flex-col gap-6 w-full h-full max-w-lg mx-auto justify-between"
+        className="flex-1 flex flex-col gap-6 w-full h-full max-w-lg mx-auto"
       >
         <div className="gap-6 flex flex-col bg-gray px-5 pt-3 pb-12 rounded-[0.625rem]">
           <div className="flex gap-4">
@@ -61,7 +61,7 @@ export const CreateGroupForm = () => {
               name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>그룹 이미지</FormLabel>
+                  <FormLabel className="text-lg">그룹 이미지</FormLabel>
                   <FormControl>
                     <div>
                       <Input
@@ -101,13 +101,16 @@ export const CreateGroupForm = () => {
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="flex flex-col flex-1 gap-4 pt-7">
-                  <FormLabel className="font-semibold">그룹 이름</FormLabel>
+                <FormItem className="flex flex-col flex-1 gap-4 pt-7 min-h-[10rem]">
+                  <FormLabel className="font-semibold text-lg">그룹 이름</FormLabel>
                   <FormControl>
                     <Input
-                      className="text-[0.875rem]"
                       placeholder="그룹 이름을 입력하세요"
                       {...field}
+                      onChange={(e) => {
+                        const onlyLetters = e.target.value.replace(/[^a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ]/g, '')
+                        field.onChange(onlyLetters)
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -121,13 +124,13 @@ export const CreateGroupForm = () => {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between">
-                  <FormLabel className="font-semibold">그룹 소개</FormLabel>
+                  <FormLabel className="font-semibold text-lg">그룹 소개</FormLabel>
                   <Label className="text-xs">{field.value.length}/50</Label>
                 </div>
                 <FormControl>
                   <Textarea
                     placeholder="그룹을 소개해주세요 (최대 50자)"
-                    className="text-[0.875rem]"
+                    className="resize-none"
                     {...field}
                   />
                 </FormControl>
@@ -138,7 +141,7 @@ export const CreateGroupForm = () => {
         </div>
         <div className="flex justify-center items-center">
           <Button
-            className={`py-4 px-14 h-full ${form.formState.isValid && 'bg-secondary text-white'}`}
+            className={`py-4 px-14 h-full ${form.formState.isValid && 'bg-primary text-white'}`}
             type="submit"
             disabled={!form.formState.isValid}
           >

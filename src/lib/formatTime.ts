@@ -39,3 +39,22 @@ export default function formatTime(timeStamp: string): string {
     }
   }
 }
+
+export function formatTimeDetail(timestamp: string): string {
+  const date = new Date(timestamp)
+  const now = new Date()
+
+  const year = date.getFullYear()
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  const hour = date.getHours().toString().padStart(2, '0')
+  const minute = date.getMinutes().toString().padStart(2, '0')
+
+  const isThisYear = year === now.getFullYear()
+
+  if (isThisYear) {
+    return `${month}/${day} ${hour}:${minute}`
+  } else {
+    return `${year}/${month}/${day} ${hour}:${minute}`
+  }
+}

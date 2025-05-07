@@ -6,7 +6,7 @@ import { useInviteCodeMutation } from '@/api/services/user/group/quries'
 import { InviteCodeSchema, inviteCodeSchema } from '@/features/user/lib/userSchema'
 import { useModalStore } from '@/stores/modalStore'
 import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { Card, CardContent } from '../ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 
@@ -50,11 +50,6 @@ export const AddGroupModal = () => {
       className={`flex justify-center px-4 py-9 w-[20rem] h-[20rem] rounded-[0.75rem] shadow-card bg-gray-300
     `}
     >
-      <CardHeader className="flex flex-row px-0 justify-center items-center">
-        <div className="flex flex-row gap-1 ">
-          <CardTitle className="font-unbounded text-2xl text-center">초대코드 입력</CardTitle>
-        </div>
-      </CardHeader>
       <CardContent className="flex flex-col justify-center items-center gap-5">
         <div>
           <Form {...form}>
@@ -75,7 +70,8 @@ export const AddGroupModal = () => {
                           maxLength={8}
                           className="flex-1 bg-white rounded-[0.75rem]"
                           onChange={(e) => {
-                            field.onChange(e.target.value.toUpperCase().replace(/\s/g, ''))
+                            const onlyLetters = e.target.value.replace(/[^a-zA-Z가-힣]/g, '')
+                            field.onChange(onlyLetters)
                           }}
                         />
                       </FormControl>
@@ -84,7 +80,7 @@ export const AddGroupModal = () => {
                         type="submit"
                         className={`px-4 ${isValid ? 'bg-primary text-white' : 'bg-gray-400 text-gray-200'}`}
                       >
-                        전송
+                        가입
                       </Button>
                     </div>
                     <FormMessage />
@@ -94,7 +90,10 @@ export const AddGroupModal = () => {
             </form>
           </Form>
         </div>
-        <div className="w-full flex justify-around">
+        <div className="w-full flex flex-col justify-center gap-2">
+          <Button className="px-7" onClick={onNewGroupHandler}>
+            새 그룹 생성
+          </Button>
           <Button
             className="px-7"
             onClick={() => {
@@ -102,9 +101,6 @@ export const AddGroupModal = () => {
             }}
           >
             취소
-          </Button>
-          <Button className="px-7" onClick={onNewGroupHandler}>
-            새 그룹 생성
           </Button>
         </div>
       </CardContent>

@@ -27,14 +27,14 @@ export const ResearchList = () => {
 
   return (
     <section className="px-4 py-2">
-      <div className="flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-4 mb-4">
         <Label
           onClick={() => setIndex(0)}
-          className={`text-2xl font-unbounded cursor-pointer ${index === 0 ? 'font-bold' : 'font-light'}`}
+          className={`text-2xl flex items-center justify-end font-unbounded cursor-pointer w-35 ${index === 0 ? 'font-bold' : 'font-light'}`}
         >
           참여한 투표
         </Label>
-        <Label className="text-xl font-unbounded">|</Label>
+        <Label className="text-xl font-light font-unbounded">|</Label>
         <Label
           onClick={() => setIndex(1)}
           className={`text-2xl font-unbounded cursor-pointer ${index === 1 ? 'font-bold' : 'font-light'}`}

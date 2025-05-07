@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/quries'
 import { Label } from '@/components/ui/label'
-import formatTime from '@/lib/formatTime'
+import { formatTimeDetail } from '@/lib/formatTime'
 import { useGroupStore } from '@/stores/groupStore'
 
 const ResearchDetailPage = () => {
@@ -16,9 +16,12 @@ const ResearchDetailPage = () => {
 
   if (detailLoading || resultLoading) return <div>로딩중...</div>
 
+  const agree = voteResult?.results[0]
+  const disAgree = voteResult?.results[1]
+
   return (
     <article>
-      <ChevronLeft onClick={() => navigation(-1)} className="mx-7 mt-5" />
+      <ChevronLeft onClick={() => navigation(-1)} className="mx-7 mt-5 cursor-pointer" />
       <section className="mx-9 pb-8">
         <div className="mt-4">
           <h1 className="text-xs font-semibold">
@@ -30,30 +33,34 @@ const ResearchDetailPage = () => {
         <div className="mt-3 flex flex-col gap-4">
           <p className="font-semibold text-end">{voteResult?.totalCount}표</p>
           <div className="relative h-12 w-full rounded bg-gray-200 overflow-hidden">
-            <div
-              className="absolute left-0 top-0 h-full bg-red-500 text-white pl-2 flex flex-col justify-center"
-              style={{ width: `${Math.round(voteResult?.results[1]?.ratio as number)}%` }}
-            >
-              <Label className="font-bold">No</Label>
-              <Label>
-                {voteResult?.results[1]?.ratio}% {voteResult?.results[1]?.count}표
-              </Label>
-            </div>
+            {(disAgree?.count as number) > 0 && (
+              <div
+                className="absolute left-0 top-0 h-full bg-red-500 text-white pl-2 flex flex-col justify-center"
+                style={{ width: `${Math.round(disAgree?.ratio as number)}%` }}
+              >
+                <Label className="font-bold">No</Label>
+                <Label>
+                  {Math.round(disAgree?.ratio as number)}% {disAgree?.count}표
+                </Label>
+              </div>
+            )}
           </div>
-          <div className="relative h-12 w-full rounded bg-gray-200 overflow-hidden">
-            <div
-              className="absolute left-0 top-0 h-full bg-green-500 text-white pl-2 flex flex-col justify-center"
-              style={{ width: `${Math.round(voteResult?.results[0]?.ratio as number)}%` }}
-            >
-              <Label className="font-bold">Yes</Label>
-              <Label>
-                {voteResult?.results[0]?.ratio}% {voteResult?.results[0]?.count}표
-              </Label>
+          {(agree?.count as number) > 0 && (
+            <div className="relative h-12 w-full rounded bg-gray-200 overflow-hidden">
+              <div
+                className="absolute left-0 top-0 h-full bg-green-500 text-white pl-2 flex flex-col justify-center"
+                style={{ width: `${Math.round(agree?.ratio as number)}%` }}
+              >
+                <Label className="font-bold">Yes</Label>
+                <Label>
+                  {Math.round(agree?.ratio as number)}% {agree?.count}표
+                </Label>
+              </div>
             </div>
-          </div>
+          )}
           <div className="text-xs font-semibold  text-gray">
-            {formatTime(voteDetail?.createdAt as string)} ~{' '}
-            {formatTime(voteDetail?.closedAt as string)}
+            {formatTimeDetail(voteDetail?.createdAt as string)} ~{' '}
+            {formatTimeDetail(voteDetail?.closedAt as string)}
           </div>
         </div>
       </section>

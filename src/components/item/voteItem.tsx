@@ -16,13 +16,13 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
         if (vote.voteStatus === 'PENDING' || vote.voteStatus === 'REJECTED') return
         navigation(`/research/${vote.voteId}`)
       }}
-      className={`flex flex-col px-2 py-3 border-[0.125rem] rounded-2xl gap-2 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-help' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
+      className={`flex flex-col px-4 py-6 border-[0.125rem] rounded-2xl gap-4 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-help' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <div className="flex flex-row items-center justify-between relative">
-        <Label className="font-bold line-clamp-2">{vote.content}</Label>
+        <Label className="font-bold text-lg line-clamp-1">{vote.content}</Label>
         {vote.voteStatus && <VoteStatusLabel status={vote.voteStatus} />}
       </div>
-      <div className="flex items-center justify-end text-xs font-bold">
+      <div className="flex items-center justify-end text-xs">
         {formatTime(vote.closedAt as string)}
       </div>
       <div
@@ -33,7 +33,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
             className="absolute left-0 top-0 h-full items-center justify-center bg-green-500"
             style={{ width: `${Math.round(agree?.ratio as number)}%` }}
           >
-            <ResultLabel>찬성</ResultLabel>
+            <ResultLabel>Yes</ResultLabel>
           </div>
         )}
         {(disagree?.count as number) > 0 && (
@@ -41,7 +41,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
             className="absolute right-0 top-0 h-full bg-red-500"
             style={{ width: `${Math.round(disagree?.ratio as number)}%` }}
           >
-            <ResultLabel>반대</ResultLabel>
+            <ResultLabel>No</ResultLabel>
           </div>
         )}
       </div>
@@ -84,7 +84,7 @@ const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status 
         className="flex h-full justify-center items-center text-zinc-500 cursor-help min-w-14"
       >
         검토중
-        <div className="flex h-3 w-3 rounded-full bg-zinc-400 text-[0.625rem] justify-center items-center text-white font-bold">
+        <div className="flex h-3 w-3 rounded-full bg-zinc-400 text-[0.875rem] justify-center items-center text-white font-bold">
           <span className=" translate-y-[0.0625rem]">?</span>
         </div>
         {open && <StatusTooltip />}

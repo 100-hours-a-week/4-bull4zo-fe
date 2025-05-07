@@ -1,9 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ClipboardPlus, Flame, User, Vote } from 'lucide-react'
+import { ListCheckIcon, Plus, User } from 'lucide-react'
+import Vote from '@/assets/vote.svg'
 import { useModalStore } from '@/stores/modalStore'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
+import { Icon } from '../Icon/icon'
 import { LoginRequiredCard } from '../modal/loginRequiredModal'
 
 interface NavigationItemProps {
@@ -53,9 +55,9 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
 const Navigation = () => {
   return (
     <nav className="flex flex-row items-center justify-around max-w-[575px] w-full h-[4rem] fixed bottom-0 z-30 bg-white">
-      <NavigationItem icon={<Flame />} label="home" />
-      <NavigationItem icon={<ClipboardPlus />} label="make" />
-      <NavigationItem icon={<Vote />} label="research" />
+      <NavigationItem icon={<Icon src={Vote} alt="투표 아이콘" />} label="home" />
+      <NavigationItem icon={<Plus />} label="make" />
+      <NavigationItem icon={<ListCheckIcon />} label="research" />
       <NavigationItem icon={<User />} label="user" />
     </nav>
   )
