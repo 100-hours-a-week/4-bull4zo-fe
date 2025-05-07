@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
 import { userService } from '@/api/services/user/service'
 import Header from '@/components/header/header'
 import Navigation from '@/components/navigation/navigation'
@@ -11,7 +10,7 @@ export const AppLayout = () => {
   const location = useLocation()
   const navigation = useNavigate()
   const { setTab } = useNavigationStore()
-  const { isLogin, setAccessToken } = useUserStore()
+  const { isLogin, setAccessToken, accessToken } = useUserStore()
 
   useEffect(() => {
     if (!isLogin) {
@@ -22,15 +21,12 @@ export const AppLayout = () => {
 
   useEffect(() => {
     const checkAndRefreshToken = async () => {
-      const storedAccessToken = useUserStore.getState().accessToken
-
-      if (!storedAccessToken) {
+      if (!accessToken) {
         try {
           const newAccessToken = await userService.refreshAccessToken()
           setAccessToken(newAccessToken)
           // eslint-disable-next-line no-unused-vars
         } catch (e) {
-          toast('토큰 갱신 실패')
           navigation('/home')
           return
         }
@@ -39,7 +35,7 @@ export const AppLayout = () => {
 
     checkAndRefreshToken()
     setTab(location.pathname)
-  }, [location.pathname, setTab, navigation])
+  }, [location.pathname, setTab, navigation, setAccessToken])
 
   return (
     <>
