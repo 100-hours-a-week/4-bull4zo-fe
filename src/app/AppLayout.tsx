@@ -28,8 +28,6 @@ export const AppLayout = () => {
         try {
           const newAccessToken = await userService.refreshAccessToken()
 
-          console.log(newAccessToken.accessToken)
-
           setIsLogin(true)
           setAccessToken(newAccessToken.accessToken)
           // eslint-disable-next-line no-unused-vars

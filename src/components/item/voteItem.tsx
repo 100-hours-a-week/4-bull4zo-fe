@@ -33,7 +33,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
             className="absolute left-0 top-0 h-full items-center justify-center bg-green-500"
             style={{ width: `${Math.round(agree?.ratio as number)}%` }}
           >
-            <ResultLabel>찬성</ResultLabel>
+            <ResultLabel>Yes</ResultLabel>
           </div>
         )}
         {(disagree?.count as number) > 0 && (
@@ -41,7 +41,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
             className="absolute right-0 top-0 h-full bg-red-500"
             style={{ width: `${Math.round(disagree?.ratio as number)}%` }}
           >
-            <ResultLabel>반대</ResultLabel>
+            <ResultLabel>No</ResultLabel>
           </div>
         )}
       </div>
