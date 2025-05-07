@@ -2,7 +2,6 @@ import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
-import { toast } from 'sonner'
 import { useCreateGroupMutation } from '@/api/services/user/group/quries'
 import { InviteCodeCheckModal } from '@/components/modal/inviteCodeCheckModal'
 import { Modal } from '@/components/modal/modal'
@@ -45,9 +44,6 @@ export const CreateGroupForm = () => {
       {
         onSuccess: () => {
           openModal(<InviteCodeCheckModal />)
-        },
-        onError: (e) => {
-          toast(e.message)
         },
       },
     )

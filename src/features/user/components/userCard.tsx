@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, PencilLine } from 'lucide-react'
-import { toast } from 'sonner'
 import { useUserLogoutMutation, useUserUpdateMutation } from '@/api/services/user/quries'
 import { ExitUserModal } from '@/components/modal/exitUserModal'
 import { NicknameSchema, nicknameSchema } from '@/features/user/lib/userSchema'
@@ -39,9 +38,6 @@ export const UserCard = () => {
       {
         onSuccess: (data) => {
           setNickName(data.nickname)
-        },
-        onError: () => {
-          toast('닉네임 변경에 실패했습니다.')
         },
       },
     )

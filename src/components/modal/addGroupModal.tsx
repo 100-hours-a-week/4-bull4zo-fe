@@ -40,9 +40,6 @@ export const AddGroupModal = () => {
         onSuccess: () => {
           toast('그룹 가입 성공')
         },
-        onError: (e) => {
-          toast(e.message)
-        },
       },
     )
     closeModal()

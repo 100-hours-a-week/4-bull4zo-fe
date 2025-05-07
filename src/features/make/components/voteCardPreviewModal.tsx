@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
 import { useCreateVoteMutation } from '@/api/services/vote/quries'
 import { useModalStore } from '@/stores/modalStore'
 import { VoteCardPreview } from '../../../components/card/voteCardPreview'
@@ -25,9 +24,6 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
       {
         onSuccess: () => {
           navigation('/research')
-        },
-        onError: () => {
-          toast('잘못된 값이 입력되었습니다.')
         },
       },
     )

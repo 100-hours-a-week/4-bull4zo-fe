@@ -19,7 +19,7 @@ const fullGroupList = [
 ]
 
 export const groupHandlers = [
-  http.get('/api/v1/user/groups/names', ({ request }) => {
+  http.get('/api/v1/user/groups/labels', ({ request }) => {
     const url = new URL(request.url, 'http://localhost:5173')
     const cursor = url.searchParams.get('cursor')
     const size = parseInt(url.searchParams.get('size') || '10', 10)
