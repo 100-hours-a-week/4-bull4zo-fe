@@ -84,7 +84,7 @@ const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status 
         className="flex h-full justify-center items-center text-zinc-500 cursor-help min-w-14"
       >
         검토중
-        <div className="flex h-3 w-3 rounded-full bg-zinc-400 text-[0.625rem] justify-center items-center text-white font-bold">
+        <div className="flex h-3 w-3 rounded-full bg-zinc-400 text-[0.875rem] justify-center items-center text-white font-bold">
           <span className=" translate-y-[0.0625rem]">?</span>
         </div>
         {open && <StatusTooltip />}
