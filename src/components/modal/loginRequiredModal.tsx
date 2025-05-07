@@ -19,7 +19,15 @@ export const LoginRequiredCard = () => {
           </CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="flex justify-center items-center">
+      <CardContent className="flex gap-4 justify-center items-center">
+        <Button
+          className="px-5"
+          onClick={() => {
+            closeModal()
+          }}
+        >
+          취소
+        </Button>
         <Button
           className="px-5"
           onClick={() => {
