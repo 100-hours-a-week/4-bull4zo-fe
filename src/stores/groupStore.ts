@@ -12,7 +12,7 @@ interface GroupStore {
 }
 
 export const useGroupStore = create<GroupStore>((set) => ({
-  selectedId: 1,
+  selectedId: 0,
   groups: [],
   setId: (selectedId) => set({ selectedId }),
   setGroups: (groups) => set({ groups }),
