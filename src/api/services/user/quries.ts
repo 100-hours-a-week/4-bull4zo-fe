@@ -1,4 +1,4 @@
-import { UseQueryOptions, useMutation, useQuery } from '@tanstack/react-query'
+import { UseQueryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { UserInfo } from './model'
 import { userService } from './service'
 
@@ -16,8 +16,13 @@ export const useUserInfoQuery = (
 }
 // 유저 정보 수정
 export const useUserUpdateMutation = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: userService.updateUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user'] })
+    },
   })
 }
 // 유저 로그아웃
