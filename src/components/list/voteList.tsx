@@ -40,7 +40,7 @@ export const VoteList = ({
   }, [fetchNextPage, hasNextPage, isFetchingNextPage])
 
   return (
-    <ul className="flex flex-col gap-4 px-2 pt-2">
+    <ul className="flex flex-col gap-4 pt-2">
       {votes.map((vote) => (
         <VoteItem key={vote?.voteId} {...vote} />
       ))}

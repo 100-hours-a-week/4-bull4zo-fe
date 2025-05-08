@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   useCreateVotesInfinityQuery,
   useParticipatedVotesInfinityQuery,
@@ -6,9 +5,10 @@ import {
 import { VoteList } from '@/components/list/voteList'
 import { Label } from '@/components/ui/label'
 import { useGroupStore } from '@/stores/groupStore'
+import { useResearchTabStore } from '../stores/researchTapStore'
 
 export const ResearchList = () => {
-  const [index, setIndex] = useState(0)
+  const { index, setIndex } = useResearchTabStore()
   const { selectedId } = useGroupStore()
 
   const participatedQuery = useParticipatedVotesInfinityQuery({
@@ -26,7 +26,7 @@ export const ResearchList = () => {
     index === 0 ? participatedQuery.isFetchingNextPage : myVotesQuery.isFetchingNextPage
 
   return (
-    <section className="px-4 py-2">
+    <section className="px-7 py-2">
       <div className="flex items-center justify-around mb-4">
         <div className="" />
         <Label
