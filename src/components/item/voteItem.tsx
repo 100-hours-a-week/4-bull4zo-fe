@@ -16,35 +16,39 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
         if (vote.voteStatus === 'PENDING' || vote.voteStatus === 'REJECTED') return
         navigation(`/research/${vote.voteId}`)
       }}
-      className={`flex flex-col px-4 py-6 border-[0.125rem] rounded-2xl gap-4 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-not-allowed' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
+      className={`flex flex-col px-4 py-6 border-[0.125rem] min-h-28 rounded-2xl gap-4 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-not-allowed' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <div className="flex flex-row items-center justify-between relative">
         <Label className="font-bold text-lg line-clamp-1">{vote.content}</Label>
         {vote.voteStatus && <VoteStatusLabel status={vote.voteStatus} />}
       </div>
-      <div className="flex items-center justify-end text-xs">
-        {formatTime(vote.closedAt as string)}
-      </div>
-      <div
-        className={`relative h-6 w-full rounded ${vote.results && 'bg-gray-200'} overflow-hidden`}
-      >
-        {(agree?.count as number) > 0 && (
-          <div
-            className="absolute left-0 top-0 h-full items-center justify-center bg-green-500"
-            style={{ width: `${Math.round(agree?.ratio as number)}%` }}
-          >
-            <ResultLabel>Yes</ResultLabel>
-          </div>
-        )}
-        {(disagree?.count as number) > 0 && (
-          <div
-            className="absolute right-0 top-0 h-full bg-red-500"
-            style={{ width: `${Math.round(disagree?.ratio as number)}%` }}
-          >
-            <ResultLabel>No</ResultLabel>
-          </div>
-        )}
-      </div>
+      {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
+        <div className="flex items-center justify-end text-xs">
+          {formatTime(vote.closedAt as string)}
+        </div>
+      )}
+      {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
+        <div
+          className={`relative h-6 w-full rounded ${vote.results && 'bg-gray-200'} overflow-hidden`}
+        >
+          {(agree?.count as number) > 0 && (
+            <div
+              className="absolute left-0 top-0 h-full items-center justify-center bg-green-500"
+              style={{ width: `${Math.round(agree?.ratio as number)}%` }}
+            >
+              <ResultLabel>Yes</ResultLabel>
+            </div>
+          )}
+          {(disagree?.count as number) > 0 && (
+            <div
+              className="absolute right-0 top-0 h-full bg-red-500"
+              style={{ width: `${Math.round(disagree?.ratio as number)}%` }}
+            >
+              <ResultLabel>No</ResultLabel>
+            </div>
+          )}
+        </div>
+      )}
     </li>
   )
 }
@@ -61,14 +65,14 @@ const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status 
 
   if (status === 'CLOSED') {
     return (
-      <Label className="flex h-full justify-center items-center text-blue-400 min-w-14">
+      <Label className="flex h-full justify-center items-center text-blue-400 min-w-16">
         <div className="flex h-3 w-3 rounded-full bg-blue-400" /> 종료됨
       </Label>
     )
   }
   if (status === 'OPEN') {
     return (
-      <Label className="flex h-full justify-center items-center text-emerald-400 min-w-14">
+      <Label className="flex h-full justify-center items-center text-emerald-400 min-w-16">
         <div className="flex h-3 w-3 rounded-full bg-emerald-400" /> 진행중
       </Label>
     )
@@ -81,7 +85,7 @@ const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status 
           e.preventDefault()
           setOpen(!open)
         }}
-        className="flex h-full justify-center items-center text-zinc-500 cursor-help min-w-14"
+        className="flex h-full justify-center items-center text-zinc-500 cursor-help min-w-16"
       >
         검토중
         <div className="flex h-3 w-3 rounded-full bg-zinc-400 text-[0.875rem] justify-center items-center text-white font-bold">
@@ -93,7 +97,7 @@ const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status 
   }
   if (status === 'REJECTED') {
     return (
-      <Label className="flex h-full justify-center items-center text-red-400 min-w-14">
+      <Label className="flex h-full justify-center items-center text-red-400 min-w-16 cursor-not-allowed">
         등록 실패
       </Label>
     )
