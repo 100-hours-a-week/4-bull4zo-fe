@@ -6,6 +6,7 @@ import { Check, PencilLine } from 'lucide-react'
 import { useUserLogoutMutation, useUserUpdateMutation } from '@/api/services/user/quries'
 import { ExitUserModal } from '@/components/modal/exitUserModal'
 import { NicknameSchema, nicknameSchema } from '@/features/user/lib/userSchema'
+import { fullReset } from '@/lib/fullReset'
 import { useModalStore } from '@/stores/modalStore'
 import { useUserStore } from '@/stores/userStore'
 import { Button } from '../../../components/ui/button'
@@ -14,7 +15,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '../../../co
 import { Input } from '../../../components/ui/input'
 
 export const UserCard = () => {
-  const { nickname, setNickName, logout } = useUserStore()
+  const { nickname, setNickName } = useUserStore()
   const { openModal } = useModalStore()
   const [isEditing, setIsEditing] = useState(false)
   const navigation = useNavigate()
@@ -46,7 +47,7 @@ export const UserCard = () => {
   const logoutHandler = () => {
     logoutMutate(undefined, {
       onSuccess: () => {
-        logout()
+        fullReset()
         navigation('/login')
       },
     })

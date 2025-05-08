@@ -2,14 +2,13 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
-import { useVoteCardStore } from '@/features/home/stores/voteCardStore'
+import { fullReset } from '@/lib/fullReset'
 import { useUserStore } from '@/stores/userStore'
 
 const AuthCallback = () => {
   const navigate = useNavigate()
   const setIsLogin = useUserStore((state) => state.setIsLogin)
   const setAccessToken = useUserStore((state) => state.setAccessToken)
-  const { reset } = useVoteCardStore()
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -40,8 +39,8 @@ const AuthCallback = () => {
 
       const { accessToken } = response.data.data
 
+      fullReset()
       setIsLogin(true)
-      reset()
       setAccessToken(accessToken)
 
       navigate('/home')
