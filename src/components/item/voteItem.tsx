@@ -16,7 +16,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
         if (vote.voteStatus === 'PENDING' || vote.voteStatus === 'REJECTED') return
         navigation(`/research/${vote.voteId}`)
       }}
-      className={`flex flex-col px-4 py-6 border-[0.125rem] rounded-2xl gap-4 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-help' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
+      className={`flex flex-col px-4 py-6 border-[0.125rem] rounded-2xl gap-4 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-not-allowed' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
     >
       <div className="flex flex-row items-center justify-between relative">
         <Label className="font-bold text-lg line-clamp-1">{vote.content}</Label>

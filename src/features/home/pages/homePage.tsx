@@ -7,17 +7,20 @@ import { LoadingCard } from '@/components/loading/loadingCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
+import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
+import { TutorialPage } from '../components/tutorial'
 import VoteSwiperFramer from '../components/voteSwiper_framer'
 
 const HomePage = () => {
-  const { isLogin, setNickName } = useUserStore()
+  const { isLogin, setIsLogin, setNickName } = useUserStore()
   const groupId = useGroupStore((state) => state.selectedId)
   const { data, isSuccess, isFetching, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteVotesQuery({ groupId, isLogin })
-  const { data: user } = useUserInfoQuery({ enabled: isLogin })
+  const { data: user } = useUserInfoQuery({ enabled: isLogin !== undefined })
 
   const { openModal } = useModalStore()
+  const { hideUntil } = useTutorialStore()
 
   const customFetchNextPage = () => {
     if (!isLogin) {
@@ -31,8 +34,18 @@ const HomePage = () => {
     setNickName(user?.nickname || '')
   }, [user, setNickName])
 
+  useEffect(() => {
+    if (isLogin === undefined) {
+      const timer = setTimeout(() => {
+        setIsLogin(false)
+      }, 2000) // 2초
+
+      return () => clearTimeout(timer)
+    }
+  }, [isLogin, setIsLogin])
+
   // 로딩 카드
-  if (isFetching) {
+  if (isFetching || isLogin === undefined) {
     return (
       <div className="flex screen-minus-header-nav justify-center items-center">
         <LoadingCard />
@@ -65,6 +78,7 @@ const HomePage = () => {
           />
         </div>
       )}
+      {!hideUntil && <TutorialPage />}
     </article>
   )
 }

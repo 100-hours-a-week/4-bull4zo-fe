@@ -24,7 +24,6 @@ export const LoginRequiredCard = () => {
           className="px-5"
           onClick={() => {
             closeModal()
-            navigation('/login')
           }}
         >
           취소

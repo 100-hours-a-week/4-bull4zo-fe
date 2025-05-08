@@ -30,6 +30,7 @@ export const useInfiniteVotesQuery = ({
     getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
     staleTime: 1000 * 60 * 5,
     initialPageParam: undefined,
+    enabled: isLogin !== undefined,
   })
 }
 // 투표 참여

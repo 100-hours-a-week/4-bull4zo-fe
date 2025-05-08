@@ -13,7 +13,7 @@ export const voteService = {
   async getVotes({ groupId, cursor, size }: UseInfiniteVotesRequest): Promise<VoteData> {
     const params = new URLSearchParams()
 
-    if (groupId !== undefined) params.append('groupId', groupId.toString())
+    if (groupId !== 0 && groupId !== undefined) params.append('groupId', groupId.toString())
     if (cursor) params.append('cursor', cursor)
     if (size) params.append('size', size.toString())
 

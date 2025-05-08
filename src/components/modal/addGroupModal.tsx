@@ -39,10 +39,10 @@ export const AddGroupModal = () => {
       {
         onSuccess: () => {
           toast('그룹 가입 성공')
+          closeModal()
         },
       },
     )
-    closeModal()
   }
 
   return (
@@ -71,7 +71,7 @@ export const AddGroupModal = () => {
                           className="flex-1 bg-white rounded-[0.75rem]"
                           onChange={(e) => {
                             const onlyLetters = e.target.value
-                              .replace(/[^a-zA-Z]/g, '')
+                              .replace(/[^a-zA-Z0-9]/g, '')
                               .toUpperCase()
                             field.onChange(onlyLetters)
                           }}

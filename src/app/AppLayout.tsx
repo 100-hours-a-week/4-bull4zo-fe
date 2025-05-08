@@ -16,7 +16,9 @@ export const AppLayout = () => {
   const { isOpen } = useModalStore()
 
   useEffect(() => {
-    if (!isLogin) {
+    if (isLogin === undefined) return
+
+    if (isLogin === false) {
       navigation('/home')
     }
     setTab(location.pathname)
@@ -40,8 +42,7 @@ export const AppLayout = () => {
 
     checkAndRefreshToken()
     setTab(location.pathname)
-  }, [location.pathname, setTab, navigation, setAccessToken])
-
+  }, [setTab, navigation, setAccessToken, setIsLogin, accessToken, location.pathname])
   return (
     <>
       <Header />

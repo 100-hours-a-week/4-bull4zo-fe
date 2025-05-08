@@ -21,7 +21,7 @@ export interface VoteData {
 export interface UseInfiniteVotesQueryOptions {
   groupId?: number
   size?: number
-  isLogin: boolean
+  isLogin: boolean | undefined
 }
 
 export interface UseInfiniteVotesRequest {

@@ -1,15 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
-import { useVoteCardStore } from '@/features/home/stores/voteCardStore'
+import { fullReset } from '@/lib/fullReset'
 import { useUserStore } from '@/stores/userStore'
 
 const AuthCallback = () => {
   const navigate = useNavigate()
   const setIsLogin = useUserStore((state) => state.setIsLogin)
   const setAccessToken = useUserStore((state) => state.setAccessToken)
-  const { reset } = useVoteCardStore()
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -23,7 +22,12 @@ const AuthCallback = () => {
     }
   }, [navigate])
 
+  const isDoing = useRef(false)
+
   const handleKakaoLogin = async (kakaoAuthCode: string) => {
+    if (isDoing.current) return
+    isDoing.current = true
+
     try {
       const response = await axiosInstance.post(
         '/api/v1/auth/login/oauth',
@@ -40,13 +44,15 @@ const AuthCallback = () => {
 
       const { accessToken } = response.data.data
 
+      fullReset()
       setIsLogin(true)
-      reset()
       setAccessToken(accessToken)
 
       navigate('/home')
     } catch (e) {
       console.log(e)
+      isDoing.current = false
+      setIsLogin(false)
       toast('로그인에 실패했습니다. 다시 시도해주세요!', {
         action: {
           label: '확인',

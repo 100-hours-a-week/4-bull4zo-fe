@@ -40,9 +40,9 @@ const SwipeCard = React.memo((props: SwipeCardProps) => {
       if (!isTop) return
       const latestX = x.get()
 
-      if (latestX > 150) setSwipeDir('찬성')
-      else if (latestX < -150) setSwipeDir('반대')
-      else if (Math.abs(latestX) < 80 && latestY < -150) setSwipeDir('기권')
+      if (latestX > 60) setSwipeDir('찬성')
+      else if (latestX < -60) setSwipeDir('반대')
+      else if (Math.abs(latestX) < 60 && latestY < -60) setSwipeDir('기권')
       else setSwipeDir(null)
     })
 
