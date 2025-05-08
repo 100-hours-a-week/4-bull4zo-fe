@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
@@ -22,7 +22,12 @@ const AuthCallback = () => {
     }
   }, [navigate])
 
+  const isDoing = useRef(false)
+
   const handleKakaoLogin = async (kakaoAuthCode: string) => {
+    if (isDoing.current) return
+    isDoing.current = true
+
     try {
       const response = await axiosInstance.post(
         '/api/v1/auth/login/oauth',
@@ -46,6 +51,7 @@ const AuthCallback = () => {
       navigate('/home')
     } catch (e) {
       console.log(e)
+      setIsLogin(false)
       toast('로그인에 실패했습니다. 다시 시도해주세요!', {
         action: {
           label: '확인',
