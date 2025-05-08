@@ -88,8 +88,9 @@ export const VoteSwiperFramer = ({
     }
   }, [])
 
+  // 현재 새로고침 이슈를 해결하지 못해 1개마다 그냥 요청이 발생하도록 설정
   useEffect(() => {
-    if (selectVote.length >= 5) {
+    if (selectVote.length >= 1 && isLogin) {
       submitVotes()
       resetVotes()
     }
