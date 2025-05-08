@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import { useInfiniteGroupNameListQuery } from '@/api/services/user/group/quries'
 import { useGroupStore } from '@/stores/groupStore'
@@ -14,6 +15,7 @@ import {
 export const GroupDropDown = () => {
   const { groups, setId, setGroups, selectedId } = useGroupStore()
   const [open, setOpen] = useState(false)
+  const location = useLocation()
 
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteGroupNameListQuery()
@@ -23,11 +25,15 @@ export const GroupDropDown = () => {
       const fetchGroup = data.pages.flatMap((page) => page.groups ?? [])
       const allGroup = { groupId: 0, name: '전체' }
 
-      const updatedGroups = [allGroup, ...fetchGroup.filter((g) => g.groupId !== null)]
+      const shouldIncludeAll = !location.pathname.includes('make')
+
+      const updatedGroups = shouldIncludeAll
+        ? [allGroup, ...fetchGroup.filter((g) => g.groupId !== null)]
+        : fetchGroup.filter((g) => g.groupId !== null)
 
       setGroups(updatedGroups)
     }
-  }, [isSuccess, data, setGroups])
+  }, [isSuccess, data, setGroups, location.pathname])
 
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
 

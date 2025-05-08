@@ -21,7 +21,7 @@ import { useModalStore } from '@/stores/modalStore'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 
 export const MakeVoteForm = () => {
-  const { selectedId } = useGroupStore()
+  const { selectedId, setId } = useGroupStore()
   const { openModal } = useModalStore()
 
   const form = useForm<VoteSchema>({
@@ -59,6 +59,10 @@ export const MakeVoteForm = () => {
       form.setValue('groupId', selectedId)
     }
   }, [selectedId, form])
+
+  useEffect(() => {
+    if (selectedId === 0) setId(1)
+  }, [selectedId, setId])
 
   return (
     <div className="w-full px-5">
