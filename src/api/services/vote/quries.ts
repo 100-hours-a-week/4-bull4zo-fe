@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
   ParticipatedVoteList,
@@ -35,8 +35,13 @@ export const useInfiniteVotesQuery = ({
 }
 // 투표 참여
 export const useSubmitVoteMutation = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: voteService.submitVote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['participatedVotes'] })
+    },
   })
 }
 // 투표 생성
