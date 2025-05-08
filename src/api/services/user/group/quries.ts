@@ -35,6 +35,7 @@ export const useInviteCodeMutation = () => {
     mutationFn: groupService.joinGroup,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myGroups'] })
+      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
     },
   })
 }
@@ -46,6 +47,7 @@ export const useCreateGroupMutation = () => {
     mutationFn: groupService.createGroup,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['myGroups'] })
+      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
     },
   })
 }

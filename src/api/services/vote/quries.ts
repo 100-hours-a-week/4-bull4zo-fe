@@ -46,8 +46,13 @@ export const useSubmitVoteMutation = () => {
 }
 // 투표 생성
 export const useCreateVoteMutation = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: voteService.createVote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['createdVotes'] })
+    },
   })
 }
 // 참여한 투표 조회
