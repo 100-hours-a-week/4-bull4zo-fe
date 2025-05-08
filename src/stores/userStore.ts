@@ -16,7 +16,7 @@ interface UserStore {
 export const useUserStore = create<UserStore>((set) => ({
   isLogin: undefined,
   accessToken: '',
-  nickname: 'logan',
+  nickname: '',
   setIsLogin: (isLogin) => set({ isLogin }),
   setNickName: (nickname) => set({ nickname: nickname }),
   setAccessToken: (token) => set({ accessToken: token }),

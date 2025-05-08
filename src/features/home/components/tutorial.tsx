@@ -38,7 +38,7 @@ export const TutorialPage = () => {
     >
       <div className="w-full h-full max-w-[575px] relative">
         <div className="absolute top-20 left-4 border-2 w-40 h-9" />
-        <div className="absolute top-21 left-46 ">그룹 선택 드롭다운</div>
+        <div className="absolute top-21 left-46 ">그룹 선택 드롭다운(로그인 후 보여집니다)</div>
         <div className="text-[1.25rem] absolute top-[25%] left-[15%] sm:left-[25%]">
           화면을 스와이프해 투표해 보세요!
         </div>
@@ -64,7 +64,7 @@ export const TutorialPage = () => {
           onClick={handleClose}
           className="cursor-pointer absolute bottom-[10%] left-[35%] sm:left-[42%]"
         >
-          튜툐리얼 닫기
+          튜토리얼 닫기
         </Button>
       </div>
     </div>
