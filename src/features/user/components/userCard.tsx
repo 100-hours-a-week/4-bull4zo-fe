@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,6 +20,8 @@ export const UserCard = () => {
   const [isEditing, setIsEditing] = useState(false)
   const navigation = useNavigate()
 
+  console.log(nickname)
+
   const form = useForm<NicknameSchema>({
     resolver: zodResolver(nicknameSchema),
     defaultValues: {
@@ -28,11 +30,16 @@ export const UserCard = () => {
     mode: 'onChange',
   })
 
+  useEffect(() => {
+    if (nickname) {
+      form.setValue('nickname', nickname)
+    }
+  }, [nickname, form])
+
   const { mutate: userUpdate } = useUserUpdateMutation()
   const { mutate: logoutMutate } = useUserLogoutMutation()
 
-  const onSubmit = (data: { nickname: string }) => {
-    console.log('변경된 닉네임:', data.nickname)
+  const onSubmit = () => {
     setIsEditing(false)
     userUpdate(
       { nickname: form.getValues('nickname') },
