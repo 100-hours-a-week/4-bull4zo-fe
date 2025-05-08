@@ -3,6 +3,7 @@ import { useVoteCardStore } from '@/features/home/stores/voteCardStore'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { useNavigationStore } from '@/stores/navigationStore'
+import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
 
 export const fullReset = () => {
@@ -12,4 +13,5 @@ export const fullReset = () => {
   useGroupStore.getState().reset()
   useVoteCardStore.getState().reset()
   useVoteBatchStore.getState().resetVotes()
+  useTutorialStore.getState().reset()
 }
