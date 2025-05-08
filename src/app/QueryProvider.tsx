@@ -9,8 +9,6 @@ const errorHandler = (error: any) => {
   const message =
     error?.response?.data?.message || '문제가 발생했습니다. 잠시 후 다시 시도해주세요.'
 
-  console.log(message)
-
   if (status === 403) {
     toast('권한이 부족합니다.')
   }

@@ -40,8 +40,7 @@ export const AppLayout = () => {
 
     checkAndRefreshToken()
     setTab(location.pathname)
-  }, [location.pathname, setTab, navigation, setAccessToken])
-
+  }, [setTab, navigation, setAccessToken, setIsLogin, accessToken, location.pathname])
   return (
     <>
       <Header />
