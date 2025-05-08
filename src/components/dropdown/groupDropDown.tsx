@@ -20,7 +20,12 @@ export const GroupDropDown = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      setGroups(data.pages.flatMap((page) => page.groups ?? []))
+      const fetchGroup = data.pages.flatMap((page) => page.groups ?? [])
+      const allGroup = { groupId: 0, name: '전체' }
+
+      const updatedGroups = [allGroup, ...fetchGroup.filter((g) => g.groupId !== null)]
+
+      setGroups(updatedGroups)
     }
   }, [isSuccess, data, setGroups])
 
