@@ -51,6 +51,7 @@ const AuthCallback = () => {
       navigate('/home')
     } catch (e) {
       console.log(e)
+      isDoing.current = false
       setIsLogin(false)
       toast('로그인에 실패했습니다. 다시 시도해주세요!', {
         action: {
