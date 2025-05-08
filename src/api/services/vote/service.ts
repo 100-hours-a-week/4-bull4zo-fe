@@ -56,11 +56,11 @@ export const voteService = {
     return (await authAxiosInstance.get(`/api/v1/votes/mine?${params.toString()}`)).data.data
   },
   async getVote(voteId: string): Promise<VoteDetail> {
-    const response = await authAxiosInstance.get(`api/v1/votes/${voteId}`)
+    const response = await authAxiosInstance.get(`/api/v1/votes/${voteId}`)
     return response.data.data
   },
   async getVoteResult(voteId: string): Promise<voteDetailResult> {
-    const response = await authAxiosInstance.get(`api/v1/votes/${voteId}/result`)
+    const response = await authAxiosInstance.get(`/api/v1/votes/${voteId}/result`)
     return response.data.data
   },
 }

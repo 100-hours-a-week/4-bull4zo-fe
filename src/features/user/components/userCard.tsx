@@ -20,8 +20,6 @@ export const UserCard = () => {
   const [isEditing, setIsEditing] = useState(false)
   const navigation = useNavigate()
 
-  console.log(nickname)
-
   const form = useForm<NicknameSchema>({
     resolver: zodResolver(nicknameSchema),
     defaultValues: {
