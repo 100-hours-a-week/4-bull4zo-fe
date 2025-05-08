@@ -15,7 +15,7 @@ const HomePage = () => {
   const groupId = useGroupStore((state) => state.selectedId)
   const { data, isSuccess, isFetching, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteVotesQuery({ groupId, isLogin })
-  const { data: user } = useUserInfoQuery({ enabled: isLogin })
+  const { data: user } = useUserInfoQuery({ enabled: isLogin !== undefined })
 
   const { openModal } = useModalStore()
 
@@ -32,7 +32,7 @@ const HomePage = () => {
   }, [user, setNickName])
 
   // 로딩 카드
-  if (isFetching) {
+  if (isFetching || isLogin === undefined) {
     return (
       <div className="flex screen-minus-header-nav justify-center items-center">
         <LoadingCard />
