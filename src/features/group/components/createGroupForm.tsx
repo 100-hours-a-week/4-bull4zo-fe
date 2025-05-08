@@ -144,7 +144,7 @@ export const CreateGroupForm = () => {
         </div>
         <div className="flex justify-center items-center">
           <Button
-            className={`py-4 px-14 h-full ${form.formState.isValid && 'bg-primary text-white'}`}
+            className={`py-4 px-14 h-full text-lg ${form.formState.isValid && 'bg-primary text-white'}`}
             type="submit"
             disabled={!form.formState.isValid}
           >
