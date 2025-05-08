@@ -39,7 +39,7 @@ export const GroupList = ({
   })
 
   return (
-    <ul className="flex flex-col gap-4 px-2 pt-5">
+    <ul className="flex flex-col gap-4 pt-5">
       {groups.map((group) => (
         <GroupCard key={group.groupId} {...group} />
       ))}

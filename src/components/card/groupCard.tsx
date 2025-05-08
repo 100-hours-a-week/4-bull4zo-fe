@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, Copy, EllipsisVertical } from 'lucide-react'
+import { Check, Copy } from 'lucide-react'
 import { toast } from 'sonner'
 import { Group } from '@/api/services/user/group/model'
 import { Card, CardContent, CardHeader } from '../ui/card'
@@ -24,7 +24,7 @@ export const GroupCard = (group: Partial<Group>) => {
           </div>
           <h1 className="font-bold text-[1.125rem]">{group.name}</h1>
         </div>
-        <EllipsisVertical />
+        {/* <EllipsisVertical /> */}
       </CardHeader>
       <CardContent className="flex flex-col flex-grow justify-between h-full">
         <p className="font-semibold">{group.description}</p>

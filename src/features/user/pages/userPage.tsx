@@ -3,7 +3,7 @@ import { UserGroupList } from '../components/userGroupList'
 
 const UserPage = () => {
   return (
-    <article className="px-5 py-5">
+    <article className="px-7 py-5">
       <UserCard />
       <UserGroupList />
     </article>
