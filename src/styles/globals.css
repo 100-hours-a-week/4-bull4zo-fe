@@ -1,9 +1,16 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import '@/styles/index.css';
 
 @custom-variant dark (&:is(.dark *));
 
 @layer base {
+  html,
+  body,
+  #root {
+    min-height: 100vh;
+  }
+
   :root {
     --primary: 45 100% 60%;
     --primary-foreground: 210 40% 98%;
@@ -107,10 +114,32 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'PyeojinGothic';
-  src: url('/font/PyojinGothic.woff2') format('woff2');
-  font-weight: 200 900;
+  src: url('/font/PyeojinGothic/PyeojinGothic-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('/font/PyeojinGothic/PyeojinGothic-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('/font/PyeojinGothic/PyeojinGothic-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PyeojinGothic';
+  src: url('/font/PyeojinGothic/PyeojinGothic-Bold.woff2') format('woff2');
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
