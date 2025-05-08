@@ -38,7 +38,7 @@ export const TutorialPage = () => {
     >
       <div className="w-full h-full max-w-[575px] relative">
         <div className="absolute top-20 left-4 border-2 w-40 h-9" />
-        <div className="absolute top-21 left-46 ">그룹 선택 드롭다운</div>
+        <div className="absolute top-21 left-46 ">그룹 선택 드롭다운(로그인 후 보여집니다)</div>
         <div className="text-[1.25rem] absolute top-[25%] left-[15%] sm:left-[25%]">
           화면을 스와이프해 투표해 보세요!
         </div>
@@ -52,19 +52,19 @@ export const TutorialPage = () => {
           로그인 없이 3개까지 체험할 수 있어요. <br /> 실제 투표에는 반영되지 않아요. <br />
           로그인하면 다시 투표할 수 있어요!
         </div>
-        <div className="absolute bottom-[20%] left-[28%] sm:left-[38%]">
+        <div className="absolute bottom-[20%] left-[28%] sm:left-[38%] cursor-pointer">
           <Checkbox
             checked={checked}
             onCheckedChange={(value) => setChecked(!!value)}
-            className="mr-2 cursor-pointer"
+            className="mr-2"
           />
-          <span>하루동안 보지 않기</span>
+          <span onClick={() => setChecked((prev) => !prev)}>하루동안 보지 않기</span>
         </div>
         <Button
           onClick={handleClose}
           className="cursor-pointer absolute bottom-[10%] left-[35%] sm:left-[42%]"
         >
-          튜툐리얼 닫기
+          튜토리얼 닫기
         </Button>
       </div>
     </div>

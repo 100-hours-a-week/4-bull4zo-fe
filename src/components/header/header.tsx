@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { Bell } from 'lucide-react'
+// import { Bell }  from 'lucide-react'
 import { useUserStore } from '@/stores/userStore'
 import { Button } from '../ui/button'
 
@@ -14,7 +14,8 @@ const Header = () => {
       </h1>
       <div className="mr-4">
         {isLogin ? (
-          <Bell className="cursor-pointer" size={24} />
+          // <Bell className="cursor-pointer" size={24} />
+          <></>
         ) : (
           <Button className="cursor-pointer" onClick={() => router(`/login`)}>
             로그인

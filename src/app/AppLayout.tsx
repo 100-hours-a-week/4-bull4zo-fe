@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useUserInfoQuery } from '@/api/services/user/quries'
 import { userService } from '@/api/services/user/service'
 import Header from '@/components/header/header'
 import { Modal } from '@/components/modal/modal'
@@ -12,8 +13,16 @@ export const AppLayout = () => {
   const location = useLocation()
   const navigation = useNavigate()
   const { setTab } = useNavigationStore()
-  const { isLogin, setIsLogin, setAccessToken, accessToken } = useUserStore()
+  const { isLogin, setIsLogin, setAccessToken, setNickName, accessToken } = useUserStore()
   const { isOpen } = useModalStore()
+
+  const { data: user } = useUserInfoQuery({ enabled: !!accessToken })
+
+  useEffect(() => {
+    if (user?.nickname) {
+      setNickName(user.nickname)
+    }
+  }, [user, setNickName])
 
   useEffect(() => {
     if (isLogin === undefined) return
@@ -43,6 +52,7 @@ export const AppLayout = () => {
     checkAndRefreshToken()
     setTab(location.pathname)
   }, [setTab, navigation, setAccessToken, setIsLogin, accessToken, location.pathname])
+
   return (
     <>
       <Header />

@@ -19,7 +19,7 @@ export const VoteCard = (props: Partial<Vote>) => {
 
   return (
     <Card
-      className={`px-4 py-9 w-[90%] md:w-[70%] h-[30rem] max-h-[75%] ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
+      className={`px-4 py-9 w-[90%] md:w-[70%] h-[30rem] max-h-[75%] pointer-events-auto ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
       style={
         isImageValid
           ? {
@@ -35,12 +35,12 @@ export const VoteCard = (props: Partial<Vote>) => {
           <CardTitle className="font-unbounded text-xl line-clamp-1">
             {props.authorNickname}
           </CardTitle>
-          {props.adminVote === 0 && <Icon src={META_ICON} alt="공인 뱃지" size={20} />}
+          {props.adminVote === 1 && <Icon src={META_ICON} alt="공인 뱃지" size={20} />}
         </div>
         <span className="text-xs pr-2">{formatTime(props.closedAt as string)}</span>
       </CardHeader>
       <CardContent className="flex justify-center items-center h-full overflow-y-auto">
-        <p className="text-2xl whitespace-pre-line">{props.content}</p>
+        <p className="text-2xl whitespace-pre-line break-all">{props.content}</p>
       </CardContent>
     </Card>
   )

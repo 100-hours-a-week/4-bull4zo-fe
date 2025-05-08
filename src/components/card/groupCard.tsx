@@ -1,8 +1,20 @@
-import { EllipsisVertical } from 'lucide-react'
+import { useState } from 'react'
+import { Check, Copy, EllipsisVertical } from 'lucide-react'
+import { toast } from 'sonner'
 import { Group } from '@/api/services/user/group/model'
 import { Card, CardContent, CardHeader } from '../ui/card'
 
 export const GroupCard = (group: Partial<Group>) => {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(group.inviteCode as string)
+    toast('초대코드 복사 완료')
+    setCopied(true)
+
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   return (
     <Card className="flex flex-col rounded-2xl shadow-box border-2 min-h-54">
       <CardHeader className="flex flex-row justify-between px-4">
@@ -16,7 +28,16 @@ export const GroupCard = (group: Partial<Group>) => {
       </CardHeader>
       <CardContent className="flex flex-col flex-grow justify-between h-full">
         <p className="font-semibold">{group.description}</p>
-        <span className="text-xs font-bold text-gray-400">초대코드: {group.inviteCode}</span>
+        <div className="font-bold text-gray-400 flex items-center">
+          초대코드: {group.inviteCode}{' '}
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="hover:text-primary ml-2 transition cursor-pointer"
+          >
+            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+          </button>
+        </div>
       </CardContent>
     </Card>
   )

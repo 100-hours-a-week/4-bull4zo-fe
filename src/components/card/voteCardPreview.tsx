@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import META_ICON from '@/assets/meta_icon.png'
+// import META_ICON from '@/assets/meta_icon.png'
 import formatTime from '@/lib/formatTime'
 import { useUserStore } from '@/stores/userStore'
-import { Icon } from '../Icon/icon'
+// import { Icon } from '../Icon/icon'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 type Props = {
@@ -60,7 +60,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
         {!anonymous ? (
           <div className="flex flex-row gap-1">
             <CardTitle className="font-unbounded text-xl line-clamp-1">{nickname}</CardTitle>
-            <Icon src={META_ICON} alt="공인 뱃지" size={20} />
+            {/* <Icon src={META_ICON} alt="공인 뱃지" size={20} /> */}
           </div>
         ) : (
           <div className="flex flex-row gap-1">
@@ -69,8 +69,8 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
         )}
         <span className="text-xs pr-2 min-w-20">{formatTime(closedAt)}</span>
       </CardHeader>
-      <CardContent className="flex justify-center items-center h-full overflow-y-auto">
-        <p className="text-2xl whitespace-pre-line">{content || '내용을 입력하세요.'}</p>
+      <CardContent className="flex justify-center items-center h-full overflow-y-auto break-words">
+        <p className="text-2xl whitespace-pre-line break-all">{content || '내용을 입력하세요.'}</p>
       </CardContent>
     </Card>
   )

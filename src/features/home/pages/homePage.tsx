@@ -64,7 +64,7 @@ const HomePage = () => {
   return (
     <article className="overflow-hidden relative screen-minus-header-nav">
       {isLogin && (
-        <div className="absolute z-10 left-4 top-3">
+        <div className="absolute z-30 left-4 top-3">
           <GroupDropDown />
         </div>
       )}
