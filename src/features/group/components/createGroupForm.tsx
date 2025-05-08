@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react'
+// import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus } from 'lucide-react'
+// import { Plus } from 'lucide-react'
 import { useCreateGroupMutation } from '@/api/services/user/group/quries'
 import { InviteCodeCheckModal } from '@/components/modal/inviteCodeCheckModal'
 import { Button } from '@/components/ui/button'
@@ -34,8 +34,8 @@ export const CreateGroupForm = () => {
 
   const { mutate } = useCreateGroupMutation()
 
-  const [preview, setPreview] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  // const [preview, setPreview] = useState<string | null>(null)
+  // const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const onSubmit = (values: CreateGroupSchema) => {
     mutate(
@@ -56,7 +56,7 @@ export const CreateGroupForm = () => {
       >
         <div className="gap-6 flex flex-col bg-gray px-5 pt-3 pb-12 rounded-[0.625rem]">
           <div className="flex gap-4">
-            <FormField
+            {/* <FormField
               control={form.control}
               name="image"
               render={({ field }) => (
@@ -96,7 +96,7 @@ export const CreateGroupForm = () => {
                   <FormMessage className="max-w-24" />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="name"
