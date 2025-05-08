@@ -7,6 +7,7 @@ import PassIcon from '@/assets/pass.svg'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
 import { useModalStore } from '@/stores/modalStore'
+import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
 import { VoteChoice, useVoteBatchStore } from '../stores/batchVoteStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
@@ -29,7 +30,7 @@ export const VoteSwiperFramer = ({
   const { isOpen, openModal } = useModalStore()
 
   const { cards: cardList, appendCards } = useVoteCardStore()
-
+  const { hideUntil } = useTutorialStore()
   const { addVote, selectVote, resetVotes } = useVoteBatchStore()
   const { mutateAsync } = useSubmitVoteMutation()
 
@@ -110,7 +111,7 @@ export const VoteSwiperFramer = ({
   useEffect(() => {
     if (isInitializing) return
 
-    if (!isLogin && cardList.length === 0 && !isOpen) {
+    if (!isLogin && cardList.length === 0 && !isOpen && hideUntil !== null) {
       openModal(<NoVoteAvailAbleModal />)
     } else if (cardList.length <= 3 && isLogin && hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
