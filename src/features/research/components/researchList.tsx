@@ -27,20 +27,22 @@ export const ResearchList = () => {
 
   return (
     <section className="px-4 py-2">
-      <div className="flex items-center justify-center gap-4 mb-4">
+      <div className="flex items-center justify-around mb-4">
+        <div className="" />
         <Label
           onClick={() => setIndex(0)}
           className={`text-2xl flex items-center justify-end font-unbounded cursor-pointer w-35 ${index === 0 ? 'font-bold' : 'font-light'}`}
         >
           참여한 투표
         </Label>
-        <Label className="text-xl font-light font-unbounded">|</Label>
+        <div className="h-6 bg-black w-[1px]" />
         <Label
           onClick={() => setIndex(1)}
           className={`text-2xl font-unbounded cursor-pointer ${index === 1 ? 'font-bold' : 'font-light'}`}
         >
           내가 만든 투표
         </Label>
+        <div />
       </div>
       <VoteList
         data={data}

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import META_ICON from '@/assets/meta_icon.png'
+// import META_ICON from '@/assets/meta_icon.png'
 import formatTime from '@/lib/formatTime'
 import { useUserStore } from '@/stores/userStore'
-import { Icon } from '../Icon/icon'
+// import { Icon } from '../Icon/icon'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 type Props = {
@@ -60,7 +60,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
         {!anonymous ? (
           <div className="flex flex-row gap-1">
             <CardTitle className="font-unbounded text-xl line-clamp-1">{nickname}</CardTitle>
-            <Icon src={META_ICON} alt="공인 뱃지" size={20} />
+            {/* <Icon src={META_ICON} alt="공인 뱃지" size={20} /> */}
           </div>
         ) : (
           <div className="flex flex-row gap-1">

@@ -52,13 +52,13 @@ export const TutorialPage = () => {
           로그인 없이 3개까지 체험할 수 있어요. <br /> 실제 투표에는 반영되지 않아요. <br />
           로그인하면 다시 투표할 수 있어요!
         </div>
-        <div className="absolute bottom-[20%] left-[28%] sm:left-[38%]">
+        <div className="absolute bottom-[20%] left-[28%] sm:left-[38%] cursor-pointer">
           <Checkbox
             checked={checked}
             onCheckedChange={(value) => setChecked(!!value)}
-            className="mr-2 cursor-pointer"
+            className="mr-2"
           />
-          <span>하루동안 보지 않기</span>
+          <span onClick={() => setChecked((prev) => !prev)}>하루동안 보지 않기</span>
         </div>
         <Button
           onClick={handleClose}
