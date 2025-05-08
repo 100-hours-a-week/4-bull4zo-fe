@@ -65,10 +65,10 @@ export const MakeVoteForm = () => {
   }, [selectedId, setId])
 
   return (
-    <div className="w-full px-5">
+    <div className="w-full px-5 pt-3 flex items-center justify-center">
       <Form {...form}>
         <form
-          className="flex flex-col justify-around h-full gap-4"
+          className="flex flex-col justify-around h-full gap-4 max-w-[20rem]"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <FormField
@@ -79,7 +79,7 @@ export const MakeVoteForm = () => {
                 <FormLabel className="font-semibold text-lg">투표 내용</FormLabel>
                 <FormControl>
                   <Textarea
-                    className="border-0 text-[0.875rem] rounded-[1.25rem] min-w-[20rem] shadow-card h-[18rem] p-4 resize-none border-solid border-black border-2"
+                    className="text-[0.875rem] rounded-[1.25rem] min-w-[20rem] shadow-card h-[18rem] p-4 resize-none border-solid border-black border-2"
                     {...field}
                     value={field.value ?? ''}
                     placeholder="내용을 입력하세요."
