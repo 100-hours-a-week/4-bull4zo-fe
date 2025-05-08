@@ -71,7 +71,7 @@ export const UserCard = () => {
                       <div className="relative text-2xl">
                         <Input
                           {...field}
-                          className="w-full h-14 font-unbounded"
+                          className="w-full h-14 font-pyeojinGothic font-bold"
                           style={{ fontSize: '1.5rem', fontWeight: 'bold' }}
                           autoFocus
                           onKeyDown={(e) => {
@@ -102,7 +102,7 @@ export const UserCard = () => {
           </Form>
         ) : (
           <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-            <CardTitle className="font-unbounded text-2xl">{nickname}</CardTitle>
+            <CardTitle className="font-pyeojinGothic font-bold text-2xl">{nickname}</CardTitle>
             <PencilLine onClick={() => setIsEditing(true)} className="cursor-pointer w-5 h-5" />
           </div>
         )}
