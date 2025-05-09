@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCreateVoteMutation } from '@/api/services/vote/quries'
@@ -19,14 +20,21 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
   const { closeModal } = useModalStore()
   const { mutate } = useCreateVoteMutation()
 
+  const submit = useRef<boolean>(false)
+
+  console.log(submit.current)
+
   const onSubmit = () => {
+    if (submit.current) return
+    submit.current = true
+
     mutate(
       { groupId, content, imageUrl: '', closedAt, anonymous },
       {
         onSuccess: () => {
           toast('투표를 등록했습니다.')
           navigation('/research')
-          closeModal()
+          // closeModal()
         },
       },
     )
