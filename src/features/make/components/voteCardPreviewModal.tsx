@@ -34,7 +34,7 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
         onSuccess: () => {
           toast('투표를 등록했습니다.')
           navigation('/research')
-          // closeModal()
+          closeModal()
         },
       },
     )
