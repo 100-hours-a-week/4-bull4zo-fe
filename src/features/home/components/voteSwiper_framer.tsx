@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Vote, VoteData } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 import DisLikeIcon from '@/assets/dislike.svg'
@@ -6,6 +6,7 @@ import LikeIcon from '@/assets/like.svg'
 import PassIcon from '@/assets/pass.svg'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
+import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
@@ -29,9 +30,10 @@ export const VoteSwiperFramer = ({
   const { isLogin } = useUserStore()
   const { isOpen, openModal } = useModalStore()
 
-  const { cards: cardList, appendCards } = useVoteCardStore()
+  const { cards: cardList, appendCards, filterByGroupId } = useVoteCardStore()
   const { hideUntil } = useTutorialStore()
   const { addVote, selectVote, resetVotes } = useVoteBatchStore()
+  const { selectedId } = useGroupStore()
   const { mutateAsync } = useSubmitVoteMutation()
 
   // 남은 카드들을 관리
@@ -41,12 +43,9 @@ export const VoteSwiperFramer = ({
     const lastPage = pages[pages.length - 1]
     const newVotes = (lastPage?.votes ?? []).filter((v): v is Vote => v !== undefined && v !== null)
 
-    if (cardList.length === 0) {
-      appendCards(newVotes)
-    } else if (pages.length > 1) {
-      appendCards(newVotes)
-    }
-  }, [pages, appendCards, cardList.length])
+    appendCards(newVotes)
+    filterByGroupId(selectedId)
+  }, [pages, appendCards, cardList.length, selectedId, filterByGroupId])
 
   // 5개 모이면 자동 제출
   const submitVotes = useCallback(async () => {
@@ -57,37 +56,6 @@ export const VoteSwiperFramer = ({
       }),
     )
   }, [selectVote, mutateAsync])
-
-  // unmount시 자동 요청 전송을 위한 ref
-  const selectVoteRef = useRef(selectVote)
-  const mutateAsyncRef = useRef(mutateAsync)
-
-  useEffect(() => {
-    selectVoteRef.current = selectVote
-  }, [selectVote])
-
-  useEffect(() => {
-    mutateAsyncRef.current = mutateAsync
-  }, [mutateAsync])
-
-  useEffect(() => {
-    return () => {
-      if (isLogin) {
-        const sendRemainingVotes = async () => {
-          if (selectVoteRef.current.length > 0) {
-            await Promise.all(
-              selectVoteRef.current.map(({ voteId, voteChoice }) => {
-                const userResponse = voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2
-                return mutateAsyncRef.current({ voteId, userResponse })
-              }),
-            )
-            resetVotes()
-          }
-        }
-        sendRemainingVotes()
-      }
-    }
-  }, [])
 
   // 현재 새로고침 이슈를 해결하지 못해 1개마다 그냥 요청이 발생하도록 설정
   useEffect(() => {

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import { useInfiniteGroupNameListQuery } from '@/api/services/user/group/quries'
-import { useVoteCardStore } from '@/features/home/stores/voteCardStore'
 import { useGroupStore } from '@/stores/groupStore'
 import { Button } from '../ui/button'
 import {
@@ -15,10 +14,8 @@ import {
 
 export const GroupDropDown = () => {
   const { groups, setId, setGroups, selectedId } = useGroupStore()
-  const { reset } = useVoteCardStore()
   const [open, setOpen] = useState(false)
   const location = useLocation()
-
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteGroupNameListQuery()
 
@@ -65,10 +62,6 @@ export const GroupDropDown = () => {
 
     return () => clearTimeout(timeout)
   }, [open, fetchNextPage, hasNextPage, isFetchingNextPage])
-
-  useEffect(() => {
-    reset()
-  }, [reset, selectedId])
 
   const selectedGroup = groups.find((g) => g.groupId === selectedId)
 
