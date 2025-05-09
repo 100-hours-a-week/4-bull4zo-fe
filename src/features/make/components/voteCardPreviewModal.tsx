@@ -22,8 +22,6 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
 
   const submit = useRef<boolean>(false)
 
-  console.log(submit.current)
-
   const onSubmit = () => {
     if (submit.current) return
     submit.current = true
