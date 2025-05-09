@@ -8,6 +8,8 @@ type VoteCardStore = {
   appendCards: (newVotes: Vote[]) => void
   // eslint-disable-next-line no-unused-vars
   removeCard: (voteId: number) => void
+  // eslint-disable-next-line no-unused-vars
+  filterByGroupId: (groupId: number) => void // ✅ 추가
   reset: () => void
 }
 
@@ -40,5 +42,11 @@ export const useVoteCardStore = create<VoteCardStore>((set) => ({
         removedIds: newRemoved,
       }
     }),
+
+  filterByGroupId: (groupId) =>
+    set((state) => ({
+      cards: groupId === 0 ? state.cards : state.cards.filter((vote) => vote.groupId === groupId),
+    })),
+
   reset: () => set({ cards: [], removedIds: new Set<number>() }),
 }))

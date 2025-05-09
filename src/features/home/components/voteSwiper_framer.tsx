@@ -6,6 +6,7 @@ import LikeIcon from '@/assets/like.svg'
 import PassIcon from '@/assets/pass.svg'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
+import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
@@ -29,9 +30,10 @@ export const VoteSwiperFramer = ({
   const { isLogin } = useUserStore()
   const { isOpen, openModal } = useModalStore()
 
-  const { cards: cardList, appendCards } = useVoteCardStore()
+  const { cards: cardList, appendCards, filterByGroupId } = useVoteCardStore()
   const { hideUntil } = useTutorialStore()
   const { addVote, selectVote, resetVotes } = useVoteBatchStore()
+  const { selectedId } = useGroupStore()
   const { mutateAsync } = useSubmitVoteMutation()
 
   // 남은 카드들을 관리
@@ -41,12 +43,9 @@ export const VoteSwiperFramer = ({
     const lastPage = pages[pages.length - 1]
     const newVotes = (lastPage?.votes ?? []).filter((v): v is Vote => v !== undefined && v !== null)
 
-    if (cardList.length === 0) {
-      appendCards(newVotes)
-    } else if (pages.length > 1) {
-      appendCards(newVotes)
-    }
-  }, [pages, appendCards, cardList.length])
+    appendCards(newVotes)
+    filterByGroupId(selectedId)
+  }, [pages, appendCards, cardList.length, selectedId, filterByGroupId])
 
   // 5개 모이면 자동 제출
   const submitVotes = useCallback(async () => {
