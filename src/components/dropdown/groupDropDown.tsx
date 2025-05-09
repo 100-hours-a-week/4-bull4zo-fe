@@ -82,7 +82,7 @@ export const GroupDropDown = () => {
           onValueChange={(val) => setId(parseInt(val))}
         >
           {groups.map((group) => (
-            <DropdownMenuRadioItem value={group.groupId.toString()}>
+            <DropdownMenuRadioItem key={group.groupId} value={group.groupId.toString()}>
               {group.name}
             </DropdownMenuRadioItem>
           ))}
