@@ -47,7 +47,7 @@ export const TutorialPage = () => {
           화면을 스와이프해 투표해 보세요!
         </div>
         <MoveUp className="absolute left-[45%] top-[35%]" size={36} />
-        <div className="text-2xl absolute left-[43%] top-[40%]">기권</div>
+        <div className="text-2xl absolute left-[44.5%] top-[43%]">기권</div>
         <MoveLeft className=" absolute left-[5%] top-[50%]" size={36} />
         <div className="text-2xl absolute left-[15%] top-[50%]">반대</div>
         <MoveRight className="absolute right-[5%] top-[50%]" size={36} />
