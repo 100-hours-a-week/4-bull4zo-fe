@@ -16,5 +16,5 @@ export const useGroupStore = create<GroupStore>((set) => ({
   groups: [],
   setId: (selectedId) => set({ selectedId }),
   setGroups: (groups) => set({ groups }),
-  reset: () => set({ selectedId: 1, groups: [] }),
+  reset: () => set({ selectedId: 0, groups: [] }),
 }))
