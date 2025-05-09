@@ -59,12 +59,12 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
       <CardHeader className="flex flex-row justify-between px-0">
         {!anonymous ? (
           <div className="flex flex-row gap-1">
-            <CardTitle className="font-unbounded text-xl line-clamp-1">{nickname}</CardTitle>
+            <CardTitle className="font-pyeojinGothic text-xl line-clamp-1">{nickname}</CardTitle>
             {/* <Icon src={META_ICON} alt="공인 뱃지" size={20} /> */}
           </div>
         ) : (
           <div className="flex flex-row gap-1">
-            <CardTitle className="font-unbounded text-2xl">익명</CardTitle>
+            <CardTitle className="font-pyeojinGothic text-2xl">익명</CardTitle>
           </div>
         )}
         <span className="text-xs pr-2 min-w-20">{formatTime(closedAt)}</span>
