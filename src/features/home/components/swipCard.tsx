@@ -1,9 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { Vote } from '@/api/services/vote/model'
 import { VoteCard } from '@/components/card/voteCard'
 import { VoteChoice, VoteStore } from '../stores/batchVoteStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
+
+export type SwipeCardHandle = {
+  // eslint-disable-next-line no-unused-vars
+  swipe: (dir: VoteChoice) => void
+}
 
 type SwipeCardProps = {
   vote: Partial<Vote>
@@ -15,7 +20,7 @@ type SwipeCardProps = {
   addVote: (vote: VoteStore) => void
 }
 
-const SwipeCard = React.memo((props: SwipeCardProps) => {
+const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
   const { vote, isTop, index, setSwipeDir, addVote } = props
 
   const x = useMotionValue(0)
@@ -58,14 +63,23 @@ const SwipeCard = React.memo((props: SwipeCardProps) => {
     const targetX = offsetX * 3
     const targetY = offsetY * 3
 
-    animate(x, targetX, { duration: 0.3 })
-    animate(y, targetY, { duration: 0.3 })
+    animate(x, targetX, { duration: 0.6 })
+    animate(y, targetY, { duration: 0.6 })
 
     setTimeout(() => {
       removeCard(vote.voteId as number)
       setSwipeDir(null)
     }, 100)
   }
+
+  // 외부에서 접근 가능한 swipe(dir)함수
+  useImperativeHandle(ref, () => ({
+    swipe: (voteChoice: VoteChoice) => {
+      const offsetX = voteChoice === '찬성' ? 150 : voteChoice === '반대' ? -150 : 30
+      const offsetY = voteChoice === '기권' ? -150 : -40
+      handleSwipe(voteChoice, offsetX, offsetY)
+    },
+  }))
 
   return (
     <motion.div
@@ -93,8 +107,8 @@ const SwipeCard = React.memo((props: SwipeCardProps) => {
         if (voteChoice) {
           handleSwipe(voteChoice, offsetX, offsetY)
         } else {
-          animate(x, 0, { duration: 0.2 })
-          animate(y, 0, { duration: 0.2 })
+          animate(x, 0, { duration: 0.3 })
+          animate(y, 0, { duration: 0.3 })
         }
       }}
     >

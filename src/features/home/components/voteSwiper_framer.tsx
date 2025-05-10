@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Vote, VoteData } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
-import DisLikeIcon from '@/assets/dislike.svg'
-import LikeIcon from '@/assets/like.svg'
-import PassIcon from '@/assets/pass.svg'
+// import DisLikeIcon from '@/assets/dislike.svg'
+// import LikeIcon from '@/assets/like.svg'
+// import PassIcon from '@/assets/pass.svg'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
 import { useGroupStore } from '@/stores/groupStore'
@@ -12,7 +12,8 @@ import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
 import { VoteChoice, useVoteBatchStore } from '../stores/batchVoteStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
-import SwipeCard from './swipCard'
+import SwipeCard, { SwipeCardHandle } from './swipCard'
+import { VoteDirectionButtonGroup } from './voteDirectionButtonGroup'
 
 type Props = {
   pages: VoteData[]
@@ -86,6 +87,8 @@ export const VoteSwiperFramer = ({
     }
   }, [cardList, hasNextPage, isFetchingNextPage, fetchNextPage, isLogin, openModal, isInitializing])
 
+  const topCardRef = useRef<SwipeCardHandle>(null)
+
   if (cardList.length === 0)
     return (
       <div className="h-full w-full flex justify-center items-center">
@@ -95,18 +98,17 @@ export const VoteSwiperFramer = ({
 
   return (
     <div className={`flex justify-center items-center h-full relative overflow-hidden `}>
-      <div
+      {/* <div
         className={`absolute text-3xl font-bold z-[9999]
           ${swipeDir === '찬성' ? 'top-10 right-10' : ''}
           ${swipeDir === '반대' ? 'top-10 left-10' : ''}
-          ${swipeDir === '기권' ? 'bottom-5 left-1/2 transform -translate-x-1/2' : ''}
+          ${swipeDir === '기권' ? 'top-5 left-1/2 transform -translate-x-1/2' : ''}
         `}
       >
         {swipeDir === '찬성' && <img src={LikeIcon} alt="찬성" className="w-16 h-16" />}
         {swipeDir === '반대' && <img src={DisLikeIcon} alt="반대" className="w-16 h-16" />}
         {swipeDir === '기권' && <img src={PassIcon} alt="기권" className="w-16 h-16" />}
-      </div>
-
+      </div> */}
       {cardList.map((vote, index) => {
         const isTop = index === 0
 
@@ -118,9 +120,14 @@ export const VoteSwiperFramer = ({
             index={index}
             setSwipeDir={setSwipeDir}
             addVote={addVote}
+            ref={isTop ? topCardRef : null}
           />
         )
       })}
+      <VoteDirectionButtonGroup
+        swipeDir={swipeDir}
+        onSwipe={(dir) => topCardRef.current?.swipe(dir)}
+      />
     </div>
   )
 }
