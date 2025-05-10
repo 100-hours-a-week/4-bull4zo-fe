@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
+import { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { Vote } from '@/api/services/vote/model'
 import { VoteCard } from '@/components/card/voteCard'
