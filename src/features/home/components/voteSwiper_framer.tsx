@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Vote, VoteData } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
-import DisLikeIcon from '@/assets/dislike.svg'
-import LikeIcon from '@/assets/like.svg'
-import PassIcon from '@/assets/pass.svg'
+// import DisLikeIcon from '@/assets/dislike.svg'
+// import LikeIcon from '@/assets/like.svg'
+// import PassIcon from '@/assets/pass.svg'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
 import { useGroupStore } from '@/stores/groupStore'
@@ -13,6 +13,7 @@ import { useUserStore } from '@/stores/userStore'
 import { VoteChoice, useVoteBatchStore } from '../stores/batchVoteStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
 import SwipeCard, { SwipeCardHandle } from './swipCard'
+import { VoteDirectionButtonGroup } from './voteDirectionButtonGroup'
 
 type Props = {
   pages: VoteData[]
@@ -97,7 +98,7 @@ export const VoteSwiperFramer = ({
 
   return (
     <div className={`flex justify-center items-center h-full relative overflow-hidden `}>
-      <div
+      {/* <div
         className={`absolute text-3xl font-bold z-[9999]
           ${swipeDir === '찬성' ? 'top-10 right-10' : ''}
           ${swipeDir === '반대' ? 'top-10 left-10' : ''}
@@ -107,8 +108,7 @@ export const VoteSwiperFramer = ({
         {swipeDir === '찬성' && <img src={LikeIcon} alt="찬성" className="w-16 h-16" />}
         {swipeDir === '반대' && <img src={DisLikeIcon} alt="반대" className="w-16 h-16" />}
         {swipeDir === '기권' && <img src={PassIcon} alt="기권" className="w-16 h-16" />}
-      </div>
-
+      </div> */}
       {cardList.map((vote, index) => {
         const isTop = index === 0
 
@@ -124,17 +124,10 @@ export const VoteSwiperFramer = ({
           />
         )
       })}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[9999] flex gap-5">
-        <button className="cursor-pointer " onClick={() => topCardRef.current?.swipe('반대')}>
-          <img src={DisLikeIcon} alt="반대" className="w-16 h-16" />
-        </button>
-        <button onClick={() => topCardRef.current?.swipe('기권')}>
-          <img src={PassIcon} alt="반대" className="w-16 h-16" />
-        </button>
-        <button onClick={() => topCardRef.current?.swipe('찬성')}>
-          <img src={LikeIcon} alt="찬성" className="w-16 h-16" />
-        </button>
-      </div>
+      <VoteDirectionButtonGroup
+        swipeDir={swipeDir}
+        onSwipe={(dir) => topCardRef.current?.swipe(dir)}
+      />
     </div>
   )
 }
