@@ -107,7 +107,8 @@ const StatusTooltip = () => {
   return (
     <div className="absolute top-4 right-0 z-10 bg-zinc-400 text-white text-xs rounded p-2 shadow-lg">
       작성하신 투표는 부적절한 내용이 없는지 <br />
-      간단히 검토한 뒤 공개돼요. <br />약 20초 뒤 <span className="text-emerald-200">'진행중'</span>
+      간단히 검토한 뒤 공개돼요. <br />
+      10초 이내로 <span className="text-emerald-200">"진행중"</span>
       으로 전환됩니다.
     </div>
   )
