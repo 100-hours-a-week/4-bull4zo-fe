@@ -1,6 +1,10 @@
+import { toKstISOString } from './toKSTISOString'
+
 export default function formatTime(timeStamp: string): string {
+  const KSTtime = toKstISOString(timeStamp)
+
   const now = Date.now()
-  const date = new Date(timeStamp)
+  const date = new Date(KSTtime)
   const diff = now - date.getTime()
 
   const year = date.getFullYear()
@@ -41,7 +45,9 @@ export default function formatTime(timeStamp: string): string {
 }
 
 export function formatTimeDetail(timestamp: string): string {
-  const date = new Date(timestamp)
+  const KSTtime = toKstISOString(timestamp)
+
+  const date = new Date(KSTtime)
   const now = new Date()
 
   const year = date.getFullYear()

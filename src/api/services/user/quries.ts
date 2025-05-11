@@ -37,3 +37,9 @@ export const useUserDeleteMutation = () => {
     mutationFn: userService.deleteUser,
   })
 }
+// 유저 피드백
+export const useUserFeedbackMutation = () => {
+  return useMutation({
+    mutationFn: userService.userFeedback,
+  })
+}

@@ -14,7 +14,7 @@ export const VoteDirectionButtonGroup = ({ swipeDir, onSwipe }: Props) => {
     `cursor-pointer transition-transform duration-200 ${swipeDir === dir ? 'scale-125' : ''}`
 
   return (
-    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[9999] flex gap-5">
+    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[50] flex gap-5">
       {(swipeDir === null || swipeDir === '반대') && (
         <button className={getClass('반대')} onClick={() => onSwipe('반대')}>
           <img src={DisLikeIcon} alt="반대" className="w-16 h-16" />

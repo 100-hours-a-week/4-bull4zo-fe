@@ -1,5 +1,5 @@
 import { authAxiosInstance, axiosInstance } from '@/api/axios'
-import { UserInfo } from './model'
+import { UserFeedbackRequest, UserInfo } from './model'
 
 export const userService = {
   async getUserInfo(): Promise<UserInfo> {
@@ -26,5 +26,9 @@ export const userService = {
     } else {
       throw new Error('리프레쉬 토큰 재발급 실패')
     }
+  },
+  async userFeedback(payload: UserFeedbackRequest): Promise<void> {
+    await authAxiosInstance.post(`/api/v1/user-feedback`, payload)
+    return
   },
 }
