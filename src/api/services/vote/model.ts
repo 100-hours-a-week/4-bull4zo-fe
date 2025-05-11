@@ -81,6 +81,7 @@ export interface VoteDetail {
   imageUrl: string
   createdAt: string
   closedAt: string
+  adminVote: number
 }
 
 export interface voteDetailResult {
