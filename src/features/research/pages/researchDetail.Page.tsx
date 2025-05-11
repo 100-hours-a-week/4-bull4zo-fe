@@ -3,7 +3,6 @@ import { ChevronLeft } from 'lucide-react'
 import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/quries'
 import { Label } from '@/components/ui/label'
 import { formatTimeDetail } from '@/lib/formatTime'
-import { toKstISOString } from '@/lib/toKSTISOString'
 import { useGroupStore } from '@/stores/groupStore'
 
 const ResearchDetailPage = () => {
@@ -64,7 +63,7 @@ const ResearchDetailPage = () => {
             </div>
           )}
           <div className="text-xs font-semibold  text-gray">
-            {formatTimeDetail(toKstISOString(voteDetail?.createdAt as string))} ~{' '}
+            {formatTimeDetail(voteDetail?.createdAt as string)} ~{' '}
             {formatTimeDetail(voteDetail?.closedAt as string)}
           </div>
         </div>
