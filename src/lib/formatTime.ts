@@ -1,10 +1,8 @@
 import { toKstISOString } from './toKSTISOString'
 
-export default function formatTime(timeStamp: string): string {
-  const KSTtime = toKstISOString(timeStamp)
-
+export default function formatTime(timeStamp: string, KST: boolean = true): string {
   const now = Date.now()
-  const date = new Date(KSTtime)
+  const date = KST ? new Date(toKstISOString(timeStamp)) : new Date(timeStamp)
   const diff = now - date.getTime()
 
   const year = date.getFullYear()
