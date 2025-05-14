@@ -20,7 +20,7 @@ const HomePage = () => {
   const { data: user } = useUserInfoQuery({ enabled: isLogin !== undefined })
 
   const { openModal } = useModalStore()
-  const { hideUntil } = useTutorialStore()
+  const { isExpired } = useTutorialStore()
 
   const customFetchNextPage = () => {
     if (!isLogin) {
@@ -62,9 +62,9 @@ const HomePage = () => {
   }
 
   return (
-    <article className="overflow-hidden relative screen-minus-header-nav">
+    <article className="overflow-hidden screen-minus-header-nav">
       {isLogin && (
-        <div className="absolute z-30 left-4 top-3">
+        <div className="absolute z-30 left-4 top-20">
           <GroupDropDown />
         </div>
       )}
@@ -78,7 +78,7 @@ const HomePage = () => {
           />
         </div>
       )}
-      {!hideUntil && <TutorialPage />}
+      {isExpired() && <TutorialPage />}
     </article>
   )
 }
