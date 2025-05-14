@@ -54,13 +54,13 @@ export const AppLayout = () => {
   }, [setTab, navigation, setAccessToken, setIsLogin, accessToken, location.pathname])
 
   return (
-    <>
+    <div>
       <Header />
       <main className="py-[4.25rem] min-h-screen bg-white">
         <Outlet />
         {isOpen && <Modal />}
       </main>
       <Navigation />
-    </>
+    </div>
   )
 }
