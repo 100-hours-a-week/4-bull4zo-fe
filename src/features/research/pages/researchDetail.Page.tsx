@@ -31,7 +31,9 @@ const ResearchDetailPage = () => {
           <h1 className="text-xs font-semibold">
             {groups.find((f) => f.groupId === voteDetail?.groupId)?.name}
           </h1>
-          <p className="mt-2 text-[1.125rem] font-bold">{voteDetail?.content}</p>
+          <p className="mt-2 text-[1.125rem] font-bold whitespace-pre-line break-all">
+            {voteDetail?.content}
+          </p>
           <p className="mt-3">{voteDetail?.authorNickname}</p>
         </div>
         <div className="mt-3 flex flex-col gap-4">
