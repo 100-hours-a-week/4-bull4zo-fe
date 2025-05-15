@@ -73,6 +73,12 @@ const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
       page: location.pathname,
     })
 
+    trackEvent({
+      cta_id: 'vote_card_swipe',
+      action: 'swipe',
+      page: location.pathname,
+    })
+
     const targetX = offsetX * 3
     const targetY = offsetY * 3
 

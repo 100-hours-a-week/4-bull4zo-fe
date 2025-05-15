@@ -6,10 +6,11 @@ import { Check, PencilLine } from 'lucide-react'
 import { useUserLogoutMutation, useUserUpdateMutation } from '@/api/services/user/quries'
 import { ExitUserModal } from '@/components/modal/exitUserModal'
 import { NicknameSchema, nicknameSchema } from '@/features/user/lib/userSchema'
-import { fullReset } from '@/lib/fullReset'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { useUserStore } from '@/stores/userStore'
+import { logoutAndResetStores } from '@/utils/reset'
+import { filterAllowedKoreanInput } from '@/utils/validation'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../../../components/ui/form'
@@ -60,7 +61,7 @@ export const UserCard = () => {
   const logoutHandler = () => {
     logoutMutate(undefined, {
       onSuccess: () => {
-        fullReset()
+        logoutAndResetStores()
         navigation('/login')
       },
       onSettled: () => {
@@ -101,11 +102,7 @@ export const UserCard = () => {
                             }
                           }}
                           onChange={(e) => {
-                            const onlyLetters = e.target.value.replace(
-                              /[^a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]/g,
-                              '',
-                            )
-                            field.onChange(onlyLetters)
+                            field.onChange(filterAllowedKoreanInput(e.target.value))
                           }}
                         />
                         <Check

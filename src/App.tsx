@@ -1,9 +1,9 @@
 import { RouterProvider } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import MOA from '@/assets/home.png'
 import '@/styles/layout.css'
 import { AppProvider } from './app/AppProvider'
 import { router } from './app/router'
+import MOA from '/images/home.png'
 
 const App = () => {
   return (

@@ -1,37 +1,52 @@
-import { MemoryRouter } from 'react-router-dom'
-import type { Meta, StoryObj } from '@storybook/react'
+import { unstable_HistoryRouter as Router } from 'react-router-dom'
+import type { StoryObj } from '@storybook/react'
+import { expect, userEvent, within } from '@storybook/test'
+import { createMemoryHistory } from 'history'
 import { useUserStore } from '@/stores/userStore'
 import Header from './header'
 
-const meta: Meta<typeof Header> = {
+interface StoryArgs {
+  isLogin: boolean
+}
+
+const rawHistory = createMemoryHistory({ initialEntries: ['/'] })
+const history = rawHistory as any
+
+const meta = {
   title: 'Components/Header',
   component: Header,
+  args: {
+    isLogin: false,
+  } as StoryArgs,
   decorators: [
-    (Story) => (
-      <MemoryRouter>
-        <Story />
-      </MemoryRouter>
-    ),
+    (Story: any, context: any) => {
+      const args = context.args as StoryArgs
+      useUserStore.setState({ isLogin: args.isLogin })
+      return (
+        <Router history={history}>
+          <Story />
+        </Router>
+      )
+    },
   ],
+  argTypes: {
+    isLogin: {
+      control: 'boolean',
+      description: '로그인 여부',
+    },
+  },
+  tags: ['unit test'],
 }
 export default meta
 
-type Story = StoryObj<typeof Header>
+type Story = StoryObj<StoryArgs>
 
-const mockLoginState = (isLogin: boolean) => {
-  useUserStore.setState({ isLogin })
-}
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    const loginBtn = await canvas.findByRole('button', { name: /로그인/ })
+    await userEvent.click(loginBtn)
 
-export const LoggedOut: Story = {
-  render: () => {
-    mockLoginState(false)
-    return <Header />
-  },
-}
-
-export const LoggedIn: Story = {
-  render: () => {
-    mockLoginState(true)
-    return <Header />
+    expect(history.location.pathname).toBe('/login')
   },
 }
