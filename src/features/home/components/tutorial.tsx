@@ -32,19 +32,20 @@ export const TutorialPage = () => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center text-white bg-black/60"
+      className="absolute inset-0 z-50 flex items-center justify-center text-white bg-black/60"
       aria-modal="true"
       role="dialog"
     >
       <div className="w-full h-full max-w-[575px] relative">
-        <div className="absolute top-20 left-4 sm:left-18 border-2 w-41 h-9" />
-        <div className="absolute top-19 left-50 sm:left-64 text-center">
+        <div className="absolute top-20 left-4 border-2 w-41 h-9" />
+        <div className="absolute top-19 left-50 text-center">
           그룹 선택 드롭다운
           <br />
           (로그인 후 보여집니다)
         </div>
-        <div className="text-[1.25rem] absolute top-[25%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          화면을 스와이프해 투표해 보세요!
+        <div className="text-[1.25rem] text-center absolute top-[25%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          화면을 스와이프해 <br />
+          투표해 보세요!
         </div>
         <MoveUp
           className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 top-[35%]"

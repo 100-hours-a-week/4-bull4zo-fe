@@ -1,18 +1,30 @@
 html {
-  background-color: rgb(227, 227, 227);
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-html::-webkit-scrollbar {
-  display: none;
 }
 body {
+  width: 100vw;
+  font-family: 'PyeojinGothic';
+}
+.main-content {
   max-width: 450px;
   width: 100%;
-  font-family: 'PyeojinGothic';
-  background-color: white;
+  height: 100vh;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.main-content::-webkit-scrollbar {
+  display: none;
+}
+.layout {
+  display: flex;
+  align-items: center;
+  gap: 5vw;
+  height: 100vh;
 }
