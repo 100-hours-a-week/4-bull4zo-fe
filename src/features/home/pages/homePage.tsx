@@ -11,16 +11,18 @@ import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
 import { TutorialPage } from '../components/tutorial'
 import VoteSwiperFramer from '../components/voteSwiper_framer'
+import { useVoteCardStore } from '../stores/voteCardStore'
 
 const HomePage = () => {
   const { isLogin, setIsLogin, setNickName } = useUserStore()
-  const groupId = useGroupStore((state) => state.selectedId)
-  const { data, isSuccess, isFetching, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { selectedId: groupId } = useGroupStore()
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteVotesQuery({ groupId, isLogin })
   const { data: user } = useUserInfoQuery({ enabled: isLogin !== undefined })
 
   const { openModal } = useModalStore()
   const { isExpired } = useTutorialStore()
+  const { appendCards, filterByGroupId } = useVoteCardStore()
 
   const customFetchNextPage = () => {
     if (!isLogin) {
@@ -44,8 +46,16 @@ const HomePage = () => {
     }
   }, [isLogin, setIsLogin])
 
+  useEffect(() => {
+    const lastPage = data?.pages?.at(-1)
+    if (lastPage?.votes) {
+      appendCards(lastPage.votes)
+      filterByGroupId(groupId)
+    }
+  }, [data?.pages, appendCards, groupId, filterByGroupId])
+
   // 로딩 카드
-  if (isFetching || isLogin === undefined) {
+  if (isLoading || isLogin === undefined) {
     return (
       <div className="flex screen-minus-header-nav justify-center items-center">
         <LoadingCard />
@@ -68,16 +78,11 @@ const HomePage = () => {
           <GroupDropDown />
         </div>
       )}
-      {isSuccess && data?.pages && (
-        <div className=" w-full h-full">
-          <VoteSwiperFramer
-            pages={data.pages}
-            fetchNextPage={customFetchNextPage}
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-          />
-        </div>
-      )}
+      <VoteSwiperFramer
+        fetchNextPage={customFetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+      />
       {isExpired() && <TutorialPage />}
     </article>
   )

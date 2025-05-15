@@ -12,7 +12,7 @@ const App = () => {
         <div className="hidden lg:block max-w-[40vw] ml-[5vw]">
           <img src={MOA} alt="로고 설명 이미지" />
         </div>
-        <div className="main-content">
+        <div id="main-content" className="main-content">
           <RouterProvider router={router} />
           <Toaster
             toastOptions={{

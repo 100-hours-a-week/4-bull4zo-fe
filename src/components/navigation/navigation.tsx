@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ListCheckIcon, Plus, User } from 'lucide-react'
-import Vote from '@/assets/vote.svg'
+import Vote from '@/assets/vote.svg?react'
 import { useModalStore } from '@/stores/modalStore'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
@@ -54,8 +54,8 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
 
 const Navigation = () => {
   return (
-    <nav className="flex flex-row items-center justify-around max-w-[450px] w-full h-[4rem] fixed bottom-0 z-30 bg-white">
-      <NavigationItem icon={<Icon src={Vote} alt="투표 아이콘" />} label="home" />
+    <nav className="flex z-[999] flex-row items-center justify-around max-w-[450px] w-full h-[4rem] fixed bottom-0 bg-white">
+      <NavigationItem icon={<Icon component={Vote} />} label="home" />
       <NavigationItem icon={<Plus />} label="make" />
       <NavigationItem icon={<ListCheckIcon />} label="research" />
       <NavigationItem icon={<User />} label="user" />

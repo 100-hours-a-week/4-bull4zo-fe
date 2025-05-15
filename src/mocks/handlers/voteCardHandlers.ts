@@ -16,7 +16,8 @@ export const votesHandlers = [
         voteId: 101,
         groupId: Number(finalGroupId),
         authorNickname: 'MOA AI',
-        content: '오늘 점심은 무엇을 먹을까요?',
+        content:
+          '마이페이지 오른쪽 하단의 코알라 아이콘을 누르면 피드백을 남기실 수 있어요 :)\n\n 피드백으로 남겨주시면 저희가 더욱 잘 확인하고 반영할 수 있습니다.\n\n 투표로 남기기보다는 피드백 기능을 활용해주시면 정말 감사하겠습니다!',
         imageUrl:
           'https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1600&q=80',
         createdAt: '2025-04-20T12:00:00',

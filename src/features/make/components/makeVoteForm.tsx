@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight } from 'lucide-react'
@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { VoteCardPreviewModal } from '@/features/make/components/voteCardPreviewModal'
 import { convertGlobalTime2LocalTime } from '@/lib/globalTime2LocalTime'
+import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
@@ -23,6 +24,9 @@ import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 export const MakeVoteForm = () => {
   const { selectedId, setId } = useGroupStore()
   const { openModal } = useModalStore()
+
+  const [minDateTime, setMinDateTime] = useState('')
+  const [maxDateTime, setMaxDateTime] = useState('')
 
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),
@@ -43,6 +47,12 @@ export const MakeVoteForm = () => {
     const closedAt = form.getValues('closedAt')
     const anonymous = form.getValues('anonymous')
 
+    trackEvent({
+      cta_id: 'vote_submit_modal',
+      action: 'modal',
+      page: location.pathname,
+    })
+
     openModal(
       <VoteCardPreviewModal
         groupId={groupId}
@@ -53,16 +63,29 @@ export const MakeVoteForm = () => {
       />,
     )
   }
-
+  // form에 그룹 id 반영
   useEffect(() => {
     if (selectedId) {
       form.setValue('groupId', selectedId)
     }
   }, [selectedId, form])
-
+  // 선택한 그룹이 "전체"일 경우 "공개"로 자동 변경
   useEffect(() => {
     if (selectedId === 0) setId(1)
   }, [selectedId, setId])
+  // 타임 캘린더의 선택 가능을 오늘 + 7일까지로 제한
+  useEffect(() => {
+    const now = new Date()
+    const sevenDaysLater = new Date()
+    sevenDaysLater.setDate(now.getDate() + 7)
+
+    const toInputFormat = (date: Date) => {
+      return date.toISOString().slice(0, 16)
+    }
+
+    setMinDateTime(toInputFormat(now))
+    setMaxDateTime(toInputFormat(sevenDaysLater))
+  }, [])
 
   return (
     <div className="w-full px-5 pt-3 flex items-center justify-center">
@@ -83,13 +106,13 @@ export const MakeVoteForm = () => {
                     {...field}
                     value={field.value ?? ''}
                     placeholder="내용을 입력하세요."
-                    maxLength={256}
+                    maxLength={101}
                   />
                 </FormControl>
                 <div className="min-h-[1.25rem]">
                   <FormMessage />
                   <span className="absolute bottom-1 right-1 text-xs text-muted-foreground pr-1">
-                    {field.value?.length || 0}/255
+                    {field.value?.length || 0}/100
                   </span>
                 </div>
               </FormItem>
@@ -193,6 +216,8 @@ export const MakeVoteForm = () => {
                     className="rounded-[0.75rem] bg-gray px-8 py-3"
                     {...field}
                     type="datetime-local"
+                    min={minDateTime}
+                    max={maxDateTime}
                   />
                 </FormControl>
                 <FormMessage />
