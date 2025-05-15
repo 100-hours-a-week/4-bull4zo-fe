@@ -2,16 +2,17 @@ import { useEffect } from 'react'
 import { useModalStore } from '@/stores/modalStore'
 
 export const Modal = () => {
-  const { isOpen, modalContent } = useModalStore()
+  const { isOpen, modalContent, closeModal } = useModalStore()
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
+    const main = document.getElementById('main-content')
+    if (isOpen && main) {
+      main.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = 'auto'
+      if (main) main.style.overflow = 'auto'
     }
     return () => {
-      document.body.style.overflow = 'auto'
+      if (main) main.style.overflow = 'auto'
     }
   }, [isOpen])
 
@@ -19,13 +20,16 @@ export const Modal = () => {
 
   return (
     <div
-      className="absolute inset-0 z-[9999] flex items-center justify-center bg-black/50"
+      className="absolute [@media(max-height:820)]:fixed max-[450px]:fixed inset-0 z-[9999] flex items-center justify-center bg-black/50"
       aria-modal="true"
       role="dialog"
+      onClick={() => closeModal()}
     >
       <div
-        className="p-6 w-full max-w-[575px] flex items-center justify-center rounded-lg relative z-60"
-        onClick={(e) => e.stopPropagation()}
+        className="rounded-lg relative z-60"
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
       >
         {modalContent}
       </div>

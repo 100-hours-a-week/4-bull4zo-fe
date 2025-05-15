@@ -1,4 +1,3 @@
-import { useVoteBatchStore } from '@/features/home/stores/batchVoteStore'
 import { useVoteCardStore } from '@/features/home/stores/voteCardStore'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
@@ -11,5 +10,4 @@ export const fullReset = () => {
   useNavigationStore.getState().reset()
   useGroupStore.getState().reset()
   useVoteCardStore.getState().reset()
-  useVoteBatchStore.getState().resetVotes()
 }

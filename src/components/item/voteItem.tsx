@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ParticipatedVote, ParticipatedVoteStatus } from '@/api/services/vote/model'
 import formatTime from '@/lib/formatTime'
+import { trackEvent } from '@/lib/trackEvent'
 import { Label } from '../ui/label'
 
 export const VoteItem = (vote: Partial<ParticipatedVote>) => {
@@ -15,6 +16,11 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
       onClick={() => {
         if (vote.voteStatus === 'PENDING' || vote.voteStatus === 'REJECTED') return
         navigation(`/research/${vote.voteId}`)
+        trackEvent({
+          cta_id: 'vote_detail',
+          action: 'navigation',
+          page: location.pathname,
+        })
       }}
       className={`flex flex-col px-4 py-6 border-[0.125rem] min-h-28 rounded-2xl gap-4 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-not-allowed' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
     >
@@ -33,7 +39,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
         >
           {(agree?.count as number) > 0 && (
             <div
-              className="absolute left-0 top-0 h-full items-center justify-center bg-green-500"
+              className="absolute right-0 top-0 h-full bg-green-500"
               style={{ width: `${Math.round(agree?.ratio as number)}%` }}
             >
               <ResultLabel>Yes</ResultLabel>
@@ -41,7 +47,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
           )}
           {(disagree?.count as number) > 0 && (
             <div
-              className="absolute right-0 top-0 h-full bg-red-500"
+              className="absolute left-0 top-0 h-full bg-red-500"
               style={{ width: `${Math.round(disagree?.ratio as number)}%` }}
             >
               <ResultLabel>No</ResultLabel>

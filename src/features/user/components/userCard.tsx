@@ -7,6 +7,7 @@ import { useUserLogoutMutation, useUserUpdateMutation } from '@/api/services/use
 import { ExitUserModal } from '@/components/modal/exitUserModal'
 import { NicknameSchema, nicknameSchema } from '@/features/user/lib/userSchema'
 import { fullReset } from '@/lib/fullReset'
+import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { useUserStore } from '@/stores/userStore'
 import { Button } from '../../../components/ui/button'
@@ -45,6 +46,13 @@ export const UserCard = () => {
         onSuccess: (data) => {
           setNickName(data.nickname)
         },
+        onSettled: () => {
+          trackEvent({
+            cta_id: 'user_nickname_change',
+            action: 'submit',
+            page: location.pathname,
+          })
+        },
       },
     )
   }
@@ -54,6 +62,13 @@ export const UserCard = () => {
       onSuccess: () => {
         fullReset()
         navigation('/login')
+      },
+      onSettled: () => {
+        trackEvent({
+          cta_id: 'logout_click',
+          action: 'click',
+          page: location.pathname,
+        })
       },
     })
   }

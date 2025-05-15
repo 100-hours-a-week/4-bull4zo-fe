@@ -1,7 +1,8 @@
-import DisLikeIcon from '@/assets/dislike.svg'
-import LikeIcon from '@/assets/like.svg'
-import PassIcon from '@/assets/pass.svg'
-import { VoteChoice } from '../stores/batchVoteStore'
+import { VoteChoice } from '@/api/services/vote/model'
+import DisLikeIcon from '@/assets/dislike.svg?react'
+import LikeIcon from '@/assets/like.svg?react'
+import PassIcon from '@/assets/pass.svg?react'
+import { Icon } from '@/components/Icon/icon'
 
 type Props = {
   swipeDir: VoteChoice
@@ -17,17 +18,17 @@ export const VoteDirectionButtonGroup = ({ swipeDir, onSwipe }: Props) => {
     <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[50] flex gap-5">
       {(swipeDir === null || swipeDir === '반대') && (
         <button className={getClass('반대')} onClick={() => onSwipe('반대')}>
-          <img src={DisLikeIcon} alt="반대" className="w-16 h-16" />
+          <Icon component={DisLikeIcon} className="w-16 h-16" />
         </button>
       )}
       {(swipeDir === null || swipeDir === '기권') && (
         <button className={getClass('기권')} onClick={() => onSwipe('기권')}>
-          <img src={PassIcon} alt="기권" className="w-16 h-16" />
+          <Icon component={PassIcon} className="w-16 h-16" />
         </button>
       )}
       {(swipeDir === null || swipeDir === '찬성') && (
         <button className={getClass('찬성')} onClick={() => onSwipe('찬성')}>
-          <img src={LikeIcon} alt="찬성" className="w-16 h-16" />
+          <Icon component={LikeIcon} className="w-16 h-16" />
         </button>
       )}
     </div>
