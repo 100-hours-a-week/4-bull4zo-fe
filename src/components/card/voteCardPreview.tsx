@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 // import META_ICON from '@/assets/meta_icon.png'
-import formatTime from '@/lib/formatTime'
 import { useUserStore } from '@/stores/userStore'
+import { formatRelativeTime } from '@/utils/time'
 // import { Icon } from '../Icon/icon'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
@@ -67,7 +67,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
             <CardTitle className="font-pyeojinGothic text-2xl">익명</CardTitle>
           </div>
         )}
-        <span className="text-xs pr-2 min-w-20">{formatTime(closedAt, false)}</span>
+        <span className="text-xs pr-2 min-w-20">{formatRelativeTime(closedAt, false)}</span>
       </CardHeader>
       <CardContent className="flex justify-center items-center h-full overflow-y-auto break-words">
         <p className="text-2xl whitespace-pre-line break-all">{content || '내용을 입력하세요.'}</p>

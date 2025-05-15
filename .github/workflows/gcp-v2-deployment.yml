@@ -1,17 +1,30 @@
-name: React BigBang CI/CD - Dev V1
+name: React CI/CD - Unified
 
 on:
   push:
     branches:
+      - main
       - develop
       - release/**
+      - cicd/**
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: dev
-
+    environment: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
+    
     steps:
+      - name: Set environment variables based on branch
+        id: set-env
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "env=prod" >> $GITHUB_OUTPUT
+            echo "vite_command=pnpm prd-build" >> $GITHUB_OUTPUT
+          else
+            echo "env=dev" >> $GITHUB_OUTPUT
+            echo "vite_command=pnpm build" >> $GITHUB_OUTPUT
+          fi
+
       - name: Checkout source code
         uses: actions/checkout@v3
 
@@ -27,7 +40,8 @@ jobs:
         run: pnpm install
 
       - name: Build with Vite (with env)
-        run: pnpm build
+        run: | 
+          ${{ steps.set-env.outputs.vite_command }}
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_BASE_URL: ${{ secrets.VITE_BASE_URL }}
@@ -35,18 +49,18 @@ jobs:
           VITE_KAKAO_AUTH_URL: ${{ secrets.VITE_KAKAO_AUTH_URL }}
           VITE_PUBLIC_MSW: ${{ secrets.VITE_PUBLIC_MSW }}
 
-      - name: Decode GCP service account key
-        run: echo "${{ secrets.GCP_CICD_SSH_KEY }}" | base64 --decode > $HOME/gcp-key.json
+      - name: Write credentials JSON to file
+        run: echo '${{ secrets.GCP_CREDENTIALS_JSON }}' > $HOME/gcp-key.json
 
-      - name: Authenticate to GCP
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.GCP_CICD_SSH_KEY }}
+      - name: Authenticate to GCP manually
+        run: |
+          gcloud auth activate-service-account --key-file=$HOME/gcp-key.json
+          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+      - name: Setup gcloud CLI manually
+        run: |
+          gcloud auth list
+          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
 
       - name: Deploy to GCS
         run: |

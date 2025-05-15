@@ -17,7 +17,7 @@ export const GroupDropDown = () => {
   const { groups, setId, setGroups, selectedId } = useGroupStore()
   const [open, setOpen] = useState(false)
   const location = useLocation()
-  const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
     useInfiniteGroupNameListQuery()
 
   useEffect(() => {
@@ -69,14 +69,21 @@ export const GroupDropDown = () => {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button className="w-[10rem] justify-between py-1 text-sm" variant="outline">
-          {selectedGroup?.name} <ChevronDown className="ml-2 h-4 w-4" />
+        <Button
+          className="w-[10rem] justify-between py-1 text-sm"
+          variant="outline"
+          data-testid="group-dropdown-trigger"
+          disabled={isError}
+        >
+          {isError ? '그룹 호출 실패' : selectedGroup?.name}
+          <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
         className="max-h-[10rem] w-[10rem] overflow-y-auto bg-white"
         onCloseAutoFocus={(e) => e.preventDefault()}
+        data-testid="group-dropdown-content"
       >
         <DropdownMenuRadioGroup
           value={selectedId.toString()}
@@ -88,9 +95,14 @@ export const GroupDropDown = () => {
               page: location.pathname,
             })
           }}
+          data-testid="group-dropdown-group"
         >
           {groups.map((group) => (
-            <DropdownMenuRadioItem key={group.groupId} value={group.groupId.toString()}>
+            <DropdownMenuRadioItem
+              key={group.groupId}
+              value={group.groupId.toString()}
+              data-testid={`group-item-${group.groupId}`}
+            >
               {group.name}
             </DropdownMenuRadioItem>
           ))}

@@ -1,8 +1,8 @@
-import { toKstISOString } from './toKSTISOString'
+import { convertToKstISOString } from './timezone'
 
-export default function formatTime(timeStamp: string, KST: boolean = true): string {
+export function formatRelativeTime(timeStamp: string, KST: boolean = true): string {
   const now = Date.now()
-  const date = KST ? new Date(toKstISOString(timeStamp)) : new Date(timeStamp)
+  const date = KST ? new Date(convertToKstISOString(timeStamp)) : new Date(timeStamp)
   const diff = now - date.getTime()
 
   const year = date.getFullYear()
@@ -24,7 +24,7 @@ export default function formatTime(timeStamp: string, KST: boolean = true): stri
       if (year === currentYear) {
         return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
       } else {
-        return `${year.toString().slice(2)}${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+        return `${year.toString().slice(2)}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
       }
     }
   } else {
@@ -42,8 +42,8 @@ export default function formatTime(timeStamp: string, KST: boolean = true): stri
   }
 }
 
-export function formatTimeDetail(timestamp: string): string {
-  const KSTtime = toKstISOString(timestamp)
+export function formatDateTimeDetail(timestamp: string): string {
+  const KSTtime = convertToKstISOString(timestamp)
 
   const date = new Date(KSTtime)
   const now = new Date()

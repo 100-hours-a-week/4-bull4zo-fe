@@ -6,6 +6,7 @@ import { useInviteCodeMutation } from '@/api/services/user/group/quries'
 import { InviteCodeSchema, inviteCodeSchema } from '@/features/user/lib/userSchema'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
+import { filterInviteCode } from '@/utils/validation'
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
@@ -78,10 +79,7 @@ export const AddGroupModal = () => {
                           maxLength={8}
                           className="flex-1 bg-white rounded-[0.75rem]"
                           onChange={(e) => {
-                            const onlyLetters = e.target.value
-                              .replace(/[^a-zA-Z0-9]/g, '')
-                              .toUpperCase()
-                            field.onChange(onlyLetters)
+                            field.onChange(filterInviteCode(e.target.value).toUpperCase())
                           }}
                         />
                       </FormControl>
