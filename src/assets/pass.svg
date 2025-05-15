@@ -1,12 +1,12 @@
-<svg width="45" height="46" viewBox="0 0 45 46" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g filter="url(#filter0_i_15989_1472)">
-<circle cx="22.5" cy="22.5" r="22.5" fill="#436DDA"/>
+<circle cx="27.65" cy="27.65" r="27.65" fill="#A8A8A8"/>
 </g>
 <g filter="url(#filter1_d_15989_1472)">
-<rect x="7.5" y="7.50098" width="30" height="30" fill="url(#pattern0_15989_1472)" shape-rendering="crispEdges"/>
+<rect x="9.21484" y="9.21777" width="36.8667" height="36.8667" fill="url(#pattern0_15989_1472)" shape-rendering="crispEdges"/>
 </g>
 <defs>
-<filter id="filter0_i_15989_1472" x="0" y="0" width="45" height="45" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_i_15989_1472" x="0" y="0" width="55.3008" height="55.2998" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
@@ -16,7 +16,7 @@
 <feColorMatrix type="matrix" values="0 0 0 0 0.647667 0 0 0 0 0.716655 0 0 0 0 0.895696 0 0 0 1 0"/>
 <feBlend mode="normal" in2="shape" result="effect1_innerShadow_15989_1472"/>
 </filter>
-<filter id="filter1_d_15989_1472" x="3.5" y="7.50098" width="38" height="38" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter1_d_15989_1472" x="5.21484" y="9.21777" width="44.8672" height="44.8662" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
