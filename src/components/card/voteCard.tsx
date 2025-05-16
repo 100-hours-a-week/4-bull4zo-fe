@@ -39,8 +39,14 @@ export const VoteCard = (props: Partial<Vote>) => {
         </div>
         <span className="text-xs pr-2">{formatTime(props.closedAt as string)}</span>
       </CardHeader>
-      <CardContent className="flex justify-center items-center h-full overflow-y-auto">
-        <p className="text-2xl h-full whitespace-pre-line break-all">{props.content}</p>
+      <CardContent className="flex-1 relative px-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-y-auto px-2">
+          <div className="min-h-full flex items-center justify-center">
+            <p className="text-2xl whitespace-pre-line break-all text-center py-2">
+              {props.content}
+            </p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   )
