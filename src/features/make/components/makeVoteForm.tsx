@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight } from 'lucide-react'
@@ -23,6 +23,9 @@ import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 export const MakeVoteForm = () => {
   const { selectedId, setId } = useGroupStore()
   const { openModal } = useModalStore()
+
+  const [minDateTime, setMinDateTime] = useState('')
+  const [maxDateTime, setMaxDateTime] = useState('')
 
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),
@@ -53,16 +56,29 @@ export const MakeVoteForm = () => {
       />,
     )
   }
-
+  // form에 그룹 id 반영
   useEffect(() => {
     if (selectedId) {
       form.setValue('groupId', selectedId)
     }
   }, [selectedId, form])
-
+  // 선택한 그룹이 "전체"일 경우 "공개"로 자동 변경
   useEffect(() => {
     if (selectedId === 0) setId(1)
   }, [selectedId, setId])
+  // 타임 캘린더의 선택 가능을 오늘 + 7일까지로 제한
+  useEffect(() => {
+    const now = new Date()
+    const sevenDaysLater = new Date()
+    sevenDaysLater.setDate(now.getDate() + 7)
+
+    const toInputFormat = (date: Date) => {
+      return date.toISOString().slice(0, 16)
+    }
+
+    setMinDateTime(toInputFormat(now))
+    setMaxDateTime(toInputFormat(sevenDaysLater))
+  }, [])
 
   return (
     <div className="w-full px-5 pt-3 flex items-center justify-center">
@@ -193,6 +209,8 @@ export const MakeVoteForm = () => {
                     className="rounded-[0.75rem] bg-gray px-8 py-3"
                     {...field}
                     type="datetime-local"
+                    min={minDateTime}
+                    max={maxDateTime}
                   />
                 </FormControl>
                 <FormMessage />
