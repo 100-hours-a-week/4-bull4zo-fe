@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/quries'
+import CheckIcon from '@/assets/voteCheckIcon.svg'
 import { Label } from '@/components/ui/label'
 import { formatTimeDetail } from '@/lib/formatTime'
 import { useGroupStore } from '@/stores/groupStore'
@@ -38,8 +39,8 @@ const ResearchDetailPage = () => {
         </div>
         <div className="mt-3 flex flex-col gap-4">
           <p className="font-semibold text-end">{voteResult?.totalCount}표</p>
-          <div className="relative h-12 w-full rounded bg-gray-200 overflow-hidden">
-            {(disAgree?.count as number) > 0 && (
+          {Number(disAgree?.count) > 0 && (
+            <div className="relative h-12 w-full rounded bg-gray-200 overflow-hidden">
               <div
                 className="absolute left-0 top-0 h-full bg-red-500 text-white pl-2 flex flex-col justify-center"
                 style={{ width: `${Math.round(disAgree?.ratio as number)}%` }}
@@ -49,9 +50,16 @@ const ResearchDetailPage = () => {
                   {Math.round(disAgree?.ratio as number)}% {disAgree?.count}표
                 </Label>
               </div>
-            )}
-          </div>
-          {(agree?.count as number) > 0 && (
+              {voteResult?.userResponse === 2 && (
+                <img
+                  src={CheckIcon}
+                  alt="투표 체크 아이콘"
+                  className="w-[27px] h-8 absolute right-2 top-1/2 transform -translate-y-1/2"
+                />
+              )}
+            </div>
+          )}
+          {Number(agree?.count) > 0 && (
             <div className="relative h-12 w-full rounded bg-gray-200 overflow-hidden">
               <div
                 className="absolute left-0 top-0 h-full bg-green-500 text-white pl-2 flex flex-col justify-center"
@@ -62,6 +70,13 @@ const ResearchDetailPage = () => {
                   {Math.round(agree?.ratio as number)}% {agree?.count}표
                 </Label>
               </div>
+              {voteResult?.userResponse === 1 && (
+                <img
+                  src={CheckIcon}
+                  alt="투표 체크 아이콘"
+                  className="w-[27px] h-8 absolute right-2 top-1/2 transform -translate-y-1/2"
+                />
+              )}
             </div>
           )}
           <div className="text-xs font-semibold  text-gray">
