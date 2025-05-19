@@ -49,14 +49,14 @@ const ResearchDetailPage = () => {
                 <Label>
                   {Math.round(disAgree?.ratio as number)}% {disAgree?.count}표
                 </Label>
-                {voteResult?.userResponse === 2 && (
-                  <img
-                    src={CheckIcon}
-                    alt="투표 체크 아이콘"
-                    className="w-[27px] h-8 absolute right-2"
-                  />
-                )}
               </div>
+              {voteResult?.userResponse === 2 && (
+                <img
+                  src={CheckIcon}
+                  alt="투표 체크 아이콘"
+                  className="w-[27px] h-8 absolute right-2 top-1/2 transform -translate-y-1/2"
+                />
+              )}
             </div>
           )}
           {Number(agree?.count) > 0 && (
@@ -69,14 +69,14 @@ const ResearchDetailPage = () => {
                 <Label>
                   {Math.round(agree?.ratio as number)}% {agree?.count}표
                 </Label>
-                {voteResult?.userResponse === 1 && (
-                  <img
-                    src={CheckIcon}
-                    alt="투표 체크 아이콘"
-                    className="w-[27px] h-8 absolute right-2"
-                  />
-                )}
               </div>
+              {voteResult?.userResponse === 1 && (
+                <img
+                  src={CheckIcon}
+                  alt="투표 체크 아이콘"
+                  className="w-[27px] h-8 absolute right-2 top-1/2 transform -translate-y-1/2"
+                />
+              )}
             </div>
           )}
           <div className="text-xs font-semibold  text-gray">
