@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { MoveLeft, MoveRight, MoveUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
+import { trackEvent } from '@/lib/trackEvent'
 import { useTutorialStore } from '@/stores/tutorialStore'
 
 export const TutorialPage = () => {
@@ -66,13 +67,28 @@ export const TutorialPage = () => {
         <div className="absolute bottom-[20%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
           <Checkbox
             checked={checked}
-            onCheckedChange={(value) => setChecked(!!value)}
+            onCheckedChange={(value) => {
+              setChecked(!!value)
+              trackEvent({
+                cta_id: 'tutorial_checkbox',
+                action: 'toggle',
+                checked: !!value,
+                page: location.pathname,
+              })
+            }}
             className="mr-2"
           />
           <span onClick={() => setChecked((prev) => !prev)}>하루동안 보지 않기</span>
         </div>
         <Button
-          onClick={handleClose}
+          onClick={() => {
+            handleClose()
+            trackEvent({
+              cta_id: 'tutorial_close_button',
+              action: 'click',
+              page: location.pathname,
+            })
+          }}
           className="cursor-pointer absolute bottom-[10%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
         >
           튜토리얼 닫기
