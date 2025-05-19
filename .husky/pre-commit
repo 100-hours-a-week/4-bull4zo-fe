@@ -2,10 +2,25 @@
 
 pnpm lint-staged
 
-echo "🛠 빌드 검사 시작..."
-pnpm build
-if [ $? -ne 0 ]; then
-  echo "❌ 빌드 실패! 커밋 차단"
+BRANCH=$(git symbolic-ref --short HEAD)
+
+if echo "$BRANCH" | grep -Eq '^(feature|refactor|chore|bugfix|hotfix|release)/|^develop$|^main$'; then
+  echo "✅ 브랜치 이름 검증 통과: $BRANCH"
+else
+  echo "❌ 잘못된 브랜치 이름입니다: '$BRANCH'"
+  echo "ℹ️ 브랜치는 'feature/', 'refactor/', 'chore/', 'bugfix/', 'hotfix/', 'release/', 'develop', 'main' 중 하나로 시작해야 합니다."
   exit 1
 fi
-echo "✅ 빌드 성공"
+
+
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "develop" ]; then
+  echo "🛠 빌드 검사 시작..."
+  pnpm build
+  if [ $? -ne 0 ]; then
+    echo "❌ 빌드 실패! 커밋 차단"
+    exit 1
+  fi
+  echo "✅ 빌드 성공"
+else
+  echo "ℹ️ 현재 브랜치($BRANCH)에서는 빌드 검사 생략"
+fi
