@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { toast } from 'sonner'
 import { Group } from '@/api/services/user/group/model'
+import { trackEvent } from '@/lib/trackEvent'
 import { Card, CardContent, CardHeader } from '../ui/card'
 
 export const GroupCard = (group: Partial<Group>) => {
@@ -10,6 +11,13 @@ export const GroupCard = (group: Partial<Group>) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(group.inviteCode as string)
     toast('초대코드 복사 완료')
+
+    trackEvent({
+      cta_id: 'code_copy',
+      action: 'copy',
+      page: location.pathname,
+    })
+
     setCopied(true)
 
     setTimeout(() => setCopied(false), 2000)

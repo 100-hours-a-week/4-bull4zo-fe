@@ -1,4 +1,5 @@
 import KAKAOICON from '@/assets/kako_icon.svg'
+import { trackEvent } from '@/lib/trackEvent'
 import { Icon } from '../../../components/Icon/icon'
 import { Button } from '../../../components/ui/button'
 
@@ -12,7 +13,16 @@ const KakaoButton = () => {
     '/auth/callback'
 
   return (
-    <a href={kakaoUrl}>
+    <a
+      onClick={() =>
+        trackEvent({
+          cta_id: 'login_kakao',
+          action: 'click',
+          page: location.pathname,
+        })
+      }
+      href={kakaoUrl}
+    >
       <Button className="px-8 text-2xl py-7 cursor-pointer bg-[#FFE030] hover:bg-[#FFE030] hover:text-inherit">
         <Icon src={KAKAOICON} size={32} alt="카카오 로고 아이콘" />
         <span>카카오 로그인</span>

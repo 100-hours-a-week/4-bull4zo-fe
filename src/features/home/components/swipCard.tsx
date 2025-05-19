@@ -2,6 +2,7 @@ import { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { Vote } from '@/api/services/vote/model'
 import { VoteCard } from '@/components/card/voteCard'
+import { trackEvent } from '@/lib/trackEvent'
 import { VoteChoice, VoteStore } from '../stores/batchVoteStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
 
@@ -59,6 +60,12 @@ const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
 
   const handleSwipe = (voteChoice: VoteChoice, offsetX: number, offsetY: number) => {
     addVote({ voteId: vote.voteId as number, voteChoice })
+
+    trackEvent({
+      cta_id: 'vote_card_swipe',
+      action: 'swipe',
+      page: location.pathname,
+    })
 
     const targetX = offsetX * 3
     const targetY = offsetY * 3

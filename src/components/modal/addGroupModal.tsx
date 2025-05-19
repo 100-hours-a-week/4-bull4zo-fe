@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { useInviteCodeMutation } from '@/api/services/user/group/quries'
 import { InviteCodeSchema, inviteCodeSchema } from '@/features/user/lib/userSchema'
+import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
@@ -40,6 +41,13 @@ export const AddGroupModal = () => {
         onSuccess: () => {
           toast('그룹 가입 성공')
           closeModal()
+        },
+        onSettled: () => {
+          trackEvent({
+            cta_id: 'group_invite',
+            action: 'submit',
+            page: location.pathname,
+          })
         },
       },
     )
