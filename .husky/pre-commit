@@ -1,4 +1,11 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
 pnpm lint-staged
+
+echo "🛠 빌드 검사 시작..."
+pnpm build
+if [ $? -ne 0 ]; then
+  echo "❌ 빌드 실패! 커밋 차단"
+  exit 1
+fi
+echo "✅ 빌드 성공"
