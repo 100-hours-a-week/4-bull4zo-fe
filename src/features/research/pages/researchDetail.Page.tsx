@@ -55,7 +55,7 @@ const ResearchDetailPage = () => {
                     alt="투표 체크 아이콘"
                     className="w-[27px] h-8 absolute right-2"
                   />
-                )}{' '}
+                )}
               </div>
             </div>
           )}
