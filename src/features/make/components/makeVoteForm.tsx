@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { VoteCardPreviewModal } from '@/features/make/components/voteCardPreviewModal'
 import { convertGlobalTime2LocalTime } from '@/lib/globalTime2LocalTime'
+import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
@@ -45,6 +46,12 @@ export const MakeVoteForm = () => {
     const image = form.getValues('image')
     const closedAt = form.getValues('closedAt')
     const anonymous = form.getValues('anonymous')
+
+    trackEvent({
+      cta_id: 'vote_submit_modal',
+      action: 'modal',
+      page: location.pathname,
+    })
 
     openModal(
       <VoteCardPreviewModal

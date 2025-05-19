@@ -16,6 +16,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { CreateGroupSchema, createGroupSchema } from '../lib/groupSchema'
 
@@ -43,6 +44,13 @@ export const CreateGroupForm = () => {
       {
         onSuccess: (data) => {
           openModal(<InviteCodeCheckModal code={data.inviteCode} />)
+        },
+        onSettled: () => {
+          trackEvent({
+            cta_id: 'group_create',
+            action: 'submit',
+            page: location.pathname,
+          })
         },
       },
     )

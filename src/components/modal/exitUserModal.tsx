@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useUserDeleteMutation } from '@/api/services/user/quries'
 import { fullReset } from '@/lib/fullReset'
+import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
@@ -16,6 +17,13 @@ export const ExitUserModal = () => {
       onSuccess: () => {
         fullReset()
         navigation(`/login`)
+      },
+      onSettled: () => {
+        trackEvent({
+          cta_id: 'user_delete',
+          action: 'click',
+          page: location.pathname,
+        })
       },
     })
   }

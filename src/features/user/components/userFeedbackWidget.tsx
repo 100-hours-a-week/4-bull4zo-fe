@@ -6,6 +6,7 @@ import MESSAGEICON from '@/assets/message.png'
 import MOALOGO from '@/assets/moa_logo.svg'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { trackEvent } from '@/lib/trackEvent'
 import { FeedbackSchema, feedbackSchema } from '../lib/userSchema'
 
 type Props = {
@@ -123,6 +124,13 @@ export const FeedbackForm = ({ onClose, rightOffset, buttonRef }: FeedbackFormPr
       onSuccess: () => {
         setMode('sent')
         form.reset()
+      },
+      onSettled: () => {
+        trackEvent({
+          cta_id: 'user_report',
+          action: 'submit',
+          page: location.pathname,
+        })
       },
     })
   }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import { useInfiniteGroupNameListQuery } from '@/api/services/user/group/quries'
+import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { Button } from '../ui/button'
 import {
@@ -79,7 +80,14 @@ export const GroupDropDown = () => {
       >
         <DropdownMenuRadioGroup
           value={selectedId.toString()}
-          onValueChange={(val) => setId(parseInt(val))}
+          onValueChange={(val) => {
+            setId(parseInt(val))
+            trackEvent({
+              cta_id: 'group_dropdown_select',
+              action: 'select',
+              page: location.pathname,
+            })
+          }}
         >
           {groups.map((group) => (
             <DropdownMenuRadioItem key={group.groupId} value={group.groupId.toString()}>

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ParticipatedVote, ParticipatedVoteStatus } from '@/api/services/vote/model'
 import formatTime from '@/lib/formatTime'
+import { trackEvent } from '@/lib/trackEvent'
 import { Label } from '../ui/label'
 
 export const VoteItem = (vote: Partial<ParticipatedVote>) => {
@@ -15,6 +16,11 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
       onClick={() => {
         if (vote.voteStatus === 'PENDING' || vote.voteStatus === 'REJECTED') return
         navigation(`/research/${vote.voteId}`)
+        trackEvent({
+          cta_id: 'vote_detail',
+          action: 'navigation',
+          page: location.pathname,
+        })
       }}
       className={`flex flex-col px-4 py-6 border-[0.125rem] min-h-28 rounded-2xl gap-4 shadow-box ${vote.voteStatus === 'REJECTED' ? 'bg-red-200 cursor-not-allowed' : vote.voteStatus === 'PENDING' ? 'bg-zinc-200 cursor-not-allowed' : 'cursor-pointer'}`}
     >
