@@ -1,9 +1,9 @@
 import { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
-import { Vote } from '@/api/services/vote/model'
+import { Vote, VoteChoice } from '@/api/services/vote/model'
+import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 import { VoteCard } from '@/components/card/voteCard'
 import { trackEvent } from '@/lib/trackEvent'
-import { VoteChoice, VoteStore } from '../stores/batchVoteStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
 
 export type SwipeCardHandle = {
@@ -17,12 +17,11 @@ type SwipeCardProps = {
   index: number
   // eslint-disable-next-line no-unused-vars
   setSwipeDir: (dir: VoteChoice) => void
-  // eslint-disable-next-line no-unused-vars
-  addVote: (vote: VoteStore) => void
+  mutateVote: ReturnType<typeof useSubmitVoteMutation>['mutateAsync']
 }
 
 const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
-  const { vote, isTop, index, setSwipeDir, addVote } = props
+  const { vote, isTop, index, setSwipeDir, mutateVote } = props
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -58,8 +57,11 @@ const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
     }
   }, [x, y, isTop, setSwipeDir])
 
-  const handleSwipe = (voteChoice: VoteChoice, offsetX: number, offsetY: number) => {
-    addVote({ voteId: vote.voteId as number, voteChoice })
+  const handleSwipe = async (voteChoice: VoteChoice, offsetX: number, offsetY: number) => {
+    await mutateVote({
+      voteId: vote.voteId as number,
+      userResponse: voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2,
+    })
 
     trackEvent({
       cta_id: 'vote_card_swipe',

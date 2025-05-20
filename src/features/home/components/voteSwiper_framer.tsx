@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { Vote, VoteData } from '@/api/services/vote/model'
+import { useEffect, useRef, useState } from 'react'
+import { Vote, VoteChoice, VoteData } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 // import DisLikeIcon from '@/assets/dislike.svg'
 // import LikeIcon from '@/assets/like.svg'
@@ -10,7 +10,6 @@ import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
-import { VoteChoice, useVoteBatchStore } from '../stores/batchVoteStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
 import SwipeCard, { SwipeCardHandle } from './swipCard'
 import { VoteDirectionButtonGroup } from './voteDirectionButtonGroup'
@@ -33,7 +32,6 @@ export const VoteSwiperFramer = ({
 
   const { cards: cardList, appendCards, filterByGroupId } = useVoteCardStore()
   const { hideUntil } = useTutorialStore()
-  const { addVote, selectVote, resetVotes } = useVoteBatchStore()
   const { selectedId } = useGroupStore()
   const { mutateAsync } = useSubmitVoteMutation()
 
@@ -47,24 +45,6 @@ export const VoteSwiperFramer = ({
     appendCards(newVotes)
     filterByGroupId(selectedId)
   }, [pages, appendCards, cardList.length, selectedId, filterByGroupId])
-
-  // 5개 모이면 자동 제출
-  const submitVotes = useCallback(async () => {
-    await Promise.all(
-      selectVote.map(({ voteId, voteChoice }) => {
-        const userResponse = voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2
-        return mutateAsync({ voteId, userResponse })
-      }),
-    )
-  }, [selectVote, mutateAsync])
-
-  // 현재 새로고침 이슈를 해결하지 못해 1개마다 그냥 요청이 발생하도록 설정
-  useEffect(() => {
-    if (selectVote.length >= 1 && isLogin) {
-      submitVotes()
-      resetVotes()
-    }
-  }, [selectVote, submitVotes, resetVotes])
 
   const [isInitializing, setIsInitializing] = useState(true)
 
@@ -119,7 +99,7 @@ export const VoteSwiperFramer = ({
             isTop={isTop}
             index={index}
             setSwipeDir={setSwipeDir}
-            addVote={addVote}
+            mutateVote={mutateAsync}
             ref={isTop ? topCardRef : null}
           />
         )
