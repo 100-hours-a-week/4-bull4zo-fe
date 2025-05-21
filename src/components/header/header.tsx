@@ -11,9 +11,9 @@ const Header = () => {
 
   return (
     <header className=" fixed w-full max-w-[450px] overflow-hidden shadow-header flex flex-row justify-between items-center z-[999] bg-white">
-      <div onClick={() => router('/home')} className="inline-block w-24 h-16 cursor-pointer">
+      <a href="/home" className="inline-block w-24 h-16 cursor-pointer">
         <Icon component={MOA_HOME_ICON} className="h-full w-full" />
-      </div>
+      </a>
       <div className="mr-4">
         {isLogin ? (
           // <Bell className="cursor-pointer" size={24} />
