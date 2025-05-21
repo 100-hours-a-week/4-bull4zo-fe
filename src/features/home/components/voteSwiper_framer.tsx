@@ -1,70 +1,34 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { Vote, VoteData } from '@/api/services/vote/model'
+import { memo, useEffect, useRef, useState } from 'react'
+import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 // import DisLikeIcon from '@/assets/dislike.svg'
 // import LikeIcon from '@/assets/like.svg'
 // import PassIcon from '@/assets/pass.svg'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
-import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
-import { VoteChoice, useVoteBatchStore } from '../stores/batchVoteStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
 import SwipeCard, { SwipeCardHandle } from './swipCard'
 import { VoteDirectionButtonGroup } from './voteDirectionButtonGroup'
 
 type Props = {
-  pages: VoteData[]
   fetchNextPage: () => void
   hasNextPage: boolean
   isFetchingNextPage: boolean
 }
 
-export const VoteSwiperFramer = ({
-  pages,
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
-}: Props) => {
+export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPage }: Props) => {
   const { isLogin } = useUserStore()
   const { isOpen, openModal } = useModalStore()
 
-  const { cards: cardList, appendCards, filterByGroupId } = useVoteCardStore()
+  const { cards: cardList } = useVoteCardStore()
   const { hideUntil } = useTutorialStore()
-  const { addVote, selectVote, resetVotes } = useVoteBatchStore()
-  const { selectedId } = useGroupStore()
   const { mutateAsync } = useSubmitVoteMutation()
 
   // 남은 카드들을 관리
   const [swipeDir, setSwipeDir] = useState<VoteChoice>(null)
-
-  useEffect(() => {
-    const lastPage = pages[pages.length - 1]
-    const newVotes = (lastPage?.votes ?? []).filter((v): v is Vote => v !== undefined && v !== null)
-
-    appendCards(newVotes)
-    filterByGroupId(selectedId)
-  }, [pages, appendCards, cardList.length, selectedId, filterByGroupId])
-
-  // 5개 모이면 자동 제출
-  const submitVotes = useCallback(async () => {
-    await Promise.all(
-      selectVote.map(({ voteId, voteChoice }) => {
-        const userResponse = voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2
-        return mutateAsync({ voteId, userResponse })
-      }),
-    )
-  }, [selectVote, mutateAsync])
-
-  // 현재 새로고침 이슈를 해결하지 못해 1개마다 그냥 요청이 발생하도록 설정
-  useEffect(() => {
-    if (selectVote.length >= 1 && isLogin) {
-      submitVotes()
-      resetVotes()
-    }
-  }, [selectVote, submitVotes, resetVotes])
 
   const [isInitializing, setIsInitializing] = useState(true)
 
@@ -85,7 +49,17 @@ export const VoteSwiperFramer = ({
     } else if (cardList.length <= 3 && isLogin && hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
     }
-  }, [cardList, hasNextPage, isFetchingNextPage, fetchNextPage, isLogin, openModal, isInitializing])
+  }, [
+    cardList,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    isLogin,
+    openModal,
+    isInitializing,
+    isOpen,
+    hideUntil,
+  ])
 
   const topCardRef = useRef<SwipeCardHandle>(null)
 
@@ -109,7 +83,7 @@ export const VoteSwiperFramer = ({
         {swipeDir === '반대' && <img src={DisLikeIcon} alt="반대" className="w-16 h-16" />}
         {swipeDir === '기권' && <img src={PassIcon} alt="기권" className="w-16 h-16" />}
       </div> */}
-      {cardList.map((vote, index) => {
+      {cardList.slice(0, 3).map((vote, index) => {
         const isTop = index === 0
 
         return (
@@ -119,7 +93,7 @@ export const VoteSwiperFramer = ({
             isTop={isTop}
             index={index}
             setSwipeDir={setSwipeDir}
-            addVote={addVote}
+            mutateVote={mutateAsync}
             ref={isTop ? topCardRef : null}
           />
         )
@@ -131,4 +105,4 @@ export const VoteSwiperFramer = ({
     </div>
   )
 }
-export default VoteSwiperFramer
+export default memo(VoteSwiperFramer)

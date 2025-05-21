@@ -1,7 +1,7 @@
+import { VoteChoice } from '@/api/services/vote/model'
 import DisLikeIcon from '@/assets/dislike.svg'
 import LikeIcon from '@/assets/like.svg'
 import PassIcon from '@/assets/pass.svg'
-import { VoteChoice } from '../stores/batchVoteStore'
 
 type Props = {
   swipeDir: VoteChoice

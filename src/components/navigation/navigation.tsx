@@ -54,7 +54,7 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
 
 const Navigation = () => {
   return (
-    <nav className="flex flex-row items-center justify-around max-w-[450px] w-full h-[4rem] fixed bottom-0 z-30 bg-white">
+    <nav className="flex z-[999] flex-row items-center justify-around max-w-[450px] w-full h-[4rem] fixed bottom-0 bg-white">
       <NavigationItem icon={<Icon src={Vote} alt="투표 아이콘" />} label="home" />
       <NavigationItem icon={<Plus />} label="make" />
       <NavigationItem icon={<ListCheckIcon />} label="research" />
