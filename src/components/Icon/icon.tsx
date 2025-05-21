@@ -1,24 +1,46 @@
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 
+type SVGIcon = React.FC<React.SVGProps<SVGSVGElement>>
+
 interface IconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  src: string
-  alt: string
-  size?: number | string // size를 숫자(px) 또는 문자열(예: 2rem)로 받음
+  src?: string
+  component?: SVGIcon
+  alt?: string
+  size?: number | string
+  className?: string
 }
 
-const Icon = ({ src, alt, size = 24, className, ...props }: IconProps) => {
+export const Icon: React.FC<IconProps> = ({
+  src,
+  component: SVGComponent,
+  alt,
+  size = 24,
+  className,
+  ...props
+}) => {
+  const dimension = typeof size === 'number' ? `${size}px` : size
+
+  if (SVGComponent) {
+    return (
+      <SVGComponent
+        width={dimension}
+        height={dimension}
+        className={cn('inline-block', className)}
+        {...(props as React.SVGProps<SVGSVGElement>)}
+      />
+    )
+  }
+
   return (
     <img
       src={src}
       alt={alt}
       width={typeof size === 'number' ? size : undefined}
       height={typeof size === 'number' ? size : undefined}
-      style={typeof size === 'string' ? { width: size, height: size } : undefined}
+      style={typeof size === 'string' ? { width: dimension, height: dimension } : undefined}
       className={cn('object-contain', className)}
       {...props}
     />
   )
 }
-
-export { Icon }
