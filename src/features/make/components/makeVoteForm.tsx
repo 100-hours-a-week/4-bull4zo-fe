@@ -106,13 +106,13 @@ export const MakeVoteForm = () => {
                     {...field}
                     value={field.value ?? ''}
                     placeholder="내용을 입력하세요."
-                    maxLength={256}
+                    maxLength={101}
                   />
                 </FormControl>
                 <div className="min-h-[1.25rem]">
                   <FormMessage />
                   <span className="absolute bottom-1 right-1 text-xs text-muted-foreground pr-1">
-                    {field.value?.length || 0}/255
+                    {field.value?.length || 0}/100
                   </span>
                 </div>
               </FormItem>

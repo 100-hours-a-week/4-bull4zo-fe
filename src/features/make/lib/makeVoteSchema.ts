@@ -5,7 +5,7 @@ export const voteSchema = z.object({
   content: z
     .string()
     .min(2, { message: '최소 2자 이상 입니다.' })
-    .max(255, { message: '최대 255자 이하 입니다.' }),
+    .max(100, { message: '최대 100자 이하 입니다.' }),
   image: z.custom<File | undefined>(
     (val) => val === undefined || val instanceof File,
     '지원 형식: JPEG, PNG (최대 10MB)',
