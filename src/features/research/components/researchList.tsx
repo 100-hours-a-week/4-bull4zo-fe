@@ -36,7 +36,7 @@ export const ResearchList = () => {
   }
 
   return (
-    <section className="px-7 py-2">
+    <section className="px-7 py-4">
       <div className="flex items-center justify-around mb-4">
         <div className="" />
         <Label
