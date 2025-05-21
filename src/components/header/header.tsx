@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import MOA_HOME_ICON from '@/assets/moa_home.svg'
+import MOA_HOME_ICON from '@/assets/moa_home.svg?react'
 // import { Bell }  from 'lucide-react'
 import { useUserStore } from '@/stores/userStore'
+import { Icon } from '../Icon/icon'
 import { Button } from '../ui/button'
 
 const Header = () => {
@@ -11,7 +12,7 @@ const Header = () => {
   return (
     <header className=" fixed w-full max-w-[450px] overflow-hidden shadow-header flex flex-row justify-between items-center z-[999] bg-white">
       <div onClick={() => router('/home')} className="inline-block w-24 h-16 cursor-pointer">
-        <object data={MOA_HOME_ICON} className="w-full h-full pointer-events-none" />
+        <Icon component={MOA_HOME_ICON} className="h-full w-full" />
       </div>
       <div className="mr-4">
         {isLogin ? (
