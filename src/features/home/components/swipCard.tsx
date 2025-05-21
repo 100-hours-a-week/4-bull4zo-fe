@@ -4,6 +4,7 @@ import { Vote, VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 import { VoteCard } from '@/components/card/voteCard'
 import { trackEvent } from '@/lib/trackEvent'
+import { useUserStore } from '@/stores/userStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
 
 export type SwipeCardHandle = {
@@ -28,6 +29,7 @@ const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
   const rotate = useTransform(x, [-300, 300], [-20, 20])
 
   const { cards: cardList, removeCard } = useVoteCardStore()
+  const { isLogin } = useUserStore()
 
   // drag 중 라벨 업데이트
   useEffect(() => {
@@ -57,11 +59,13 @@ const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
     }
   }, [x, y, isTop, setSwipeDir])
 
-  const handleSwipe = async (voteChoice: VoteChoice, offsetX: number, offsetY: number) => {
-    await mutateVote({
-      voteId: vote.voteId as number,
-      userResponse: voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2,
-    })
+  const handleSwipe = (voteChoice: VoteChoice, offsetX: number, offsetY: number) => {
+    if (isLogin) {
+      mutateVote({
+        voteId: vote.voteId as number,
+        userResponse: voteChoice === '기권' ? 0 : voteChoice === '찬성' ? 1 : 2,
+      })
+    }
 
     trackEvent({
       cta_id: 'vote_card_swipe',
