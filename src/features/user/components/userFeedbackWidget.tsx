@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUserFeedbackMutation } from '@/api/services/user/quries'
 import MESSAGEICON from '@/assets/message.png'
-import MOALOGO from '@/assets/moa_logo.svg'
+import MOA_LOGO from '@/assets/moa_logo.svg?react'
+import { Icon } from '@/components/Icon/icon'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { trackEvent } from '@/lib/trackEvent'
@@ -44,10 +45,10 @@ export const UserFeedbackWidget = () => {
           e.stopPropagation()
           setOpen((prev) => !prev)
         }}
-        className="fixed bottom-16 z-[999] w-14 h-14 rounded-full bg-primary text-white shadow-lg flex items-center justify-center"
+        className="fixed bottom-18 z-[999] w-14 h-14 rounded-full bg-primary text-white shadow-md flex items-center justify-center"
         style={{ right: rightOffset ?? 16 }}
       >
-        <img src={MOALOGO} alt="사용자 피드백 버튼 로고" />
+        <Icon component={MOA_LOGO} className="w-14 h-14" />
       </button>
 
       {open && (
@@ -189,7 +190,7 @@ export const FeedbackForm = ({ onClose, rightOffset, buttonRef }: FeedbackFormPr
           </>
         ) : (
           <div className="h-full flex flex-col items-center justify-between gap-4">
-            <img src={MESSAGEICON} alt="메시지 아이콘" className="w-19 h-19" />
+            <Icon src={MESSAGEICON} alt="메시지 아이콘" className="w-19 h-19" />
             <div className="text-center text-[0.95rem] font-medium mb-6 text-sm">
               감사합니다! <br /> 남겨주신 의견은 잘 전달되었습니다. <br /> 참고해서 더 편하게 쓸 수
               있게 만들어볼게요.

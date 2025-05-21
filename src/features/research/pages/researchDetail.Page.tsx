@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/quries'
-import CheckIcon from '@/assets/voteCheckIcon.svg'
+import CheckIcon from '@/assets/voteCheckIcon.svg?react'
+import { Icon } from '@/components/Icon/icon'
 import { Label } from '@/components/ui/label'
 import { formatTimeDetail } from '@/lib/formatTime'
 import { useGroupStore } from '@/stores/groupStore'
@@ -51,9 +52,8 @@ const ResearchDetailPage = () => {
                 </Label>
               </div>
               {voteResult?.userResponse === 2 && (
-                <img
-                  src={CheckIcon}
-                  alt="투표 체크 아이콘"
+                <Icon
+                  component={CheckIcon}
                   className="w-[27px] h-8 absolute right-2 top-1/2 transform -translate-y-1/2"
                 />
               )}
@@ -71,9 +71,8 @@ const ResearchDetailPage = () => {
                 </Label>
               </div>
               {voteResult?.userResponse === 1 && (
-                <img
-                  src={CheckIcon}
-                  alt="투표 체크 아이콘"
+                <Icon
+                  component={CheckIcon}
                   className="w-[27px] h-8 absolute right-2 top-1/2 transform -translate-y-1/2"
                 />
               )}
