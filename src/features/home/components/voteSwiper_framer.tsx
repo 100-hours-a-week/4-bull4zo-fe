@@ -1,12 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import { Vote, VoteChoice, VoteData } from '@/api/services/vote/model'
+import { memo, useEffect, useRef, useState } from 'react'
+import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/quries'
 // import DisLikeIcon from '@/assets/dislike.svg'
 // import LikeIcon from '@/assets/like.svg'
 // import PassIcon from '@/assets/pass.svg'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
-import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { useTutorialStore } from '@/stores/tutorialStore'
 import { useUserStore } from '@/stores/userStore'
@@ -15,36 +14,21 @@ import SwipeCard, { SwipeCardHandle } from './swipCard'
 import { VoteDirectionButtonGroup } from './voteDirectionButtonGroup'
 
 type Props = {
-  pages: VoteData[]
   fetchNextPage: () => void
   hasNextPage: boolean
   isFetchingNextPage: boolean
 }
 
-export const VoteSwiperFramer = ({
-  pages,
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
-}: Props) => {
+export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPage }: Props) => {
   const { isLogin } = useUserStore()
   const { isOpen, openModal } = useModalStore()
 
-  const { cards: cardList, appendCards, filterByGroupId } = useVoteCardStore()
+  const { cards: cardList } = useVoteCardStore()
   const { hideUntil } = useTutorialStore()
-  const { selectedId } = useGroupStore()
   const { mutateAsync } = useSubmitVoteMutation()
 
   // 남은 카드들을 관리
   const [swipeDir, setSwipeDir] = useState<VoteChoice>(null)
-
-  useEffect(() => {
-    const lastPage = pages[pages.length - 1]
-    const newVotes = (lastPage?.votes ?? []).filter((v): v is Vote => v !== undefined && v !== null)
-
-    appendCards(newVotes)
-    filterByGroupId(selectedId)
-  }, [pages, appendCards, cardList.length, selectedId, filterByGroupId])
 
   const [isInitializing, setIsInitializing] = useState(true)
 
@@ -65,7 +49,17 @@ export const VoteSwiperFramer = ({
     } else if (cardList.length <= 3 && isLogin && hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
     }
-  }, [cardList, hasNextPage, isFetchingNextPage, fetchNextPage, isLogin, openModal, isInitializing])
+  }, [
+    cardList,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    isLogin,
+    openModal,
+    isInitializing,
+    isOpen,
+    hideUntil,
+  ])
 
   const topCardRef = useRef<SwipeCardHandle>(null)
 
@@ -89,7 +83,7 @@ export const VoteSwiperFramer = ({
         {swipeDir === '반대' && <img src={DisLikeIcon} alt="반대" className="w-16 h-16" />}
         {swipeDir === '기권' && <img src={PassIcon} alt="기권" className="w-16 h-16" />}
       </div> */}
-      {cardList.map((vote, index) => {
+      {cardList.slice(0, 3).map((vote, index) => {
         const isTop = index === 0
 
         return (
@@ -111,4 +105,4 @@ export const VoteSwiperFramer = ({
     </div>
   )
 }
-export default VoteSwiperFramer
+export default memo(VoteSwiperFramer)
