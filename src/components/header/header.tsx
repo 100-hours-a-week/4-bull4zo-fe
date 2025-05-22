@@ -19,7 +19,12 @@ const Header = () => {
           // <Bell className="cursor-pointer" size={24} />
           <></>
         ) : (
-          <Button className="cursor-pointer" onClick={() => router(`/login`)}>
+          <Button
+            type="button"
+            className="cursor-pointer"
+            onClick={() => router(`/login`)}
+            aria-label="로그인"
+          >
             로그인
           </Button>
         )}
