@@ -40,7 +40,7 @@ const HomePage = () => {
     if (isLogin === undefined) {
       const timer = setTimeout(() => {
         setIsLogin(false)
-      }, 2000) // 2초
+      }, 1000) // 1초
 
       return () => clearTimeout(timer)
     }

@@ -33,11 +33,7 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
   const [isInitializing, setIsInitializing] = useState(true)
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsInitializing(false)
-    }, 0)
-
-    return () => clearTimeout(timeout)
+    setIsInitializing(false)
   }, [])
 
   // 카드 3장 남으면 fetchNextPage()
