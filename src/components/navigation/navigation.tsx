@@ -33,6 +33,7 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
   return (
     <button
       onClick={onClick}
+      aria-label={label}
       className="flex flex-col items-center cursor-pointer justify-center flex-1 gap-2 my-3"
     >
       <div className="relative flex items-center justify-center">
