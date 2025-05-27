@@ -35,6 +35,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
       )}
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
         <div
+          data-testid="item-result"
           className={`relative h-6 w-full rounded ${vote.results && 'bg-gray-200'} overflow-hidden`}
         >
           {(agree?.count as number) > 0 && (
