@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { Vote } from '@/api/services/vote/model'
 import META_ICON from '@/assets/meta_icon.png'
-import formatTime from '@/lib/formatTime'
+import { formatRelativeTime } from '@/lib/time'
 import { VoteCard } from './voteCard'
 
 describe('VoteCard 컴포넌트', () => {
@@ -34,7 +34,7 @@ describe('VoteCard 컴포넌트', () => {
 
   it('종료 시간이 형식에 맞게 표시된다', () => {
     render(<VoteCard {...defaultProps} />)
-    expect(screen.getByText(formatTime(defaultProps.closedAt!))).toBeInTheDocument()
+    expect(screen.getByText(formatRelativeTime(defaultProps.closedAt!))).toBeInTheDocument()
   })
 
   it('내용이 줄바꿈 포함하여 표시된다', () => {
