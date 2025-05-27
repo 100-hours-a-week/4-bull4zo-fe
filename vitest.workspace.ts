@@ -15,6 +15,7 @@ export default defineWorkspace([
       globals: true,
       environment: 'jsdom',
       include: ['src/**/*.{test,spec}.{js,ts,jsx,tsx}'],
+      setupFiles: ['.storybook/vitest.setup.ts'],
     },
   },
   {
@@ -35,6 +36,9 @@ export default defineWorkspace([
         instances: [{ browser: 'chromium' }],
       },
       setupFiles: ['.storybook/vitest.setup.ts'],
+    },
+    optimizeDeps: {
+      exclude: ['msw/node'],
     },
   },
 ])
