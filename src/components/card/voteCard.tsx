@@ -42,7 +42,10 @@ export const VoteCard = (props: Partial<Vote>) => {
       <CardContent className="flex-1 relative px-0 overflow-hidden">
         <div className="absolute inset-0 px-2">
           <div className="min-h-full flex items-center justify-center">
-            <p className="sm:text-xl whitespace-pre-line break-all text-center py-2">
+            <p
+              data-testid="vote-content"
+              className="sm:text-xl whitespace-pre-line break-all text-center py-2"
+            >
               {props.content}
             </p>
           </div>
