@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { ParticipatedVote } from '@/api/services/vote/model'
-import formatTime from '@/lib/formatTime'
+import { formatRelativeTime } from '@/lib/time'
 import { VoteItem } from './voteItem'
 
 const mockNavigate = vi.fn()
@@ -35,7 +35,7 @@ describe('VoteItem', () => {
 
   it('종료 시간이 형식에 맞게 표시된다', () => {
     renderWithRouter(<VoteItem {...baseVote} />)
-    expect(screen.getByText(formatTime(baseVote.closedAt!))).toBeInTheDocument()
+    expect(screen.getByText(formatRelativeTime(baseVote.closedAt!))).toBeInTheDocument()
   })
 
   it('renders OPEN 상태', () => {
