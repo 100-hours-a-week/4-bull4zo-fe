@@ -24,7 +24,7 @@ export function formatRelativeTime(timeStamp: string, KST: boolean = true): stri
       if (year === currentYear) {
         return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
       } else {
-        return `${year.toString().slice(2)}${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+        return `${year.toString().slice(2)}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')} ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
       }
     }
   } else {
