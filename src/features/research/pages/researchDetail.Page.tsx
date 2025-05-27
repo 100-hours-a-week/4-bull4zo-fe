@@ -4,7 +4,7 @@ import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/qur
 import CheckIcon from '@/assets/voteCheckIcon.svg?react'
 import { Icon } from '@/components/Icon/icon'
 import { Label } from '@/components/ui/label'
-import { formatTimeDetail } from '@/lib/formatTime'
+import { formatDateTimeDetail } from '@/lib/time'
 import { useGroupStore } from '@/stores/groupStore'
 
 const ResearchDetailPage = () => {
@@ -79,8 +79,8 @@ const ResearchDetailPage = () => {
             </div>
           )}
           <div className="text-xs font-semibold  text-gray">
-            {formatTimeDetail(voteDetail?.createdAt as string)} ~{' '}
-            {formatTimeDetail(voteDetail?.closedAt as string)}
+            {formatDateTimeDetail(voteDetail?.createdAt as string)} ~{' '}
+            {formatDateTimeDetail(voteDetail?.closedAt as string)}
           </div>
         </div>
       </section>

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { expect, within } from '@storybook/test'
 import { createMemoryHistory } from 'history'
 import { ParticipatedVote } from '@/api/services/vote/model'
-import formatTime from '@/lib/formatTime'
+import { formatRelativeTime } from '@/lib/time'
 import { VoteItem } from './voteItem'
 
 const rawHistory = createMemoryHistory({ initialEntries: ['/research'] })
@@ -77,7 +77,7 @@ export const Default: Story = {
     if (args.voteStatus) {
       if (args.voteStatus === 'OPEN' || args.voteStatus === 'CLOSED') {
         // 기본 데이터 테스트
-        expect(canvas.getByText(formatTime(args.closedAt!))).toBeInTheDocument()
+        expect(canvas.getByText(formatRelativeTime(args.closedAt!))).toBeInTheDocument()
         expect(canvas.getByTestId('item-result')).toBeInTheDocument()
         expect(canvas.getByText('Yes')).toBeInTheDocument()
         expect(canvas.getByText('No')).toBeInTheDocument()

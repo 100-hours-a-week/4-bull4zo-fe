@@ -5,7 +5,7 @@ type LocalTimeOptions = {
   minutes?: number
 }
 
-export const convertGlobalTime2LocalTime = ({
+export const buildLocalDateTimeString = ({
   date = new Date(),
   days = 0,
   hours,
