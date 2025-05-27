@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Vote } from '@/api/services/vote/model'
 import META_ICON from '@/assets/meta_icon.png'
-import formatTime from '@/lib/formatTime'
+import { formatRelativeTime } from '@/lib/time'
 import { Icon } from '../Icon/icon'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
@@ -37,7 +37,7 @@ export const VoteCard = (props: Partial<Vote>) => {
           </CardTitle>
           {props.adminVote === 1 && <Icon src={META_ICON} alt="공인 뱃지" size={20} />}
         </div>
-        <span className="text-xs pr-2">{formatTime(props.closedAt as string)}</span>
+        <span className="text-xs pr-2">{formatRelativeTime(props.closedAt as string)}</span>
       </CardHeader>
       <CardContent className="flex-1 relative px-0 overflow-hidden">
         <div className="absolute inset-0 px-2">

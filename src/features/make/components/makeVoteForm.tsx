@@ -15,7 +15,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { VoteCardPreviewModal } from '@/features/make/components/voteCardPreviewModal'
-import { convertGlobalTime2LocalTime } from '@/lib/globalTime2LocalTime'
+import { buildLocalDateTimeString } from '@/lib/time'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
@@ -34,7 +34,7 @@ export const MakeVoteForm = () => {
       groupId: selectedId,
       content: '',
       image: undefined,
-      closedAt: convertGlobalTime2LocalTime({ days: 1 }),
+      closedAt: buildLocalDateTimeString({ days: 1 }),
       anonymous: false,
     },
     mode: 'onChange',
