@@ -15,8 +15,6 @@ interface StoryArgs {
   tab: Tab
 }
 
-const rawHistory = createMemoryHistory({ initialEntries: ['/home'] })
-const history = rawHistory as any
 const queryClient = new QueryClient()
 
 const meta = {
@@ -36,6 +34,11 @@ const meta = {
 
       authAxiosInstance.defaults.baseURL = window.location.origin
       authAxiosInstance.defaults.headers.common['Authorization'] = 'kakao-auth-code'
+
+      const dynamicHistory = createMemoryHistory({
+        initialEntries: [args.tab === 'make' ? '/make' : '/home'],
+      })
+      const history = dynamicHistory as any
 
       return (
         <QueryClientProvider client={queryClient}>
@@ -73,6 +76,7 @@ type Story = StoryObj<StoryArgs>
 export const Default: Story = {
   args: {
     isLogin: true,
+    tab: 'make',
   },
 
   play: async ({ canvasElement, args }) => {
@@ -108,8 +112,10 @@ export const Default: Story = {
 
     // 7. 경로가 "/make"일 때 "전체"가 없어야 하는지 확인
     if (args.tab === 'make') {
-      const groupNames = useGroupStore.getState().groups.map((g) => g.name)
-      expect(groupNames.includes('전체')).toBe(false)
+      await waitFor(() => {
+        const groupNames = useGroupStore.getState().groups.map((g) => g.name)
+        expect(groupNames.includes('전체')).toBe(false)
+      })
     } else {
       const groupNames = useGroupStore.getState().groups.map((g) => g.name)
       expect(groupNames[0]).toBe('전체')
