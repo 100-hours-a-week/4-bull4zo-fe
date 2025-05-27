@@ -2,7 +2,7 @@ import type { StoryObj } from '@storybook/react'
 import { expect, waitFor, within } from '@storybook/test'
 import { Vote } from '@/api/services/vote/model'
 import META_ICON from '@/assets/meta_icon.png'
-import formatTime from '@/lib/formatTime'
+import { formatRelativeTime } from '@/lib/time'
 import { VoteCard } from './voteCard'
 
 const meta = {
@@ -70,7 +70,7 @@ export const Default: Story = {
     }
 
     // 종료 시간이 올바르게 표시되는지 확인
-    const formattedTime = formatTime(args.closedAt!)
+    const formattedTime = formatRelativeTime(args.closedAt!)
     expect(canvas.getByText(formattedTime)).toBeInTheDocument()
 
     // 내용 전체가 줄바꿈 포함해 잘 렌더링되었는지 확인

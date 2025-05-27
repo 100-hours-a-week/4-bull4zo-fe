@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ParticipatedVote, ParticipatedVoteStatus } from '@/api/services/vote/model'
-import formatTime from '@/lib/formatTime'
+import { formatRelativeTime } from '@/lib/time'
 import { trackEvent } from '@/lib/trackEvent'
 import { Label } from '../ui/label'
 
@@ -30,7 +30,7 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
       </div>
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
         <div className="flex items-center justify-end text-xs">
-          {formatTime(vote.closedAt as string)}
+          {formatRelativeTime(vote.closedAt as string)}
         </div>
       )}
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
