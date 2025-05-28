@@ -1,5 +1,5 @@
+import MOA_404 from '@/assets/moa_404.svg?react'
 import { Icon } from '@/components/Icon/icon'
-import MOA_404 from '../../public/moa_404.svg?react'
 
 const NotFoundPage = () => {
   return (
