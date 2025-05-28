@@ -8,6 +8,7 @@ import ResearchDetailPage from '@/features/research/pages/researchDetail.Page'
 import ResearchPage from '@/features/research/pages/researchPage'
 import UserPage from '@/features/user/pages/userPage'
 import { AppLayout } from './AppLayout'
+import NotFoundPage from './NotFound'
 
 export const router = createBrowserRouter([
   {
@@ -51,5 +52,9 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
   },
 ])
