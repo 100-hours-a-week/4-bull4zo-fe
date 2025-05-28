@@ -47,9 +47,13 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
   }
 
   return (
-    <div className="flex flex-col justify-center items-center h-full w-[100svw] max-w-[450px]">
+    <div className="flex flex-col justify-center items-center h-full w-[100svw] max-w-[450px] gap-4">
       <VoteCardPreview content={content} image={image} closedAt={closedAt} anonymous={anonymous} />
-      <div className="flex items-center justify-center w-full gap-4 mt-4">
+      <div className="text-xl text-white z-10 backdrop-blur-sm">
+        투표는 등록 후 <span className="font-bold text-[1.375rem] text-red-300">수정, 삭제</span>가
+        불가능합니다.
+      </div>
+      <div className="flex items-center justify-center w-full gap-4 ">
         <Button className="flex-1 max-w-25" onClick={() => closeModal()}>
           닫기
         </Button>
