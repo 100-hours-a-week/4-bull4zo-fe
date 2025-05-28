@@ -2,23 +2,19 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type TutorialStore = {
-  hideUntil: number | null
-  // eslint-disable-next-line no-unused-vars
-  setHideUntil: (timestamp: number | null) => void
-  isExpired: () => boolean
+  isHidden: boolean
+  close: () => void
+  open: () => void
   reset: () => void
 }
 
 export const useTutorialStore = create(
   persist<TutorialStore>(
-    (set, get) => ({
-      hideUntil: null,
-      setHideUntil: (timestamp) => set({ hideUntil: timestamp }),
-      isExpired: () => {
-        const hideUntil = get().hideUntil
-        return !hideUntil || Date.now() > hideUntil
-      },
-      reset: () => set({ hideUntil: null }),
+    (set) => ({
+      isHidden: false,
+      close: () => set({ isHidden: true }),
+      open: () => set({ isHidden: false }),
+      reset: () => set({ isHidden: false }),
     }),
     {
       name: 'tutorial-store',
