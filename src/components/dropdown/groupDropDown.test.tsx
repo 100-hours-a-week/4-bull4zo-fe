@@ -3,6 +3,7 @@ import { userEvent } from '@storybook/test'
 import '@testing-library/jest-dom'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
+import { afterEach } from 'node:test'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import * as trackModule from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
@@ -44,19 +45,23 @@ class MockIO {
   }
   unobserve() {}
 }
-vi.stubGlobal('IntersectionObserver', MockIO)
-
 describe('GroupDropDown 단위 테스트', () => {
   const rawHistory = createMemoryHistory({ initialEntries: ['/'] })
   let history = rawHistory as any
+  const originalIO = globalThis.IntersectionObserver
 
   beforeEach(() => {
+    vi.stubGlobal('IntersectionObserver', MockIO)
+
     useGroupStore.setState({ groups: [], selectedId: 0 })
 
     trackSpy.mockClear()
     fakeFetchNext.mockClear()
 
     history = createMemoryHistory({ initialEntries: ['/home'] })
+  })
+  afterEach(() => {
+    vi.stubGlobal('IntersectionObserver', originalIO)
   })
 
   // 초기 렌더링 테스트
