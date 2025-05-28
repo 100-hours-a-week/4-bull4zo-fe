@@ -49,12 +49,15 @@ const HomePage = () => {
   }, [isLogin, setIsLogin])
 
   useEffect(() => {
-    const lastPage = data?.pages?.at(-1)
+    const lastPage = data?.pages.at(-1)
     if (lastPage?.votes) {
       appendCards(lastPage.votes)
-      filterByGroupId(groupId)
     }
-  }, [data?.pages, appendCards, groupId, filterByGroupId])
+  }, [data?.pages, appendCards])
+
+  useEffect(() => {
+    filterByGroupId(groupId)
+  }, [groupId, filterByGroupId])
 
   // 로딩 카드
   if (isLoading || isLogin === undefined) {
