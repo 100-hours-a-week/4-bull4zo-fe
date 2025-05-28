@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Vote } from '@/api/services/vote/model'
 import META_ICON from '@/assets/meta_icon.png'
-import { formatRelativeTime } from '@/lib/time'
+import { formatRelativeTime } from '@/utils/time'
 import { Icon } from '../Icon/icon'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
