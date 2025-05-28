@@ -4,6 +4,7 @@ import { expect, userEvent, waitFor, within } from '@storybook/test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createMemoryHistory } from 'history'
 import { authAxiosInstance } from '@/api/axios'
+import { fullReset } from '@/lib/fullReset'
 import { groupHandlers } from '@/mocks/handlers/groupHandlers'
 import { useGroupStore } from '@/stores/groupStore'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
@@ -27,6 +28,8 @@ const meta = {
   decorators: [
     (Story: any, context: any) => {
       const args = context.args as StoryArgs
+
+      fullReset()
 
       useUserStore.setState({ isLogin: args.isLogin, accessToken: 'kakao-auth-code' })
       useNavigationStore.setState({ tab: args.tab })
