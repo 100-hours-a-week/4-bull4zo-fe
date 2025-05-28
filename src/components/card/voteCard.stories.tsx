@@ -2,7 +2,7 @@ import type { StoryObj } from '@storybook/react'
 import { expect, waitFor, within } from '@storybook/test'
 import { Vote } from '@/api/services/vote/model'
 import META_ICON from '@/assets/meta_icon.png'
-import { formatRelativeTime } from '@/lib/time'
+import { formatRelativeTime } from '@/utils/time'
 import { VoteCard } from './voteCard'
 
 const meta = {

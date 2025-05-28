@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { formatRelativeTime } from '@/lib/time'
 // import META_ICON from '@/assets/meta_icon.png'
 import { useUserStore } from '@/stores/userStore'
+import { formatRelativeTime } from '@/utils/time'
 // import { Icon } from '../Icon/icon'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 

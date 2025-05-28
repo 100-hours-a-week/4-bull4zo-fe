@@ -4,8 +4,8 @@ import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/qur
 import CheckIcon from '@/assets/voteCheckIcon.svg?react'
 import { Icon } from '@/components/Icon/icon'
 import { Label } from '@/components/ui/label'
-import { formatDateTimeDetail } from '@/lib/time'
 import { useGroupStore } from '@/stores/groupStore'
+import { formatDateTimeDetail } from '@/utils/time'
 
 const ResearchDetailPage = () => {
   const navigation = useNavigate()

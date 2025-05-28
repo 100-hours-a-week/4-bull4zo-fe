@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { expect, within } from '@storybook/test'
 import { createMemoryHistory } from 'history'
 import { ParticipatedVote } from '@/api/services/vote/model'
-import { formatRelativeTime } from '@/lib/time'
+import { formatRelativeTime } from '@/utils/time'
 import { VoteItem } from './voteItem'
 
 const rawHistory = createMemoryHistory({ initialEntries: ['/research'] })

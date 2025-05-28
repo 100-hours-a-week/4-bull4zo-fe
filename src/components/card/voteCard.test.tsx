@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { Vote } from '@/api/services/vote/model'
 import META_ICON from '@/assets/meta_icon.png'
-import { formatRelativeTime } from '@/lib/time'
+import { formatRelativeTime } from '@/utils/time'
 import { VoteCard } from './voteCard'
 
 describe('VoteCard 컴포넌트', () => {
