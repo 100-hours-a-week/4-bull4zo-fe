@@ -18,6 +18,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
+import { filterAllowedKoreanInput } from '@/utils/validation'
 import { CreateGroupSchema, createGroupSchema } from '../lib/groupSchema'
 
 export const CreateGroupForm = () => {
@@ -116,11 +117,7 @@ export const CreateGroupForm = () => {
                       placeholder="그룹 이름을 입력하세요"
                       {...field}
                       onChange={(e) => {
-                        const onlyLetters = e.target.value.replace(
-                          /[^a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9 ]/g,
-                          '',
-                        )
-                        field.onChange(onlyLetters)
+                        field.onChange(filterAllowedKoreanInput(e.target.value))
                       }}
                     />
                   </FormControl>
