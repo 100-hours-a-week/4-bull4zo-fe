@@ -10,6 +10,7 @@ import { fullReset } from '@/lib/fullReset'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { useUserStore } from '@/stores/userStore'
+import { filterAllowedKoreanInput } from '@/utils/validation'
 import { Button } from '../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../../../components/ui/form'
@@ -101,11 +102,7 @@ export const UserCard = () => {
                             }
                           }}
                           onChange={(e) => {
-                            const onlyLetters = e.target.value.replace(
-                              /[^a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ0-9]/g,
-                              '',
-                            )
-                            field.onChange(onlyLetters)
+                            field.onChange(filterAllowedKoreanInput(e.target.value))
                           }}
                         />
                         <Check
