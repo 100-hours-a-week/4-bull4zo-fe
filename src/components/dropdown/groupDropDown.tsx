@@ -17,7 +17,7 @@ export const GroupDropDown = () => {
   const { groups, setId, setGroups, selectedId } = useGroupStore()
   const [open, setOpen] = useState(false)
   const location = useLocation()
-  const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
     useInfiniteGroupNameListQuery()
 
   useEffect(() => {
@@ -73,8 +73,10 @@ export const GroupDropDown = () => {
           className="w-[10rem] justify-between py-1 text-sm"
           variant="outline"
           data-testid="group-dropdown-trigger"
+          disabled={isError}
         >
-          {selectedGroup?.name} <ChevronDown className="ml-2 h-4 w-4" />
+          {isError ? '그룹 호출 실패' : selectedGroup?.name}
+          <ChevronDown className="ml-2 h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
