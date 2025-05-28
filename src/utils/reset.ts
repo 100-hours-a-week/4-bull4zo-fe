@@ -4,7 +4,7 @@ import { useModalStore } from '@/stores/modalStore'
 import { useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
 
-export const fullReset = () => {
+export const logoutAndResetStores = () => {
   useUserStore.getState().logout()
   useModalStore.getState().closeModal()
   useNavigationStore.getState().reset()

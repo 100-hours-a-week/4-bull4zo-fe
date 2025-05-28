@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { ParticipatedVote } from '@/api/services/vote/model'
-import { formatRelativeTime } from '@/lib/time'
+import { formatRelativeTime } from '@/utils/time'
 import { VoteItem } from './voteItem'
 
 const mockNavigate = vi.fn()
