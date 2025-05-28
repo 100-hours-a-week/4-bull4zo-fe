@@ -107,7 +107,7 @@ describe('GroupDropDown 단위 테스트', () => {
     )
 
     const trigger = screen.getByTestId('group-dropdown-trigger')
-    userEvent.click(trigger)
+    await userEvent.click(trigger)
 
     const content = await within(document.body).findByTestId('group-dropdown-content')
     expect(content).toBeInTheDocument()
