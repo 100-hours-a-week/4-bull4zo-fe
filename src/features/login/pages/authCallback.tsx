@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
-import { fullReset } from '@/lib/fullReset'
 import { useUserStore } from '@/stores/userStore'
+import { logoutAndResetStores } from '@/utils/reset'
 
 const AuthCallback = () => {
   const navigate = useNavigate()
@@ -44,7 +44,7 @@ const AuthCallback = () => {
 
       const { accessToken } = response.data.data
 
-      fullReset()
+      logoutAndResetStores()
       setIsLogin(true)
       setAccessToken(accessToken)
 
