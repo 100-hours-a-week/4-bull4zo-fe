@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ParticipatedVote, ParticipatedVoteStatus } from '@/api/services/vote/model'
-import { formatRelativeTime } from '@/lib/time'
 import { trackEvent } from '@/lib/trackEvent'
+import { formatRelativeTime } from '@/utils/time'
 import { Label } from '../ui/label'
 
 export const VoteItem = (vote: Partial<ParticipatedVote>) => {

@@ -15,10 +15,10 @@ import {
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { VoteCardPreviewModal } from '@/features/make/components/voteCardPreviewModal'
-import { buildLocalDateTimeString } from '@/lib/time'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
+import { buildLocalDateTimeString } from '@/utils/time'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 
 export const MakeVoteForm = () => {
