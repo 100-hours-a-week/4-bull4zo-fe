@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useUserDeleteMutation } from '@/api/services/user/quries'
-import { fullReset } from '@/lib/fullReset'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
+import { logoutAndResetStores } from '@/utils/reset'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
@@ -15,7 +15,7 @@ export const ExitUserModal = () => {
   const deleteHandler = () => {
     deleteUserMutate(undefined, {
       onSuccess: () => {
-        fullReset()
+        logoutAndResetStores()
         navigation(`/login`)
       },
       onSettled: () => {
