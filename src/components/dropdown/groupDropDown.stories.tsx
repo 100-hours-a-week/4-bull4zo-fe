@@ -4,11 +4,11 @@ import { expect, userEvent, waitFor, within } from '@storybook/test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createMemoryHistory } from 'history'
 import { authAxiosInstance } from '@/api/axios'
-import { fullReset } from '@/lib/fullReset'
 import { groupHandlers } from '@/mocks/handlers/groupHandlers'
 import { useGroupStore } from '@/stores/groupStore'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
+import { logoutAndResetStores } from '@/utils/reset'
 import { GroupDropDown } from './groupDropDown'
 
 interface StoryArgs {
@@ -29,7 +29,7 @@ const meta = {
     (Story: any, context: any) => {
       const args = context.args as StoryArgs
 
-      fullReset()
+      logoutAndResetStores()
 
       useUserStore.setState({ isLogin: args.isLogin, accessToken: 'kakao-auth-code' })
       useNavigationStore.setState({ tab: args.tab })

@@ -5,9 +5,9 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { createMemoryHistory } from 'history'
 import { afterEach } from 'node:test'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { fullReset } from '@/lib/fullReset'
 import * as trackModule from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
+import { logoutAndResetStores } from '@/utils/reset'
 
 const fakeFetchNext = vi.fn()
 
@@ -184,7 +184,7 @@ describe('GroupDropDown 실패 및 예외 테스트', () => {
   beforeEach(() => {
     vi.stubGlobal('IntersectionObserver', MockIO)
 
-    fullReset()
+    logoutAndResetStores()
 
     useGroupStore.setState({ groups: [], selectedId: 0 })
     trackSpy.mockClear()
