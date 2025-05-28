@@ -24,7 +24,7 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
   const { isOpen, openModal } = useModalStore()
 
   const { cards: cardList } = useVoteCardStore()
-  const { hideUntil } = useTutorialStore()
+  const { isHidden } = useTutorialStore()
   const { mutateAsync } = useSubmitVoteMutation()
 
   // 남은 카드들을 관리
@@ -40,7 +40,7 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
   useEffect(() => {
     if (isInitializing) return
 
-    if (!isLogin && cardList.length === 0 && !isOpen && hideUntil !== null) {
+    if (!isLogin && cardList.length === 0 && !isOpen && isHidden) {
       openModal(<NoVoteAvailAbleModal />)
     } else if (cardList.length <= 3 && isLogin && hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
@@ -54,7 +54,7 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
     openModal,
     isInitializing,
     isOpen,
-    hideUntil,
+    isHidden,
   ])
 
   const topCardRef = useRef<SwipeCardHandle>(null)
