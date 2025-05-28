@@ -1,27 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { MoveLeft, MoveRight, MoveUp } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { trackEvent } from '@/lib/trackEvent'
 import { useTutorialStore } from '@/stores/tutorialStore'
 
 export const TutorialPage = () => {
-  const { hideUntil, setHideUntil } = useTutorialStore()
-
-  const [checked, setChecked] = useState(false)
-
-  const handleClose = () => {
-    if (checked) {
-      const tomorrow = Date.now() + 24 * 60 * 60 * 1000
-      setHideUntil(tomorrow)
-    } else {
-      const hideTime = Date.now() + 60 * 60 * 1000
-      setHideUntil(hideTime)
-    }
-  }
+  const { isHidden, close } = useTutorialStore()
 
   useEffect(() => {
-    if (!hideUntil) {
+    if (!isHidden) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = 'auto'
@@ -64,25 +51,9 @@ export const TutorialPage = () => {
           실제 투표에는 반영되지 않아요. <br />
           로그인하면 다시 투표할 수 있어요!
         </div>
-        <div className="absolute bottom-[20%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center cursor-pointer">
-          <Checkbox
-            checked={checked}
-            onCheckedChange={(value) => {
-              setChecked(!!value)
-              trackEvent({
-                cta_id: 'tutorial_checkbox',
-                action: 'toggle',
-                checked: !!value,
-                page: location.pathname,
-              })
-            }}
-            className="mr-2"
-          />
-          <span onClick={() => setChecked((prev) => !prev)}>하루동안 보지 않기</span>
-        </div>
         <Button
           onClick={() => {
-            handleClose()
+            close()
             trackEvent({
               cta_id: 'tutorial_close_button',
               action: 'click',
