@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useUserDeleteMutation } from '@/api/services/user/quries'
+import { useUserDeleteMutation } from '@/api/services/user/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { logoutAndResetStores } from '@/utils/reset'

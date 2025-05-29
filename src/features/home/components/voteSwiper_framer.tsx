@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { VoteChoice } from '@/api/services/vote/model'
-import { useSubmitVoteMutation } from '@/api/services/vote/quries'
+import { useSubmitVoteMutation } from '@/api/services/vote/queries'
 // import DisLikeIcon from '@/assets/dislike.svg'
 // import LikeIcon from '@/assets/like.svg'
 // import PassIcon from '@/assets/pass.svg'

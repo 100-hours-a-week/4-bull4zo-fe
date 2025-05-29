@@ -1,4 +1,4 @@
-import { useInfiniteGroupsQuery } from '@/api/services/user/group/quries'
+import { useInfiniteGroupsQuery } from '@/api/services/group/queries'
 import { GroupList } from '@/components/list/groupList'
 import { AddGroupModal } from '@/components/modal/addGroupModal'
 import { Button } from '@/components/ui/button'

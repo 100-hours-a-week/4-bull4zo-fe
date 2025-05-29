@@ -1,7 +1,7 @@
 import {
   useCreateVotesInfinityQuery,
   useParticipatedVotesInfinityQuery,
-} from '@/api/services/vote/quries'
+} from '@/api/services/vote/queries'
 import { VoteList } from '@/components/list/voteList'
 import { Label } from '@/components/ui/label'
 import { trackEvent } from '@/lib/trackEvent'

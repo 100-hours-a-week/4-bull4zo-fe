@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
-import { useInfiniteGroupNameListQuery } from '@/api/services/user/group/quries'
+import { useInfiniteGroupNameListQuery } from '@/api/services/group/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { Button } from '../ui/button'

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useParticipatedVotesInfinityQuery } from '@/api/services/vote/quries'
+import { useParticipatedVotesInfinityQuery } from '@/api/services/vote/queries'
 import { VoteItem } from '../item/voteItem'
 
 type VoteListProps = {

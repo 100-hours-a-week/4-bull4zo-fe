@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { toast } from 'sonner'
-import { Group } from '@/api/services/user/group/model'
+import { Group } from '@/api/services/group/model'
 import { trackEvent } from '@/lib/trackEvent'
 import { Card, CardContent, CardHeader } from '../ui/card'
 

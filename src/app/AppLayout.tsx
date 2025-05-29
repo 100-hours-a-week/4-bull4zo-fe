@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useUserInfoQuery } from '@/api/services/user/quries'
+import { useUserInfoQuery } from '@/api/services/user/queries'
 import { userService } from '@/api/services/user/service'
 import Header from '@/components/header/header'
 import { Modal } from '@/components/modal/modal'
@@ -54,13 +54,13 @@ export const AppLayout = () => {
   }, [setTab, navigation, setAccessToken, setIsLogin, accessToken, location.pathname])
 
   return (
-    <div>
+    <div className="relative">
       <Header />
       <main className="py-[4.25rem] min-h-screen bg-white">
         <Outlet />
-        {isOpen && <Modal />}
       </main>
       <Navigation />
+      {isOpen && <Modal />}
     </div>
   )
 }

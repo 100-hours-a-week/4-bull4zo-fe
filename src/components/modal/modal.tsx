@@ -20,7 +20,7 @@ export const Modal = () => {
 
   return (
     <div
-      className="absolute [@media(max-height:820)]:fixed max-[450px]:fixed inset-0 z-[9999] flex items-center justify-center bg-black/50"
+      className="absolute max-[450px]:fixed inset-0 z-[9999] flex items-center justify-center bg-black/50"
       aria-modal="true"
       role="dialog"
       onClick={() => closeModal()}
