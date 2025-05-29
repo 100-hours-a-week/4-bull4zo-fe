@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { Comment } from '@/api/services/comment/model'
 import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/quries'
 import { CommentItem } from '@/components/comment/commentItem'
-import ResearchDetailInfo from '../components/researchInfo'
+import ResearchDetailInfo from '../components/researchDetailInfo'
 
 const ResearchDetailPage = () => {
   const { voteId } = useParams()
