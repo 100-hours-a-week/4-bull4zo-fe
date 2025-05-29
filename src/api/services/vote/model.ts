@@ -1,3 +1,5 @@
+import { PageNation } from '@/type'
+
 export type VoteType = 'USER' | 'AI' | 'EVENT'
 
 export type VoteChoice = '찬성' | '반대' | '기권' | null
@@ -14,12 +16,8 @@ export interface Vote {
   adminVote: 0 | 1 // 0이면 admin, 1이면 아님
   voteType: VoteType
 }
-export interface VoteData {
-  votes: Vote[]
-  nextCursor: string
-  hasNext: boolean
-  size: number
-}
+
+export type VoteData = PageNation<'votes', Vote[]>
 
 export interface UseInfiniteVotesQueryOptions {
   groupId?: number
@@ -51,12 +49,7 @@ export interface ParticipatedVotesQueryOptions {
   size?: number
 }
 
-export interface ParticipatedVoteList {
-  votes: ParticipatedVote[]
-  nextCursor: string
-  hasNext: boolean
-  size: number
-}
+export type ParticipatedVoteList = PageNation<'votes', ParticipatedVote[]>
 
 export interface ParticipatedVote {
   voteId: number

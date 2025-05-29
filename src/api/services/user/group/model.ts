@@ -1,3 +1,5 @@
+import { PageNation } from '@/type'
+
 export interface GroupName {
   groupId: number
   name: string
@@ -13,12 +15,7 @@ export interface Group {
 
 export type GroupRole = 'OWNER' | 'MANAGER' | 'MEMBER'
 
-export interface MyGroupNamesData {
-  groups: GroupName[]
-  nextCursor: string | null
-  hasNext: boolean
-  size: number
-}
+export type MyGroupNamesData = PageNation<'groups', GroupName[]>
 
 export interface MyGroupList {
   groups: Group[]
