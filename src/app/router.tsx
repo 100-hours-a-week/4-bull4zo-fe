@@ -32,6 +32,10 @@ export const router = createBrowserRouter([
         element: <MakePage />,
       },
       {
+        path: '/make/:voteId',
+        element: <MakePage />,
+      },
+      {
         path: '/research',
         element: <ResearchPage />,
       },

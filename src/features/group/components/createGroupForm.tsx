@@ -1,8 +1,10 @@
-// import { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-// import { Plus } from 'lucide-react'
-import { useCreateGroupMutation } from '@/api/services/user/group/quries'
+import { Plus } from 'lucide-react'
+import { toast } from 'sonner'
+import { authAxiosInstance } from '@/api/axios'
+import { useCreateGroupMutation } from '@/api/services/group/queries'
 import { InviteCodeCheckModal } from '@/components/modal/inviteCodeCheckModal'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,6 +20,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
+import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'
 import { CreateGroupSchema, createGroupSchema } from '../lib/groupSchema'
 
@@ -27,34 +30,78 @@ export const CreateGroupForm = () => {
     defaultValues: {
       name: '',
       description: '',
-      image: '',
+      image: undefined,
     },
     mode: 'onChange',
   })
 
   const { openModal } = useModalStore()
 
-  const { mutate } = useCreateGroupMutation()
+  const { mutateAsync } = useCreateGroupMutation()
 
-  // const [preview, setPreview] = useState<string | null>(null)
-  // const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const onSubmit = (values: CreateGroupSchema) => {
-    mutate(
-      { name: values.name, description: values.description, imageUrl: '' },
-      {
-        onSuccess: (data) => {
-          openModal(<InviteCodeCheckModal code={data.inviteCode} />)
+  const onSubmit = async (values: CreateGroupSchema) => {
+    try {
+      const image = form.getValues('image')
+      let imageUrl = ''
+      let imageName = ''
+
+      if (image) {
+        // 1. presigned URL 요청
+        const { data: presignedRes } = await authAxiosInstance.post('/api/v1/image/presigned-url', {
+          fileName: image.name,
+        })
+        if (presignedRes.message !== 'SUCCESS') {
+          throw new Error('Presigned URL 발급 실패')
+        }
+        const { uploadUrl, fileUrl } = presignedRes.data
+
+        // 2. 이미지 업로드 (PUT)
+        const uploadRes = await fetch(uploadUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': image.type,
+          },
+          body: image,
+        })
+
+        if (!uploadRes.ok) {
+          toast.error('이미지 업로드에 실패했습니다.')
+        }
+
+        imageUrl = fileUrl
+        imageName = image.name
+      }
+      await mutateAsync(
+        { name: values.name, description: values.description, imageUrl, imageName },
+        {
+          onSuccess: (data) => {
+            openModal(<InviteCodeCheckModal code={data.inviteCode} />)
+          },
+          onSettled: () => {
+            trackEvent({
+              cta_id: 'group_create',
+              action: 'submit',
+              page: location.pathname,
+            })
+          },
         },
-        onSettled: () => {
-          trackEvent({
-            cta_id: 'group_create',
-            action: 'submit',
-            page: location.pathname,
-          })
-        },
-      },
-    )
+      )
+      // eslint-disable-next-line no-unused-vars
+    } catch (err) {
+      // const errorObject = err as {
+      //   message: string
+      // }
+      // toast.error(errorObject.message || '그룹 생성에 실패했습니다.')
+    } finally {
+      trackEvent({
+        cta_id: 'group_create',
+        action: 'submit',
+        page: location.pathname,
+      })
+    }
   }
 
   return (
@@ -63,9 +110,9 @@ export const CreateGroupForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex-1 flex flex-col gap-6 w-full h-full max-w-lg mx-auto"
       >
-        <div className="gap-6 flex flex-col bg-gray px-5 pt-3 pb-12 rounded-[0.625rem]">
+        <div className="gap-6 flex flex-col bg-white shadow-md px-5 pt-3 pb-12 rounded-[0.625rem]">
           <div className="flex gap-4">
-            {/* <FormField
+            <FormField
               control={form.control}
               name="image"
               render={({ field }) => (
@@ -75,14 +122,14 @@ export const CreateGroupForm = () => {
                     <div>
                       <Input
                         type="file"
-                        accept="image/*"
+                        accept="image/png, image/jpeg, image/jpg"
                         ref={fileInputRef}
                         className="hidden"
                         onChange={(e) => {
                           const file = e.target.files?.[0]
                           if (file) {
                             setPreview(URL.createObjectURL(file))
-                            field.onChange(e.target.files)
+                            field.onChange(file)
                           }
                         }}
                       />
@@ -105,7 +152,7 @@ export const CreateGroupForm = () => {
                   <FormMessage className="max-w-24" />
                 </FormItem>
               )}
-            /> */}
+            />
             <FormField
               control={form.control}
               name="name"
@@ -133,13 +180,14 @@ export const CreateGroupForm = () => {
               <FormItem>
                 <div className="flex items-center justify-between">
                   <FormLabel className="font-semibold text-lg">그룹 소개</FormLabel>
-                  <Label className="text-xs">{field.value.length}/50</Label>
+                  <Label className="text-xs">{getContentLength(field.value)}/50</Label>
                 </div>
                 <FormControl>
                   <Textarea
                     placeholder="그룹을 소개해주세요 (최대 50자)"
                     className="resize-none"
                     {...field}
+                    maxLength={50}
                   />
                 </FormControl>
                 <FormMessage />

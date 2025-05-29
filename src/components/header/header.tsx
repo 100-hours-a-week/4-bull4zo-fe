@@ -1,6 +1,7 @@
-import { useNavigate } from 'react-router-dom'
-import MOA_HOME_ICON from '@/assets/moa_home.svg?react'
-// import { Bell }  from 'lucide-react'
+import { FaAngleLeft } from 'react-icons/fa6'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { Bell } from 'lucide-react'
+import MOA_HOME_ICON from '@/assets/moa_home.webp'
 import { useUserStore } from '@/stores/userStore'
 import { Icon } from '../Icon/icon'
 import { Button } from '../ui/button'
@@ -9,15 +10,29 @@ const Header = () => {
   const router = useNavigate()
   const isLogin = useUserStore((state) => state.isLogin)
 
+  const location = useLocation()
+
+  const path = location.pathname
+  const excludedPaths = ['/home', '/make', '/research', '/user']
+  const showBackbutton = !excludedPaths.includes(path)
+
+  const handleBack = () => {
+    router(-1)
+  }
+
   return (
     <header className=" fixed w-full max-w-[450px] overflow-hidden shadow-header flex flex-row justify-between items-center z-[999] bg-white">
+      {showBackbutton && (
+        <button className="ml-2 cursor-pointer" onClick={handleBack} aria-label="뒤로가기">
+          <FaAngleLeft size={24} />
+        </button>
+      )}
       <a href="/home" className="inline-block w-24 h-16 cursor-pointer">
-        <Icon component={MOA_HOME_ICON} className="h-full w-full" />
+        <Icon src={MOA_HOME_ICON} className="h-full w-full" />
       </a>
       <div className="mr-4">
         {isLogin ? (
-          // <Bell className="cursor-pointer" size={24} />
-          <></>
+          <Bell className="cursor-pointer" size={24} />
         ) : (
           <Button
             type="button"

@@ -16,3 +16,9 @@
 > MOA의 작업 현황은 아래 프로젝트 보드에서 확인할 수 있습니다.
 
 - [🔗 MOA Kanban Board](https://github.com/orgs/100-hours-a-week/projects/130)<br/>
+
+## 🔥 트러블 슈팅
+
+> MOA FE의 트러블 슈팅은 아래 wiki문서에서 확인 가능합니다.
+
+- [🔗 FE WIKI 바로가기](https://github.com/100-hours-a-week/4-bull4zo-fe/wiki)<br/>

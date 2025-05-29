@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight } from 'lucide-react'
+import { useVoteDetailInfo } from '@/api/services/vote/queries'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -12,21 +14,28 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { VoteCardPreviewModal } from '@/features/make/components/voteCardPreviewModal'
 import { trackEvent } from '@/lib/trackEvent'
+import { cn } from '@/lib/utils'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
+import { getContentLength } from '@/utils/textLength'
 import { buildLocalDateTimeString } from '@/utils/time'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 
 export const MakeVoteForm = () => {
+  const { voteId } = useParams()
+  const router = useNavigate()
+
   const { selectedId, setId } = useGroupStore()
   const { openModal } = useModalStore()
 
+  const [fileName, setFileName] = useState<string | null>(null)
   const [minDateTime, setMinDateTime] = useState('')
   const [maxDateTime, setMaxDateTime] = useState('')
+
+  const { data: editData, isError } = useVoteDetailInfo(voteId ?? '')
 
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),
@@ -41,11 +50,7 @@ export const MakeVoteForm = () => {
   })
 
   const onSubmit = () => {
-    const groupId = form.getValues('groupId')
-    const content = form.getValues('content')
-    const image = form.getValues('image')
-    const closedAt = form.getValues('closedAt')
-    const anonymous = form.getValues('anonymous')
+    const data = form.getValues()
 
     trackEvent({
       cta_id: 'vote_submit_modal',
@@ -53,16 +58,19 @@ export const MakeVoteForm = () => {
       page: location.pathname,
     })
 
+    const imageToUse = data.image instanceof File ? data.image : data.image
+
     openModal(
       <VoteCardPreviewModal
-        groupId={groupId}
-        content={content}
-        image={image}
-        closedAt={closedAt}
-        anonymous={anonymous}
+        groupId={data.groupId}
+        content={data.content}
+        image={imageToUse}
+        closedAt={data.closedAt}
+        anonymous={data.anonymous}
       />,
     )
   }
+
   // form에 그룹 id 반영
   useEffect(() => {
     if (selectedId) {
@@ -87,6 +95,28 @@ export const MakeVoteForm = () => {
     setMaxDateTime(toInputFormat(sevenDaysLater))
   }, [])
 
+  useEffect(() => {
+    if (editData) {
+      form.reset({
+        groupId: editData.groupId,
+        content: editData.content,
+        closedAt: editData.closedAt,
+        anonymous: editData.authorNickname.includes('익명'),
+        image: editData.imageUrl,
+      })
+      if (editData.imageUrl) {
+        form.setValue('image', editData.imageUrl)
+        setFileName(editData.imageName)
+      }
+    }
+  }, [editData, form])
+
+  useEffect(() => {
+    if (isError) {
+      router('/research')
+    }
+  }, [isError, router])
+
   return (
     <div className="w-full px-5 pt-3 flex items-center justify-center">
       <Form {...form}>
@@ -102,17 +132,17 @@ export const MakeVoteForm = () => {
                 <FormLabel className="font-semibold text-lg">투표 내용</FormLabel>
                 <FormControl>
                   <Textarea
-                    className="text-[0.875rem] rounded-[1.25rem] min-w-[20rem] shadow-card h-[18rem] p-4 resize-none border-solid border-black border-2"
+                    className="text-[0.875rem] bg-white rounded-[1.25rem] min-w-[20rem] shadow-card h-[18rem] p-4 resize-none border-none shadow-figma"
                     {...field}
                     value={field.value ?? ''}
                     placeholder="내용을 입력하세요."
-                    maxLength={101}
+                    maxLength={100}
                   />
                 </FormControl>
                 <div className="min-h-[1.25rem]">
                   <FormMessage />
                   <span className="absolute bottom-1 right-1 text-xs text-muted-foreground pr-1">
-                    {field.value?.length || 0}/100
+                    {getContentLength(field.value)}/100
                   </span>
                 </div>
               </FormItem>
@@ -123,24 +153,27 @@ export const MakeVoteForm = () => {
             name="anonymous"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-semibold text-lg">익명 투표 여부</FormLabel>
                 <FormControl>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 ml-3">
                     <Checkbox
-                      className="w-5 h-5"
+                      className="w-5 h-5 bg-white"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                    <Label className="font-semibold font-unbounded">
-                      {!field.value ? '실명' : '익명'}
-                    </Label>
+                    <button
+                      type="button"
+                      className="font-medium font-unbounded"
+                      onClick={() => {
+                        field.onChange(!field.value)
+                      }}
+                    >
+                      익명으로 올리기
+                    </button>
                   </div>
                 </FormControl>
               </FormItem>
             )}
           />
-          {/*
-          v2 이미지 저장 로직 추가 후 반영
           <FormField
             control={form.control}
             name="image"
@@ -148,24 +181,25 @@ export const MakeVoteForm = () => {
               const id = 'file-upload'
               return (
                 <FormItem>
-                  <FormLabel className="font-semibold">이미지 첨부(선택)</FormLabel>
+                  <FormLabel className="font-semibold text-lg">이미지 첨부(선택)</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/png, image/jpeg, image/jpg"
                         className="hidden"
                         id={id}
                         onChange={(e) => {
                           const file = e.target.files?.[0]
                           if (file) {
                             field.onChange(file)
+                            setFileName(file.name)
                           }
                         }}
                       />
                       <Button
                         type="button"
-                        className="w-full py-3 h-full text-[1rem]"
+                        className="w-full py-3 h-full text-[1rem] bg-white shadow-md"
                         onClick={() => {
                           const input = document.getElementById(id) as HTMLInputElement | null
                           if (input) {
@@ -173,26 +207,18 @@ export const MakeVoteForm = () => {
                           }
                         }}
                       >
-                        <span>
-                          {field.value
-                            ? field.value.name.replace(/\.[^/.]+$/, '')
-                            : '이미지 올리기'}
-                        </span>
-                        {field.value && (
+                        <span>{fileName ? fileName : '이미지 올리기'}</span>
+                        {fileName && (
                           <span
                             onClick={(e) => {
                               e.stopPropagation()
 
-                              setTimeout(() => {
-                                field.onChange(undefined)
-                                const input = document.getElementById(id) as HTMLInputElement | null
-
-                                if (input) {
-                                  input.value = ''
-                                }
-                              }, 0)
+                              field.onChange(undefined)
+                              setFileName(null)
+                              const input = document.getElementById(id) as HTMLInputElement | null
+                              if (input) input.value = ''
                             }}
-                            className="ml-2 text-sm text-muted-foreground hover:text-red-500 cursor-pointer"
+                            className="text-sm pl-1 pr-4 text-muted-foreground hover:text-red-500 cursor-pointer"
                           >
                             ✕
                           </span>
@@ -204,7 +230,7 @@ export const MakeVoteForm = () => {
                 </FormItem>
               )
             }}
-          /> */}
+          />
           <FormField
             control={form.control}
             name="closedAt"
@@ -213,8 +239,9 @@ export const MakeVoteForm = () => {
                 <FormLabel className="font-semibold text-lg">투표 종료 시간</FormLabel>
                 <FormControl>
                   <input
-                    className="rounded-[0.75rem] bg-gray px-8 py-3"
+                    className="rounded-[0.75rem] bg-gray px-8 py-3 shadow-md focus:ring-1 focus:outline-none"
                     {...field}
+                    style={{ backgroundColor: 'white' }}
                     type="datetime-local"
                     min={minDateTime}
                     max={maxDateTime}
@@ -228,9 +255,12 @@ export const MakeVoteForm = () => {
             <Button
               type="submit"
               disabled={!form.formState.isValid}
-              className={`w-full h-full max-w-[6rem] py-2 text-lg font-semibold mt-4 ${form.formState.isValid && 'bg-primary text-white'}`}
+              className={cn(
+                `w-full h-full max-w-[6rem] py-2 text-lg font-medium mt-4 `,
+                form.formState.isValid ? 'bg-primary text-white' : 'bg-gray-300',
+              )}
             >
-              등록
+              {!voteId ? '등록' : '수정'}
               <ChevronRight />
             </Button>
           </div>

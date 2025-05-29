@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useInfiniteGroupsQuery } from '@/api/services/user/group/quries'
+import { useInfiniteGroupsQuery } from '@/api/services/group/queries'
 import { GroupCard } from '../card/groupCard'
 
 type GroupListProps = {

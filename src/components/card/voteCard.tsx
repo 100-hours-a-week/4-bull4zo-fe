@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Vote } from '@/api/services/vote/model'
-import META_ICON from '@/assets/meta_icon.png'
+import META_ICON from '@/assets/meta_icon.webp'
+import { cn } from '@/lib/utils'
 import { useGroupStore } from '@/stores/groupStore'
 import { formatRelativeTime } from '@/utils/time'
 import { Icon } from '../Icon/icon'
@@ -21,7 +22,10 @@ export const VoteCard = (props: Partial<Vote>) => {
 
   return (
     <Card
-      className={`px-4 py-9 w-[90%] md:w-[70%] h-[30rem] max-h-[75%] pointer-events-auto ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
+      className={cn(
+        `p-0 w-[80%] h-[30rem] max-h-[75%] border-none  pointer-events-auto text-white rounded-[3.125rem] shadow-card text-shadow-lg`,
+        !isImageValid && 'bg-primary-gradient-down',
+      )}
       style={
         isImageValid
           ? {
@@ -32,7 +36,7 @@ export const VoteCard = (props: Partial<Vote>) => {
           : undefined
       }
     >
-      <CardHeader className="flex flex-row justify-between px-0">
+      <CardHeader className="flex flex-row justify-between px-4 pt-9">
         <div className="flex flex-row gap-1">
           <div className="flex flex-col gap-1">
             <CardTitle className="font-pyeojinGothic text-xl line-clamp-1">
@@ -44,16 +48,22 @@ export const VoteCard = (props: Partial<Vote>) => {
         </div>
         <span className="text-xs pr-2">{formatRelativeTime(props.closedAt as string)}</span>
       </CardHeader>
-      <CardContent className="flex-1 relative px-0 overflow-hidden">
-        <div className="absolute inset-0 px-2">
-          <div className="min-h-full flex items-center justify-center">
-            <p
-              data-testid="vote-content"
-              className="sm:text-xl whitespace-pre-line break-all text-center py-2"
-            >
-              {props.content}
-            </p>
-          </div>
+      <CardContent className="flex-1 relative overflow-hidden px-4 pb-9">
+        {isImageValid && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/40 to-transparent rounded-[3.125rem]" />
+        )}
+        <div
+          className={cn(
+            'min-h-[90%] flex items-end justify-center px-2',
+            !isImageValid && 'items-center',
+          )}
+        >
+          <p
+            data-testid="vote-content"
+            className="sm:text-xl whitespace-pre-line break-all text-center py-2 z-30"
+          >
+            {props.content}
+          </p>
         </div>
       </CardContent>
     </Card>

@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
-// import { AiFillQuestionCircle } from 'react-icons/ai'
 import { FaQuestion } from 'react-icons/fa'
-import { useUserInfoQuery } from '@/api/services/user/quries'
-import { useInfiniteVotesQuery } from '@/api/services/vote/quries'
+import { useUserInfoQuery } from '@/api/services/user/queries'
+import { useInfiniteVotesQuery } from '@/api/services/vote/queries'
 import { VoteNoMoreCard } from '@/components/card/voteNoMoreCard'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
 import { LoadingCard } from '@/components/loading/loadingCard'
@@ -20,7 +19,7 @@ const HomePage = () => {
   const { selectedId: groupId } = useGroupStore()
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteVotesQuery({ groupId, isLogin })
-  const { data: user } = useUserInfoQuery({ enabled: isLogin !== undefined })
+  const { data: user } = useUserInfoQuery({ enabled: isLogin })
 
   const { openModal } = useModalStore()
   const { isHidden, open } = useTutorialStore()
@@ -35,18 +34,10 @@ const HomePage = () => {
   }
 
   useEffect(() => {
-    setNickName(user?.nickname || '')
-  }, [user, setNickName])
-
-  useEffect(() => {
-    if (isLogin === undefined) {
-      const timer = setTimeout(() => {
-        setIsLogin(false)
-      }, 1000) // 1초
-
-      return () => clearTimeout(timer)
+    if (user) {
+      setNickName(user.nickname || '')
     }
-  }, [isLogin, setIsLogin])
+  }, [user, setNickName, setIsLogin])
 
   useEffect(() => {
     const lastPage = data?.pages.at(-1)
@@ -60,7 +51,7 @@ const HomePage = () => {
   }, [groupId, filterByGroupId])
 
   // 로딩 카드
-  if (isLoading || isLogin === undefined) {
+  if (!isLogin && isLoading) {
     return (
       <div className="flex screen-minus-header-nav justify-center items-center">
         <LoadingCard />

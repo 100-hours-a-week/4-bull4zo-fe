@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { cn } from '@/lib/utils'
 // import META_ICON from '@/assets/meta_icon.png'
 import { useUserStore } from '@/stores/userStore'
 import { formatRelativeTime } from '@/utils/time'
@@ -7,12 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 type Props = {
   content: string
-  image?: File
+  image?: File | string
   closedAt: string
   anonymous: boolean
 }
 
-const usePreviewImageUrl = (file?: File) => {
+const usePreviewImageUrl = (file?: File | string) => {
   const [url, setUrl] = useState<string | null>(null)
 
   useEffect(() => {
@@ -20,6 +21,11 @@ const usePreviewImageUrl = (file?: File) => {
       setUrl(null)
       return
     }
+    if (typeof file === 'string') {
+      setUrl(file)
+      return
+    }
+
     const objectUrl = URL.createObjectURL(file)
     setUrl(objectUrl)
 
@@ -45,7 +51,10 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
 
   return (
     <Card
-      className={`px-4 py-9 w-[90%] h-[30rem] max-h-[75%] ${!isImageValid ? 'bg-primary' : ''} text-white rounded-[3.125rem] shadow-card`}
+      className={cn(
+        `p-0 w-[80%] h-[30rem] max-h-[75%] border-none pointer-events-auto text-white rounded-[3.125rem] shadow-card text-shadow-lg`,
+        !isImageValid && 'bg-primary-gradient-down',
+      )}
       style={
         isImageValid
           ? {
@@ -56,7 +65,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
           : undefined
       }
     >
-      <CardHeader className="flex flex-row justify-between px-0">
+      <CardHeader className="flex flex-row justify-between px-4 pt-9">
         {!anonymous ? (
           <div className="flex flex-row gap-1">
             <CardTitle className="font-pyeojinGothic text-xl line-clamp-1">{nickname}</CardTitle>
@@ -69,8 +78,24 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
         )}
         <span className="text-xs pr-2 min-w-20">{formatRelativeTime(closedAt, false)}</span>
       </CardHeader>
-      <CardContent className="flex justify-center items-center h-full overflow-y-auto break-words">
-        <p className="text-2xl whitespace-pre-line break-all">{content || '내용을 입력하세요.'}</p>
+      <CardContent className="flex-1 relative overflow-hidden px-4 pb-9">
+        {isImageValid && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/40 to-transparent rounded-[3.125rem]" />
+        )}
+
+        <div
+          className={cn(
+            'min-h-[90%] flex items-end justify-center px-2',
+            !isImageValid && 'items-center',
+          )}
+        >
+          <p
+            data-testid="vote-content"
+            className="sm:text-xl whitespace-pre-line break-all text-center py-2 z-30"
+          >
+            {content}
+          </p>
+        </div>
       </CardContent>
     </Card>
   )

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Check, PencilLine } from 'lucide-react'
-import { useUserLogoutMutation, useUserUpdateMutation } from '@/api/services/user/quries'
+import { useUserLogoutMutation, useUserUpdateMutation } from '@/api/services/user/queries'
 import { ExitUserModal } from '@/components/modal/exitUserModal'
 import { NicknameSchema, nicknameSchema } from '@/features/user/lib/userSchema'
 import { trackEvent } from '@/lib/trackEvent'
@@ -75,7 +75,7 @@ export const UserCard = () => {
   }
 
   return (
-    <Card className="relative px-5 py-5 w-full bg-primary text-black rounded-2xl shadow-box border-2 h-40">
+    <Card className="relative px-5 py-6 w-full bg-primary-gradient-down-right text-black rounded-4xl shadow-md border-none h-40 gap-[2.5rem]">
       <CardHeader className="px-4 relative h-full">
         {isEditing ? (
           <Form {...form}>
@@ -92,9 +92,10 @@ export const UserCard = () => {
                       <div className="relative text-2xl">
                         <Input
                           {...field}
-                          className="w-full h-14 font-pyeojinGothic font-bold"
-                          style={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                          className="w-[calc(100%+20px)] h-14 font-pyeojinGothic font-bold"
+                          style={{ fontSize: '1.125rem' }}
                           autoFocus
+                          maxLength={18}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault()
@@ -107,7 +108,7 @@ export const UserCard = () => {
                         />
                         <Check
                           onClick={() => form.handleSubmit(onSubmit)()}
-                          className="absolute top-4 right-3 cursor-pointer w-6 h-6 shrink-0"
+                          className="absolute top-4 right-0 cursor-pointer w-6 h-6 shrink-0"
                         />
                       </div>
                     </FormControl>
@@ -119,18 +120,25 @@ export const UserCard = () => {
           </Form>
         ) : (
           <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-            <CardTitle className="font-pyeojinGothic font-bold text-2xl">{nickname}</CardTitle>
+            <CardTitle className="font-pyeojinGothic font-bold text-[1.25rem]">
+              {nickname}
+            </CardTitle>
             <PencilLine onClick={() => setIsEditing(true)} className="cursor-pointer w-5 h-5" />
           </div>
         )}
       </CardHeader>
-
-      <CardContent className="absolute bottom-4 right-4 flex gap-2">
-        <Button onClick={() => logoutHandler()} className="bg-emerald-400 text-white">
+      <CardContent
+        className="flex gap-2 items-end justify-between text-xs"
+        style={{ padding: '0', paddingLeft: '12px' }}
+      >
+        <span onClick={() => openModal(<ExitUserModal />)} className="underline cursor-pointer">
+          회원탈퇴를 원하시나요?
+        </span>
+        <Button
+          onClick={() => logoutHandler()}
+          className="bg-red-400 text-white rounded-[1.875rem]"
+        >
           로그아웃
-        </Button>
-        <Button onClick={() => openModal(<ExitUserModal />)} className="bg-red-400 text-white">
-          회원탈퇴
         </Button>
       </CardContent>
     </Card>
