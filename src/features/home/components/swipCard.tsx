@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { Vote, VoteChoice } from '@/api/services/vote/model'
-import { useSubmitVoteMutation } from '@/api/services/vote/quries'
+import { useSubmitVoteMutation } from '@/api/services/vote/queries'
 import { VoteCard } from '@/components/card/voteCard'
 import { trackEvent } from '@/lib/trackEvent'
 import { useUserStore } from '@/stores/userStore'

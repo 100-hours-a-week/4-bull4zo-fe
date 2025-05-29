@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { GroupName } from '@/api/services/user/group/model'
+import { GroupName } from '@/api/services/group/model'
 
 interface GroupStore {
   selectedId: number

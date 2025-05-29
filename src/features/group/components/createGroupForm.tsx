@@ -2,7 +2,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 // import { Plus } from 'lucide-react'
-import { useCreateGroupMutation } from '@/api/services/user/group/quries'
+import { useCreateGroupMutation } from '@/api/services/group/queries'
 import { InviteCodeCheckModal } from '@/components/modal/inviteCodeCheckModal'
 import { Button } from '@/components/ui/button'
 import {

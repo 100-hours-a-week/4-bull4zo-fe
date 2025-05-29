@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useUserFeedbackMutation } from '@/api/services/user/quries'
+import { useUserFeedbackMutation } from '@/api/services/user/queries'
 import MESSAGEICON from '@/assets/message.png'
 import MOA_LOGO from '@/assets/moa_logo.svg?react'
 import { Icon } from '@/components/Icon/icon'

@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { useCreateVoteMutation } from '@/api/services/vote/quries'
+import { useCreateVoteMutation } from '@/api/services/vote/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { VoteCardPreview } from '../../../components/card/voteCardPreview'

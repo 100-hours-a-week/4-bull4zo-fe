@@ -10,7 +10,7 @@ export const userHandlers = [
 
     const token = authHeader.replace('Bearer ', '').trim()
 
-    if (token === 'jwt-access-token') {
+    if (token) {
       return HttpResponse.json(
         {
           message: 'SUCCESS',
