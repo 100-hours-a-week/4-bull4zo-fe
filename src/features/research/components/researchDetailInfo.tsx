@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
 import { VoteDetail, voteDetailResult } from '@/api/services/vote/model'
 import CheckIcon from '@/assets/voteCheckIcon.svg?react'
 import { Icon } from '@/components/Icon/icon'
@@ -13,8 +11,6 @@ interface Props {
 }
 
 const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
-  const navigation = useNavigate()
-
   const { groups } = useGroupStore()
 
   const agree = voteResult?.results[0]
@@ -22,7 +18,6 @@ const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
 
   return (
     <div>
-      <ChevronLeft onClick={() => navigation(-1)} className="mx-7 mt-5 cursor-pointer" />
       <section className="mx-9 pb-8">
         <div className="mt-4">
           <h1 className="text-xs font-semibold">
