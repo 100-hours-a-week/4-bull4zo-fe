@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useUserInfoQuery } from '@/api/services/user/quries'
+import { useUserInfoQuery } from '@/api/services/user/queries'
 import { userService } from '@/api/services/user/service'
 import Header from '@/components/header/header'
 import { Modal } from '@/components/modal/modal'
@@ -25,11 +25,6 @@ export const AppLayout = () => {
   }, [user, setNickName])
 
   useEffect(() => {
-    if (isLogin === undefined) return
-
-    if (isLogin === false) {
-      navigation('/home')
-    }
     setTab(location.pathname)
   }, [location.pathname, setTab, isLogin, navigation])
 
@@ -53,14 +48,25 @@ export const AppLayout = () => {
     setTab(location.pathname)
   }, [setTab, navigation, setAccessToken, setIsLogin, accessToken, location.pathname])
 
+  useEffect(() => {
+    const main = document.getElementById('main-content')
+    if (!main) return
+
+    const preserveScrollRoutes = ['/research']
+
+    if (!preserveScrollRoutes.includes(location.pathname)) {
+      main.scrollTop = 0
+    }
+  }, [location.pathname])
+
   return (
     <div>
       <Header />
-      <main className="py-[4.25rem] min-h-screen bg-white">
+      <main className="py-[4.25rem] min-h-screen bg-yellow">
         <Outlet />
-        {isOpen && <Modal />}
       </main>
       <Navigation />
+      {isOpen && <Modal />}
     </div>
   )
 }

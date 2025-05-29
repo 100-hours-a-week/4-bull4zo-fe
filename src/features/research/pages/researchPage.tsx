@@ -3,7 +3,7 @@ import { ResearchList } from '../components/researchList'
 
 const ResearchPage = () => {
   return (
-    <article className="min-h-full overflow-y-auto">
+    <article className="min-h-full">
       <div className="pl-4 py-3">
         <GroupDropDown />
       </div>

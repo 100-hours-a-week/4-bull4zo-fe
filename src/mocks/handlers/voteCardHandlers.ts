@@ -1,4 +1,5 @@
 import { HttpResponse, http } from 'msw'
+import { voteCreateFailMessage } from '@/lib/messageMap'
 
 export const votesHandlers = [
   http.get('api/v1/votes', ({ request }) => {
@@ -15,6 +16,7 @@ export const votesHandlers = [
       {
         voteId: 101,
         groupId: Number(finalGroupId),
+        groupName: 'MOA AI',
         authorNickname: 'MOA AI',
         content:
           '마이페이지 오른쪽 하단의 코알라 아이콘을 누르면 피드백을 남기실 수 있어요 :)\n\n 피드백으로 남겨주시면 저희가 더욱 잘 확인하고 반영할 수 있습니다.\n\n 투표로 남기기보다는 피드백 기능을 활용해주시면 정말 감사하겠습니다!',
@@ -29,6 +31,7 @@ export const votesHandlers = [
         voteId: 102,
         groupId: Number(finalGroupId),
         authorNickname: '김철수',
+        groupName: 'MOA AI',
         content: '주말에 가볼만한 여행지 추천해주세요!',
         imageUrl:
           'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80',
@@ -445,6 +448,7 @@ export const votesHandlers = [
             ratio: noRatio,
           },
         ],
+        comments: i % 2 === 0 ? 1 : 0,
       }
     })
 
@@ -522,5 +526,40 @@ export const votesHandlers = [
       },
       { status: 200 },
     )
+  }),
+  http.get('/api/v1/votes/:voteId/review', async ({ params }) => {
+    const voteId = params.voteId as string
+
+    const keys = Object.keys(voteCreateFailMessage) as (keyof typeof voteCreateFailMessage)[]
+    const randomKey = keys[Math.floor(Math.random() * keys.length)]
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        voteId: Number(voteId),
+        reviewReason: randomKey,
+      },
+    })
+  }),
+  http.patch(`/api/v1/votes/:voteId`, async ({ request }) => {
+    const body = await request.json()
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: body,
+      },
+      { status: 200 },
+    )
+  }),
+  http.delete(`/api/v1/votes/:voteId`, async ({ params }) => {
+    const voteId = params.voteId as string
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        voteId: Number(voteId),
+      },
+      status: 200,
+    })
   }),
 ]

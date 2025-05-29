@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
-import { useInfiniteGroupNameListQuery } from '@/api/services/user/group/quries'
+import { useInfiniteGroupNameListQuery } from '@/api/services/group/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { Button } from '../ui/button'
@@ -68,20 +68,22 @@ export const GroupDropDown = () => {
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild style={{ padding: 0, paddingLeft: '12px' }}>
         <Button
-          className="w-[10rem] justify-between py-1 text-sm"
+          className="w-[10rem] justify-between border-none overflow-hidden text-sm shadow-md hover:bg-white"
           variant="outline"
           data-testid="group-dropdown-trigger"
           disabled={isError}
         >
           {isError ? '그룹 호출 실패' : selectedGroup?.name}
-          <ChevronDown className="ml-2 h-4 w-4" />
+          <div className="bg-primary h-full w-[30px] flex items-center justify-center">
+            <ChevronDown className="w-6 h-6" />
+          </div>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="max-h-[10rem] w-[10rem] overflow-y-auto bg-white"
+        className="max-h-[10rem] w-[10rem] overflow-y-auto bg-white border-none"
         onCloseAutoFocus={(e) => e.preventDefault()}
         data-testid="group-dropdown-content"
       >

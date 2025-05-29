@@ -22,7 +22,7 @@ const LoginPage = () => {
       </div>
       <div className="flex flex-col items-center gap-4">
         <KakaoButton />
-        <Label onClick={() => router(`/`)} className="text-2xl underline cursor-pointer">
+        <Label onClick={() => router(`/home`)} className="text-2xl underline cursor-pointer">
           로그인 없이 둘러보기
         </Label>
       </div>

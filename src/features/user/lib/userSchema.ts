@@ -3,8 +3,8 @@ import { z } from 'zod'
 export const nicknameSchema = z.object({
   nickname: z
     .string()
-    .min(2, '2자 이상 10자 이하 문자열입니다.')
-    .max(10, '2자 이상 10자 이하 문자열입니다.'),
+    .min(2, '2자 이상 18자 이하 문자열입니다.')
+    .max(18, '2자 이상 18자 이하 문자열입니다.'),
 })
 export type NicknameSchema = z.infer<typeof nicknameSchema>
 // 초대코드 스키마

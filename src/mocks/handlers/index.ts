@@ -1,4 +1,6 @@
+import { commentHandlers } from './commentHandlers'
 import { groupHandlers } from './groupHandlers'
+import { ImageHandlers } from './imageHandlers'
 import { authHandlers } from './loginHandlers'
 import { researchHandlers } from './researchHandlers'
 import { userHandlers } from './userHandlers'
@@ -10,4 +12,6 @@ export const handlers = [
   ...groupHandlers,
   ...votesHandlers,
   ...researchHandlers,
+  ...commentHandlers,
+  ...ImageHandlers,
 ]
