@@ -5,6 +5,7 @@ export type VoteChoice = '찬성' | '반대' | '기권' | null
 export interface Vote {
   voteId: number
   groupId: number
+  groupName: string
   authorNickname: string
   content: string
   imageUrl: string

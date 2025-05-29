@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Vote } from '@/api/services/vote/model'
 import META_ICON from '@/assets/meta_icon.png'
+import { useGroupStore } from '@/stores/groupStore'
 import { formatRelativeTime } from '@/utils/time'
 import { Icon } from '../Icon/icon'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const VoteCard = (props: Partial<Vote>) => {
   const [isImageValid, setIsImageValid] = useState(false)
+  const { selectedId: groupId } = useGroupStore()
 
   useEffect(() => {
     if (!props.imageUrl) return setIsImageValid(false)
@@ -32,9 +34,12 @@ export const VoteCard = (props: Partial<Vote>) => {
     >
       <CardHeader className="flex flex-row justify-between px-0">
         <div className="flex flex-row gap-1">
-          <CardTitle className="font-pyeojinGothic text-xl line-clamp-1">
-            {props.authorNickname}
-          </CardTitle>
+          <div className="flex flex-col gap-1">
+            <CardTitle className="font-pyeojinGothic text-xl line-clamp-1">
+              {props.authorNickname}
+            </CardTitle>
+            {groupId === 0 && <span className="text-sm line-clamp-1">{props.groupName}</span>}
+          </div>
           {props.adminVote === 1 && <Icon src={META_ICON} alt="공인 뱃지" size={20} />}
         </div>
         <span className="text-xs pr-2">{formatRelativeTime(props.closedAt as string)}</span>
