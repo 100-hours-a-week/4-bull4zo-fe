@@ -20,7 +20,7 @@ const ResearchDetailPage = () => {
     reportedByUser: false,
   }
 
-  if (detailLoading || resultLoading) return <div>로딩중...</div>
+  if (detailLoading || resultLoading) return
 
   return (
     <article>
