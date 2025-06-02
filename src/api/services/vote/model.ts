@@ -59,6 +59,7 @@ export interface ParticipatedVote {
   createdAt: string
   closedAt: string
   results: ParticipatedVoteResult[]
+  comments: number
 }
 
 export type ParticipatedVoteStatus = 'OPEN' | 'CLOSED' | 'REJECTED' | 'PENDING'

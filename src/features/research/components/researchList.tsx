@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import {
   useCreateVotesInfinityQuery,
   useParticipatedVotesInfinityQuery,
@@ -35,24 +36,30 @@ export const ResearchList = () => {
     })
   }
 
+  const tabs = ['참여한 투표', '내가 만든 투표']
+
   return (
     <section className="px-7 py-4">
-      <div className="flex items-center justify-around mb-4">
-        <div className="" />
-        <Label
-          onClick={() => onClickHandler(0)}
-          className={`text-2xl flex items-center justify-end font-unbounded cursor-pointer w-35 ${index === 0 ? 'font-bold' : 'font-light'}`}
-        >
-          참여한 투표
-        </Label>
-        <div className="h-6 bg-black w-[1px]" />
-        <Label
-          onClick={() => onClickHandler(1)}
-          className={`text-2xl font-unbounded cursor-pointer ${index === 1 ? 'font-bold' : 'font-light'}`}
-        >
-          내가 만든 투표
-        </Label>
-        <div />
+      <div className="relative flex w-fit mx-auto mb-4 rounded-full shadow-md bg-white">
+        {tabs.map((label, i) => (
+          <div key={label} className="relative w-36">
+            {index === i && (
+              <motion.div
+                layoutId="vote-tab"
+                className="absolute inset-0 z-0 bg-primary rounded-full"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <Label
+              onClick={() => onClickHandler(i)}
+              className={`relative items-center justify-center z-10 cursor-pointer text-center text-sm sm:text-lg font-unbounded px-4 py-2 w-full ${
+                index === i ? 'text-white font-bold' : 'text-black font-light'
+              }`}
+            >
+              {label}
+            </Label>
+          </div>
+        ))}
       </div>
       <VoteList
         data={data}

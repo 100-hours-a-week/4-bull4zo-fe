@@ -1,5 +1,5 @@
 import React, { Dispatch, forwardRef, useEffect, useRef, useState } from 'react'
-import { FaUserCircle } from 'react-icons/fa'
+import { FaUserLarge } from 'react-icons/fa6'
 import { HiDotsVertical } from 'react-icons/hi'
 import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -32,7 +32,7 @@ export const CommentItem = forwardRef<HTMLLIElement, Partial<Comment>>((comment,
     <li ref={ref} className="list-none flex flex-col gap-1 ">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-1">
-          <FaUserCircle className="text-neutral-300" />
+          <FaUserLarge className="text-gray-300" />
           <h1 className="text-sm font-semibold">{comment.authorNickname}</h1>
         </div>
         <div className="relative" ref={menuRef}>

@@ -75,8 +75,8 @@ export const UserCard = () => {
   }
 
   return (
-    <Card className="relative px-5 py-5 w-full bg-primary text-black rounded-2xl shadow-box border-2 h-40">
-      <CardHeader className="px-4 relative h-full">
+    <Card className="relative px-5 py-6 w-full bg-primary-gradient-down-right text-black rounded-4xl shadow-md border-none h-40 gap-[2.5rem]">
+      <CardHeader className="px-4 relative h-24">
         {isEditing ? (
           <Form {...form}>
             <form
@@ -127,13 +127,18 @@ export const UserCard = () => {
           </div>
         )}
       </CardHeader>
-
-      <CardContent className="absolute bottom-4 right-4 flex gap-2">
-        <Button onClick={() => logoutHandler()} className="bg-emerald-400 text-white">
+      <CardContent
+        className="flex gap-2 items-end justify-between text-xs"
+        style={{ padding: '0', paddingLeft: '12px' }}
+      >
+        <span onClick={() => openModal(<ExitUserModal />)} className="underline cursor-pointer">
+          회원탈퇴를 원하시나요?
+        </span>
+        <Button
+          onClick={() => logoutHandler()}
+          className="bg-red-400 text-white rounded-[1.875rem]"
+        >
           로그아웃
-        </Button>
-        <Button onClick={() => openModal(<ExitUserModal />)} className="bg-red-400 text-white">
-          회원탈퇴
         </Button>
       </CardContent>
     </Card>
