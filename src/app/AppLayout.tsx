@@ -56,7 +56,7 @@ export const AppLayout = () => {
   return (
     <div>
       <Header />
-      <main className="py-[4.25rem] min-h-screen bg-white">
+      <main className="py-[4.25rem] min-h-screen bg-yellow">
         <Outlet />
       </main>
       <Navigation />

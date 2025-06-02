@@ -33,7 +33,7 @@ export const CommentList = ({ voteId }: Props) => {
           />
         )
       })}
-      <p className="text-center text-sm font-bold">마지막 댓글 입니다.</p>
+      <p className="text-center text-sm font-[500]">마지막 댓글 입니다.</p>
     </ul>
   )
 }

@@ -14,7 +14,7 @@ export const UserGroupList = () => {
       <Label className="text-2xl font-bold font-unbounded">그룹</Label>
       <Button
         onClick={() => openModal(<AddGroupModal />)}
-        className="bg-gray-300 mt-3 w-full text-5xl h-full text-white"
+        className="bg-gray-300 mt-3 w-full text-5xl h-full text-white rounded-[1.25rem] shadow-md"
       >
         +
       </Button>

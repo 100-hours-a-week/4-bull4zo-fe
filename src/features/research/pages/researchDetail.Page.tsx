@@ -13,10 +13,14 @@ const ResearchDetailPage = () => {
 
   return (
     <article>
-      <ResearchDetailInfo voteDetail={voteDetail} voteResult={voteResult} />
-      <CommentList voteId={Number(voteId)} />
-      <div className="fixed bottom-16 w-full max-w-[450px]">
-        <CommentInput />
+      <div className="pb-16">
+        <ResearchDetailInfo voteDetail={voteDetail} voteResult={voteResult} />
+        <CommentList voteId={Number(voteId)} />
+      </div>
+      <div className="bg-white fixed bottom-16 w-full max-w-[450px]">
+        <div className="bg-yellow py-2">
+          <CommentInput />
+        </div>
       </div>
     </article>
   )

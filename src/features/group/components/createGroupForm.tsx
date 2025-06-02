@@ -20,6 +20,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
+import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'
 import { CreateGroupSchema, createGroupSchema } from '../lib/groupSchema'
 
@@ -106,7 +107,7 @@ export const CreateGroupForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex-1 flex flex-col gap-6 w-full h-full max-w-lg mx-auto"
       >
-        <div className="gap-6 flex flex-col bg-gray px-5 pt-3 pb-12 rounded-[0.625rem]">
+        <div className="gap-6 flex flex-col bg-white shadow-md px-5 pt-3 pb-12 rounded-[0.625rem]">
           <div className="flex gap-4">
             <FormField
               control={form.control}
@@ -176,13 +177,14 @@ export const CreateGroupForm = () => {
               <FormItem>
                 <div className="flex items-center justify-between">
                   <FormLabel className="font-semibold text-lg">그룹 소개</FormLabel>
-                  <Label className="text-xs">{field.value.length}/50</Label>
+                  <Label className="text-xs">{getContentLength(field.value)}/50</Label>
                 </div>
                 <FormControl>
                   <Textarea
                     placeholder="그룹을 소개해주세요 (최대 50자)"
                     className="resize-none"
                     {...field}
+                    maxLength={50}
                   />
                 </FormControl>
                 <FormMessage />

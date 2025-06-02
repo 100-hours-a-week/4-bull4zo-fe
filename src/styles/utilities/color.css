@@ -2,6 +2,9 @@
   .bg-gray {
     background-color: #f2f2f2;
   }
+  .bg-yellow {
+    background-color: rgba(232, 221, 194, 0.25);
+  }
   .bg-primary {
     background-color: hsl(var(--primary));
   }
@@ -25,6 +28,15 @@
   }
   .bg-foreground {
     background-color: hsl(var(--foreground));
+  }
+  .bg-primary-gradient-down {
+    background-image: linear-gradient(to bottom, #ffe29a, #ffd265, #fac549);
+  }
+  .bg-primary-gradient-down {
+    background-image: linear-gradient(to bottom, #ffe29a, #ffd265, #fac549);
+  }
+  .bg-primary-gradient-down-right {
+    background-image: linear-gradient(to bottom right, #ffe29a, #ffd265, #fac549);
   }
 }
 

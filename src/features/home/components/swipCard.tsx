@@ -4,6 +4,7 @@ import { Vote, VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/queries'
 import { VoteCard } from '@/components/card/voteCard'
 import { trackEvent } from '@/lib/trackEvent'
+import { cn } from '@/lib/utils'
 import { useUserStore } from '@/stores/userStore'
 import { useVoteCardStore } from '../stores/voteCardStore'
 
@@ -26,10 +27,18 @@ const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
-  const rotate = useTransform(x, [-300, 300], [-20, 20])
 
   const { cards: cardList, removeCard } = useVoteCardStore()
   const { isLogin } = useUserStore()
+
+  const baseRotate = index === 1 ? 3 : index === 2 ? -3 : 0
+
+  const finalRotate = useTransform(x, (lastX) => {
+    const dynamicRotate = (lastX / 300) * 20
+    return baseRotate + dynamicRotate
+  })
+
+  const baseYOffset = index === 1 ? -12 : index === 2 ? -24 : 0
 
   // drag 중 라벨 업데이트
   useEffect(() => {
@@ -102,11 +111,12 @@ const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
 
   return (
     <motion.div
-      className=" absolute flex items-center h-full w-full justify-center"
+      className={cn('absolute flex items-center h-full w-full justify-center')}
       style={{
         x,
         y,
-        rotate,
+        rotate: finalRotate,
+        translateY: `${baseYOffset}px`,
         zIndex: cardList.length - index,
         scale: 1,
         opacity: 1,
