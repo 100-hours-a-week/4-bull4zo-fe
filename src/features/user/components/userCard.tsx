@@ -92,9 +92,10 @@ export const UserCard = () => {
                       <div className="relative text-2xl">
                         <Input
                           {...field}
-                          className="w-full h-14 font-pyeojinGothic font-bold"
-                          style={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                          className="w-[calc(100%+20px)] h-14 font-pyeojinGothic font-bold"
+                          style={{ fontSize: '1.125rem' }}
                           autoFocus
+                          maxLength={18}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault()
@@ -107,7 +108,7 @@ export const UserCard = () => {
                         />
                         <Check
                           onClick={() => form.handleSubmit(onSubmit)()}
-                          className="absolute top-4 right-3 cursor-pointer w-6 h-6 shrink-0"
+                          className="absolute top-4 right-0 cursor-pointer w-6 h-6 shrink-0"
                         />
                       </div>
                     </FormControl>
@@ -119,7 +120,9 @@ export const UserCard = () => {
           </Form>
         ) : (
           <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-            <CardTitle className="font-pyeojinGothic font-bold text-2xl">{nickname}</CardTitle>
+            <CardTitle className="font-pyeojinGothic font-bold text-[1.25rem]">
+              {nickname}
+            </CardTitle>
             <PencilLine onClick={() => setIsEditing(true)} className="cursor-pointer w-5 h-5" />
           </div>
         )}

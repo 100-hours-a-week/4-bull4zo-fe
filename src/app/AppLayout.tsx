@@ -54,7 +54,7 @@ export const AppLayout = () => {
   }, [setTab, navigation, setAccessToken, setIsLogin, accessToken, location.pathname])
 
   return (
-    <div className="relative">
+    <div>
       <Header />
       <main className="py-[4.25rem] min-h-screen bg-white">
         <Outlet />

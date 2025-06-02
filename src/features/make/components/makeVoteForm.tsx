@@ -123,7 +123,7 @@ export const MakeVoteForm = () => {
             name="anonymous"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-semibold text-lg">익명 투표 여부</FormLabel>
+                <FormLabel className="font-semibold text-lg">익명</FormLabel>
                 <FormControl>
                   <div className="flex gap-2">
                     <Checkbox
@@ -139,8 +139,6 @@ export const MakeVoteForm = () => {
               </FormItem>
             )}
           />
-          {/*
-          v2 이미지 저장 로직 추가 후 반영
           <FormField
             control={form.control}
             name="image"
@@ -204,7 +202,7 @@ export const MakeVoteForm = () => {
                 </FormItem>
               )
             }}
-          /> */}
+          />
           <FormField
             control={form.control}
             name="closedAt"
