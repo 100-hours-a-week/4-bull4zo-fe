@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import { axiosInstance } from '@/api/axios'
 import { useCreateVoteMutation } from '@/api/services/vote/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
@@ -19,31 +20,62 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
   const navigation = useNavigate()
 
   const { closeModal } = useModalStore()
-  const { mutate } = useCreateVoteMutation()
+  const { mutateAsync } = useCreateVoteMutation()
 
   const submit = useRef<boolean>(false)
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (submit.current) return
     submit.current = true
 
-    mutate(
-      { groupId, content, imageUrl: '', closedAt, anonymous },
-      {
-        onSuccess: () => {
-          toast('투표를 등록했습니다.')
-          navigation('/research')
-          closeModal()
-        },
-        onSettled: () => {
-          trackEvent({
-            cta_id: 'vote_submit',
-            action: 'submit',
-            page: location.pathname,
-          })
-        },
-      },
-    )
+    try {
+      let imageUrl = ''
+
+      if (image) {
+        // 1. presigned URL 요청
+        const { data: presignedRes } = await axiosInstance.post('/api/v1/image/presigned-url', {
+          fileName: image.name,
+        })
+        if (presignedRes.message !== 'SUCCESS') {
+          throw new Error('Presigned URL 발급 실패')
+        }
+        const { uploadUrl, fileUrl } = presignedRes.data
+
+        // 2. 이미지 업로드 (PUT)
+        const uploadRes = await fetch(uploadUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': image.type,
+          },
+          body: image,
+        })
+
+        if (!uploadRes.ok) {
+          toast.error('이미지 업로드에 실패했습니다.')
+        }
+
+        imageUrl = fileUrl
+      }
+
+      // 3. 투표 등록
+      await mutateAsync({ groupId, content, imageUrl, closedAt, anonymous })
+
+      toast('투표를 등록했습니다.')
+      navigation('/research')
+      closeModal()
+    } catch (err: unknown) {
+      const errorObject = err as {
+        message: string
+      }
+      toast.error(errorObject.message || '투표 등록에 실패했습니다.')
+      submit.current = false // 재시도 가능하게
+    } finally {
+      trackEvent({
+        cta_id: 'vote_submit',
+        action: 'submit',
+        page: location.pathname,
+      })
+    }
   }
 
   return (

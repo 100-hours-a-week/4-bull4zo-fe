@@ -1,7 +1,9 @@
-// import { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-// import { Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
+import { toast } from 'sonner'
+import { axiosInstance } from '@/api/axios'
 import { useCreateGroupMutation } from '@/api/services/group/queries'
 import { InviteCodeCheckModal } from '@/components/modal/inviteCodeCheckModal'
 import { Button } from '@/components/ui/button'
@@ -34,27 +36,68 @@ export const CreateGroupForm = () => {
 
   const { openModal } = useModalStore()
 
-  const { mutate } = useCreateGroupMutation()
+  const { mutateAsync } = useCreateGroupMutation()
 
-  // const [preview, setPreview] = useState<string | null>(null)
-  // const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const onSubmit = (values: CreateGroupSchema) => {
-    mutate(
-      { name: values.name, description: values.description, imageUrl: '' },
-      {
-        onSuccess: (data) => {
-          openModal(<InviteCodeCheckModal code={data.inviteCode} />)
+  const onSubmit = async (values: CreateGroupSchema) => {
+    try {
+      const image = form.getValues('image')
+      let imageUrl = ''
+
+      if (image) {
+        // 1. presigned URL 요청
+        const { data: presignedRes } = await axiosInstance.post('/api/v1/image/presigned-url', {
+          fileName: image.name,
+        })
+        if (presignedRes.message !== 'SUCCESS') {
+          throw new Error('Presigned URL 발급 실패')
+        }
+        const { uploadUrl, fileUrl } = presignedRes.data
+
+        // 2. 이미지 업로드 (PUT)
+        const uploadRes = await fetch(uploadUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': image.type,
+          },
+          body: image,
+        })
+
+        if (!uploadRes.ok) {
+          toast.error('이미지 업로드에 실패했습니다.')
+        }
+
+        imageUrl = fileUrl
+      }
+      await mutateAsync(
+        { name: values.name, description: values.description, imageUrl },
+        {
+          onSuccess: (data) => {
+            openModal(<InviteCodeCheckModal code={data.inviteCode} />)
+          },
+          onSettled: () => {
+            trackEvent({
+              cta_id: 'group_create',
+              action: 'submit',
+              page: location.pathname,
+            })
+          },
         },
-        onSettled: () => {
-          trackEvent({
-            cta_id: 'group_create',
-            action: 'submit',
-            page: location.pathname,
-          })
-        },
-      },
-    )
+      )
+    } catch (err) {
+      const errorObject = err as {
+        message: string
+      }
+      toast.error(errorObject.message || '그룹 생성에 실패했습니다.')
+    } finally {
+      trackEvent({
+        cta_id: 'group_create',
+        action: 'submit',
+        page: location.pathname,
+      })
+    }
   }
 
   return (
@@ -65,7 +108,7 @@ export const CreateGroupForm = () => {
       >
         <div className="gap-6 flex flex-col bg-gray px-5 pt-3 pb-12 rounded-[0.625rem]">
           <div className="flex gap-4">
-            {/* <FormField
+            <FormField
               control={form.control}
               name="image"
               render={({ field }) => (
@@ -105,7 +148,7 @@ export const CreateGroupForm = () => {
                   <FormMessage className="max-w-24" />
                 </FormItem>
               )}
-            /> */}
+            />
             <FormField
               control={form.control}
               name="name"
