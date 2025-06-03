@@ -48,7 +48,7 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
     <Card
       className={cn(
         `p-0 w-[80%] h-[30rem] max-h-[75%] border-none pointer-events-auto text-white rounded-[3.125rem] shadow-card text-shadow-lg`,
-        !isImageValid && 'bg-gradient-to-b from-[#FFe29A] via-[#FFD265] to-[#FAC549]',
+        !isImageValid && 'bg-primary-gradient-down',
       )}
       style={
         isImageValid

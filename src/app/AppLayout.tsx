@@ -53,6 +53,17 @@ export const AppLayout = () => {
     setTab(location.pathname)
   }, [setTab, navigation, setAccessToken, setIsLogin, accessToken, location.pathname])
 
+  useEffect(() => {
+    const main = document.getElementById('main-content')
+    if (!main) return
+
+    const preserveScrollRoutes = ['/research']
+
+    if (!preserveScrollRoutes.includes(location.pathname)) {
+      main.scrollTop = 0
+    }
+  }, [location.pathname])
+
   return (
     <div>
       <Header />
