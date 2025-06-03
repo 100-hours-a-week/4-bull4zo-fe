@@ -9,7 +9,7 @@ export const VoteNoMoreCard = () => {
 
   return (
     <Card
-      className={`px-4 py-9 w-[90%] md:w-[70%] h-[30rem] max-h-[75%] flex justify-center bg-primary text-white rounded-[3.125rem] shadow-card relative`}
+      className={`px-4 py-9 w-[90%] h-[30rem] max-h-[75%] flex justify-center bg-primary-gradient-down text-white rounded-[3.125rem] shadow-card relative`}
     >
       <CardHeader className="flex flex-col justify-between w-full items-center px-0 text-black">
         <div className="flex flex-row gap-1 ">

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   useCreateVotesInfinityQuery,
@@ -7,6 +8,7 @@ import { VoteList } from '@/components/list/voteList'
 import { Label } from '@/components/ui/label'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
+import { useScrollStore } from '@/stores/scrollStore'
 import { useResearchTabStore } from '../stores/researchTapStore'
 
 export const ResearchList = () => {
@@ -35,6 +37,40 @@ export const ResearchList = () => {
       page: location.pathname,
     })
   }
+
+  const { setScroll, getScroll } = useScrollStore()
+
+  useEffect(() => {
+    const main = document.getElementById('main-content')
+
+    const handleScroll = () => {
+      if (!main) return
+      const y = main.scrollTop
+      clearTimeout((handleScroll as any).timer)
+      ;(handleScroll as any).timer = setTimeout(() => {
+        setScroll('research', y)
+      }, 100)
+    }
+
+    main?.addEventListener('scroll', handleScroll)
+    return () => {
+      clearTimeout((handleScroll as any).timer)
+      main?.removeEventListener('scroll', handleScroll)
+    }
+  }, [setScroll])
+
+  useEffect(() => {
+    if (!data) return
+
+    const timer = setTimeout(() => {
+      const main = document.getElementById('main-content')
+      if (main && main.scrollHeight > main.clientHeight) {
+        main.scrollTo(0, getScroll('research') || 0)
+      }
+    }, 0)
+
+    return () => clearTimeout(timer)
+  }, [data, getScroll])
 
   const tabs = ['참여한 투표', '내가 만든 투표']
 

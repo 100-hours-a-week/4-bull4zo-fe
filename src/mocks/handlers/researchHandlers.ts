@@ -9,6 +9,15 @@ export const researchHandlers = [
       return HttpResponse.json({ message: 'NO_TOKEN', data: null }, { status: 401 })
     }
 
+    if (voteId === '0') {
+      return HttpResponse.json(
+        {
+          message: 'ERROR',
+          data: null,
+        },
+        { status: 404 },
+      )
+    }
     if (voteId) {
       return HttpResponse.json(
         {

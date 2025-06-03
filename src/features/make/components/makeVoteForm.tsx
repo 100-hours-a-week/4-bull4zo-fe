@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight } from 'lucide-react'
 import { useVoteDetailInfo } from '@/api/services/vote/queries'
@@ -26,6 +26,7 @@ import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 
 export const MakeVoteForm = () => {
   const { voteId } = useParams()
+  const router = useNavigate()
 
   const { selectedId, setId } = useGroupStore()
   const { openModal } = useModalStore()
@@ -34,7 +35,7 @@ export const MakeVoteForm = () => {
   const [minDateTime, setMinDateTime] = useState('')
   const [maxDateTime, setMaxDateTime] = useState('')
 
-  const { data: editData } = useVoteDetailInfo(voteId ?? '')
+  const { data: editData, isError } = useVoteDetailInfo(voteId ?? '')
 
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),
@@ -106,6 +107,12 @@ export const MakeVoteForm = () => {
       })
     }
   }, [editData, form])
+
+  useEffect(() => {
+    if (isError) {
+      router('/research')
+    }
+  }, [isError, router])
 
   return (
     <div className="w-full px-5 pt-3 flex items-center justify-center">

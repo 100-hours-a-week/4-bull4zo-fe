@@ -76,7 +76,7 @@ export const UserCard = () => {
 
   return (
     <Card className="relative px-5 py-6 w-full bg-primary-gradient-down-right text-black rounded-4xl shadow-md border-none h-40 gap-[2.5rem]">
-      <CardHeader className="px-4 relative h-24">
+      <CardHeader className="px-4 relative h-full">
         {isEditing ? (
           <Form {...form}>
             <form
