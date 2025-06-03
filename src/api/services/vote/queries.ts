@@ -1,11 +1,13 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
+  CreateVotePayload,
   ParticipatedVoteList,
   ParticipatedVotesQueryOptions,
   UseInfiniteVotesQueryOptions,
   VoteData,
   VoteDetail,
+  VoteReportReason,
   voteDetailResult,
 } from './model'
 import { voteService } from './service'
@@ -99,5 +101,36 @@ export const useVoteDetailResults = (voteId: string) => {
     queryFn: () => voteService.getVoteResult(voteId),
     enabled: !!voteId,
     staleTime: 1000 * 60 * 1,
+  })
+}
+// 투표 실패 사유 조회
+export const useVoteReportReasons = (voteId: string) => {
+  return useQuery<VoteReportReason>({
+    queryKey: ['voteReportReasons', voteId],
+    queryFn: () => voteService.getVoteFailReason(voteId),
+    enabled: !!voteId,
+  })
+}
+// 투표 수정
+export const useUpdateVoteMutation = (voteId: string) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (payload: CreateVotePayload) => voteService.updateVote(voteId, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['createdVotes'] })
+    },
+  })
+}
+// 투표 삭제
+export const useDeleteVoteMutation = (voteId: string) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => voteService.deleteVote(voteId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['createdVotes'] })
+      queryClient.invalidateQueries({ queryKey: ['participatedVotes'] })
+    },
   })
 }

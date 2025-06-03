@@ -5,6 +5,7 @@ import {
   UseInfiniteVotesRequest,
   VoteData,
   VoteDetail,
+  VoteReportReason,
   submitVoteRequest,
   voteDetailResult,
 } from './model'
@@ -61,6 +62,21 @@ export const voteService = {
   },
   async getVoteResult(voteId: string): Promise<voteDetailResult> {
     const response = await authAxiosInstance.get(`/api/v1/votes/${voteId}/result`)
+    return response.data.data
+  },
+  // 투표 실패 사유 조회
+  async getVoteFailReason(voteId: string): Promise<VoteReportReason> {
+    const response = await authAxiosInstance.get(`/api/v1/votes/${voteId}/review`)
+    return response.data.data
+  },
+  // PATCH: 투표 수정
+  async updateVote(voteId: string, payload: CreateVotePayload) {
+    const response = await authAxiosInstance.patch(`/api/v1/votes/${voteId}`, payload)
+    return response.data.data
+  },
+  // DELETE: 투표 삭제
+  async deleteVote(voteId: string) {
+    const response = await authAxiosInstance.delete(`/api/v1/votes/${voteId}`)
     return response.data.data
   },
 }

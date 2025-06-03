@@ -87,3 +87,9 @@ export interface voteDetailResult {
   totalCount: number
   results: ParticipatedVoteResult[]
 }
+
+// 투표 신고 사유 Response
+export interface VoteReportReason {
+  voteId: number
+  reviewReason: string
+}

@@ -1,8 +1,8 @@
 import { useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
-import { useCreateVoteMutation } from '@/api/services/vote/queries'
+import { useCreateVoteMutation, useUpdateVoteMutation } from '@/api/services/vote/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { VoteCardPreview } from '../../../components/card/voteCardPreview'
@@ -17,10 +17,13 @@ type Props = {
 }
 
 export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonymous }: Props) => {
+  const { voteId } = useParams()
+
   const navigation = useNavigate()
 
   const { closeModal } = useModalStore()
   const { mutateAsync } = useCreateVoteMutation()
+  const { mutateAsync: updateVote } = useUpdateVoteMutation(voteId || '')
 
   const submit = useRef<boolean>(false)
 
@@ -57,10 +60,13 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
         imageUrl = fileUrl
       }
 
-      // 3. 투표 등록
-      await mutateAsync({ groupId, content, imageUrl, closedAt, anonymous })
-
-      toast('투표를 등록했습니다.')
+      if (voteId) {
+        await updateVote({ groupId, content, imageUrl, closedAt, anonymous })
+        toast('투표를 수정했습니다.')
+      } else {
+        await mutateAsync({ groupId, content, imageUrl, closedAt, anonymous })
+        toast('투표를 등록했습니다.')
+      }
       navigation('/research')
       closeModal()
     } catch (err: unknown) {
