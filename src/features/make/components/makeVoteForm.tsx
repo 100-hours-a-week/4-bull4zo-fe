@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight } from 'lucide-react'
+import { useVoteDetailInfo } from '@/api/services/vote/queries'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -23,12 +25,16 @@ import { buildLocalDateTimeString } from '@/utils/time'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 
 export const MakeVoteForm = () => {
+  const { voteId } = useParams()
+
   const { selectedId, setId } = useGroupStore()
   const { openModal } = useModalStore()
 
   const [fileName, setFileName] = useState<string | null>(null)
   const [minDateTime, setMinDateTime] = useState('')
   const [maxDateTime, setMaxDateTime] = useState('')
+
+  const { data: editData } = useVoteDetailInfo(voteId ?? '')
 
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),
@@ -65,6 +71,7 @@ export const MakeVoteForm = () => {
       />,
     )
   }
+
   // form에 그룹 id 반영
   useEffect(() => {
     if (selectedId) {
@@ -88,6 +95,17 @@ export const MakeVoteForm = () => {
     setMinDateTime(toInputFormat(now))
     setMaxDateTime(toInputFormat(sevenDaysLater))
   }, [])
+
+  useEffect(() => {
+    if (editData) {
+      form.reset({
+        groupId: editData.groupId,
+        content: editData.content,
+        closedAt: editData.closedAt,
+        anonymous: editData.authorNickname.includes('익명'),
+      })
+    }
+  }, [editData, form])
 
   return (
     <div className="w-full px-5 pt-3 flex items-center justify-center">
@@ -232,7 +250,7 @@ export const MakeVoteForm = () => {
                 form.formState.isValid ? 'bg-primary text-white' : 'bg-gray-300',
               )}
             >
-              등록
+              {!voteId ? '등록' : '수정'}
               <ChevronRight />
             </Button>
           </div>

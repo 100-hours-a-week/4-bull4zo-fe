@@ -22,3 +22,13 @@ export const messageMap: Record<string, string> = {
   DUPLICATED_NAME: '동일한 그룹이름이 이미 존재합니다.',
   ALREADY_JOINED: '이미 가입된 그룹입니다.',
 }
+
+// 투표 생성 실패 메시지
+export const voteCreateFailMessage = {
+  OFFENSIVE_LANGUAGE: '욕설 또는 비방이 포함되어 있어요.',
+  POLITICAL_CONTENT: '정치적인 내용이 포함되어 있어요.',
+  SEXUAL_CONTENT: '음란하거나 선정적인 내용이에요.',
+  SPAM_ADVERTISEMENT: '스팸 또는 광고로 보여요.',
+  IMPERSONATION_OR_LEAK: '사칭, 사기, 개인정보 노출이 의심돼요.',
+  OTHER: '부적절하다고 판단돼요.',
+}

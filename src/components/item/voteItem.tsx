@@ -4,11 +4,14 @@ import { useNavigate } from 'react-router-dom'
 import { ParticipatedVote, ParticipatedVoteStatus } from '@/api/services/vote/model'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
+import { useModalStore } from '@/stores/modalStore'
 import { formatRelativeTime } from '@/utils/time'
+import { VoteCreateFailModal } from '../modal/voteCreateFailModal'
 import { Label } from '../ui/label'
 
 export const VoteItem = (vote: Partial<ParticipatedVote>) => {
   const navigation = useNavigate()
+  const { openModal } = useModalStore()
 
   const agree = vote.results?.find((r) => r.optionNumber === 1)
   const disagree = vote.results?.find((r) => r.optionNumber === 2)
@@ -16,7 +19,11 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
   return (
     <li
       onClick={() => {
-        if (vote.voteStatus === 'PENDING' || vote.voteStatus === 'REJECTED') return
+        if (vote.voteStatus === 'PENDING') return
+        if (vote.voteStatus === 'REJECTED') {
+          openModal(<VoteCreateFailModal voteId={vote.voteId!} />)
+          return
+        }
         navigation(`/research/${vote.voteId}`)
         trackEvent({
           cta_id: 'vote_detail',
@@ -25,9 +32,9 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
         })
       }}
       className={cn(
-        'flex flex-col px-7 bg-white pt-8 pb-4 min-h-26 rounded-[30px] gap-4 shadow-lg',
+        'flex flex-col px-7 cursor-pointer bg-white pt-8 pb-4 min-h-26 rounded-[30px] gap-4 shadow-lg',
         {
-          'bg-red-200 cursor-not-allowed': vote.voteStatus === 'REJECTED',
+          'bg-red-200': vote.voteStatus === 'REJECTED',
           'bg-zinc-200 cursor-not-allowed': vote.voteStatus === 'PENDING',
         },
       )}
@@ -71,13 +78,6 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
   )
 }
 
-// const ResultLabel = ({ children }: { children: React.ReactNode }) => {
-//   return (
-//     <Label className="text-xs text-center h-full text-white justify-center items-center">
-//       {children}
-//     </Label>
-//   )
-// }
 const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status }) => {
   const [open, setOpen] = useState(false)
 

@@ -1,4 +1,5 @@
 import { HttpResponse, http } from 'msw'
+import { voteCreateFailMessage } from '@/lib/messageMap'
 
 export const votesHandlers = [
   http.get('api/v1/votes', ({ request }) => {
@@ -525,5 +526,40 @@ export const votesHandlers = [
       },
       { status: 200 },
     )
+  }),
+  http.get('/api/v1/votes/:voteId/review', async ({ params }) => {
+    const voteId = params.voteId as string
+
+    const keys = Object.keys(voteCreateFailMessage) as (keyof typeof voteCreateFailMessage)[]
+    const randomKey = keys[Math.floor(Math.random() * keys.length)]
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        voteId: Number(voteId),
+        reviewReason: randomKey,
+      },
+    })
+  }),
+  http.patch(`/api/v1/votes/:voteId`, async ({ request }) => {
+    const body = await request.json()
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: body,
+      },
+      { status: 200 },
+    )
+  }),
+  http.delete(`/api/v1/votes/:voteId`, async ({ params }) => {
+    const voteId = params.voteId as string
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        voteId: Number(voteId),
+      },
+      status: 200,
+    })
   }),
 ]

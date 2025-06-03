@@ -17,16 +17,7 @@ const Header = () => {
   const showBackbutton = !excludedPaths.includes(path)
 
   const handleBack = () => {
-    if (path.startsWith('/user') && path.split('/').length > 2) {
-      const firstCut = path.slice(0, path.lastIndexOf('/'))
-      const secondCut = firstCut.slice(0, firstCut.lastIndexOf('/')) || '/'
-      router(secondCut)
-      return
-    }
-
-    const lastPath = path.lastIndexOf('/')
-    const newPath = path.slice(0, lastPath) || '/'
-    router(newPath)
+    router(-1)
   }
 
   return (
