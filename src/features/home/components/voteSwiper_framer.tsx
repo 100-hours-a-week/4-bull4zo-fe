@@ -1,9 +1,6 @@
 import { memo, useEffect, useRef, useState } from 'react'
 import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/queries'
-// import DisLikeIcon from '@/assets/dislike.svg'
-// import LikeIcon from '@/assets/like.svg'
-// import PassIcon from '@/assets/pass.svg'
 import { VoteEndCard } from '@/components/card/voteEndCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
 import { useModalStore } from '@/stores/modalStore'
@@ -68,17 +65,6 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
 
   return (
     <div className={`flex justify-center items-center h-full relative overflow-hidden `}>
-      {/* <div
-        className={`absolute text-3xl font-bold z-[9999]
-          ${swipeDir === '찬성' ? 'top-10 right-10' : ''}
-          ${swipeDir === '반대' ? 'top-10 left-10' : ''}
-          ${swipeDir === '기권' ? 'top-5 left-1/2 transform -translate-x-1/2' : ''}
-        `}
-      >
-        {swipeDir === '찬성' && <img src={LikeIcon} alt="찬성" className="w-16 h-16" />}
-        {swipeDir === '반대' && <img src={DisLikeIcon} alt="반대" className="w-16 h-16" />}
-        {swipeDir === '기권' && <img src={PassIcon} alt="기권" className="w-16 h-16" />}
-      </div> */}
       {cardList.slice(0, 3).map((vote, index) => {
         const isTop = index === 0
 

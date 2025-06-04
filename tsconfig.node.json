@@ -13,6 +13,8 @@
     "moduleDetection": "force",
     "noEmit": true,
 
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -20,5 +22,5 @@
     "noFallthroughCasesInSwitch": true
     // "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "src/types/**/*"]
 }

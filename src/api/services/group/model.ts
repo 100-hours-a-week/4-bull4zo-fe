@@ -1,4 +1,4 @@
-import { PageNation } from '@/type'
+import { PageNation } from '@/types'
 
 export interface GroupName {
   groupId: number

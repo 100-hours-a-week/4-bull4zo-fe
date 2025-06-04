@@ -20,7 +20,7 @@ const HomePage = () => {
   const { selectedId: groupId } = useGroupStore()
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteVotesQuery({ groupId, isLogin })
-  const { data: user } = useUserInfoQuery({ enabled: isLogin !== undefined })
+  const { data: user } = useUserInfoQuery()
 
   const { openModal } = useModalStore()
   const { isHidden, open } = useTutorialStore()
@@ -35,18 +35,13 @@ const HomePage = () => {
   }
 
   useEffect(() => {
-    setNickName(user?.nickname || '')
-  }, [user, setNickName])
-
-  useEffect(() => {
-    if (isLogin === undefined) {
-      const timer = setTimeout(() => {
-        setIsLogin(false)
-      }, 1000) // 1초
-
-      return () => clearTimeout(timer)
+    if (user) {
+      setIsLogin(true)
+      setNickName(user.nickname || '')
+    } else {
+      setIsLogin(false)
     }
-  }, [isLogin, setIsLogin])
+  }, [user, setNickName, setIsLogin])
 
   useEffect(() => {
     const lastPage = data?.pages.at(-1)
@@ -60,7 +55,7 @@ const HomePage = () => {
   }, [groupId, filterByGroupId])
 
   // 로딩 카드
-  if (isLoading || isLogin === undefined) {
+  if (!isLogin && isLoading) {
     return (
       <div className="flex screen-minus-header-nav justify-center items-center">
         <LoadingCard />
