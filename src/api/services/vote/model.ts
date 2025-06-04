@@ -1,4 +1,4 @@
-import { PageNation } from '@/type'
+import { PageNation } from '@/types'
 
 export type VoteType = 'USER' | 'AI' | 'EVENT'
 

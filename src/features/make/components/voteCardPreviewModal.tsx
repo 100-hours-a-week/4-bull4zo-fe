@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import { axiosInstance } from '@/api/axios'
+import { authAxiosInstance } from '@/api/axios'
 import { useCreateVoteMutation, useUpdateVoteMutation } from '@/api/services/vote/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
@@ -36,7 +36,7 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
 
       if (image) {
         // 1. presigned URL 요청
-        const { data: presignedRes } = await axiosInstance.post('/api/v1/image/presigned-url', {
+        const { data: presignedRes } = await authAxiosInstance.post('/api/v1/image/presigned-url', {
           fileName: image.name,
         })
         if (presignedRes.message !== 'SUCCESS') {
@@ -69,11 +69,9 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
       }
       navigation('/research')
       closeModal()
+      // eslint-disable-next-line no-unused-vars
     } catch (err: unknown) {
-      const errorObject = err as {
-        message: string
-      }
-      toast.error(errorObject.message || '투표 등록에 실패했습니다.')
+      toast.error('투표 등록에 실패했습니다.')
       submit.current = false // 재시도 가능하게
     } finally {
       trackEvent({

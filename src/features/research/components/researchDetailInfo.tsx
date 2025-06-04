@@ -1,5 +1,5 @@
 import { VoteDetail, voteDetailResult } from '@/api/services/vote/model'
-import CheckIcon from '@/assets/voteCheckIcon.svg?react'
+import CheckIcon from '@/assets/voteCheckIcon.svg'
 import { Icon } from '@/components/Icon/icon'
 import { Label } from '@/components/ui/label'
 import { useGroupStore } from '@/stores/groupStore'
@@ -43,7 +43,7 @@ const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
               </div>
               {voteResult?.userResponse === 2 && (
                 <Icon
-                  component={CheckIcon}
+                  src={CheckIcon}
                   className="w-[27px] h-8 absolute right-2 top-1/2 transform -translate-y-1/2"
                 />
               )}
@@ -62,7 +62,7 @@ const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
               </div>
               {voteResult?.userResponse === 1 && (
                 <Icon
-                  component={CheckIcon}
+                  src={CheckIcon}
                   className="w-[27px] h-8 absolute right-2 top-1/2 transform -translate-y-1/2"
                 />
               )}

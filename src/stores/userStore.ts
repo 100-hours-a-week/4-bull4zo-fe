@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 interface UserStore {
-  isLogin: boolean | undefined
+  isLogin: boolean
   nickname: string
   accessToken: string
   // eslint-disable-next-line no-unused-vars
@@ -14,7 +14,7 @@ interface UserStore {
 }
 
 export const useUserStore = create<UserStore>((set) => ({
-  isLogin: undefined,
+  isLogin: false,
   accessToken: '',
   nickname: '',
   setIsLogin: (isLogin) => set({ isLogin }),

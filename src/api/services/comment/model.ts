@@ -1,4 +1,4 @@
-import { PageNation } from '@/type'
+import { PageNation } from '@/types'
 
 // 댓글의 기본 데이터
 export interface Comment {

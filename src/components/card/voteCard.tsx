@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Vote } from '@/api/services/vote/model'
-import META_ICON from '@/assets/meta_icon.png'
+import META_ICON from '@/assets/meta_icon.webp'
 import { cn } from '@/lib/utils'
 import { useGroupStore } from '@/stores/groupStore'
 import { formatRelativeTime } from '@/utils/time'

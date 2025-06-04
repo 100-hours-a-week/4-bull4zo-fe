@@ -1,7 +1,7 @@
 import { FaAngleLeft } from 'react-icons/fa6'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Bell } from 'lucide-react'
-import MOA_HOME_ICON from '@/assets/moa_home.svg?react'
+import MOA_HOME_ICON from '@/assets/moa_home.webp'
 import { useUserStore } from '@/stores/userStore'
 import { Icon } from '../Icon/icon'
 import { Button } from '../ui/button'
@@ -28,7 +28,7 @@ const Header = () => {
         </button>
       )}
       <a href="/home" className="inline-block w-24 h-16 cursor-pointer">
-        <Icon component={MOA_HOME_ICON} className="h-full w-full" />
+        <Icon src={MOA_HOME_ICON} className="h-full w-full" />
       </a>
       <div className="mr-4">
         {isLogin ? (
