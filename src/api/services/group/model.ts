@@ -48,3 +48,10 @@ export interface CreateGroupData {
   inviteCode: string
   createdAt: string
 }
+
+export interface UpdateGroupRequest {
+  name?: string
+  description?: string
+  imageUrl?: string
+  changeInviteCode?: boolean
+}

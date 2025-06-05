@@ -1,4 +1,5 @@
 import { HttpResponse, http } from 'msw'
+import { UpdateGroupRequest } from '@/api/services/group/model'
 
 const fullGroupList = [
   { groupId: 1, name: '공개' },
@@ -159,6 +160,56 @@ export const groupHandlers = [
         },
       },
       { status: 201 },
+    )
+  }),
+  http.delete('/api/v1/groups/:groupId/members/me', ({ params }) => {
+    const { groupId } = params
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+      },
+    })
+  }),
+  http.get('/api/v1/groups/:groupId', ({ params }) => {
+    const { groupId } = params
+
+    if (groupId === ' 2') {
+      return HttpResponse.json(
+        {
+          message: 'FORBIDDEN',
+          data: null,
+        },
+        { status: 403 },
+      )
+    }
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+        name: `그룹${groupId}`,
+        description: `그룹 ${groupId}의 설명입니다.`,
+        imageUrl: '',
+        inviteCode: `CODE${groupId}`,
+        role: 'OWNER',
+      },
+    })
+  }),
+  http.patch('/api/v1/groups/:groupId', async ({ params, request }) => {
+    const { groupId } = params
+
+    const body = (await request.json()) as UpdateGroupRequest
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          groupId: parseInt(groupId as string, 10),
+          ...body,
+        },
+      },
+      { status: 200 },
     )
   }),
 ]

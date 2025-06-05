@@ -1,6 +1,6 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { MyGroupList, MyGroupNamesData } from './model'
+import { MyGroupList, MyGroupNamesData, UpdateGroupRequest } from './model'
 import { groupService } from './service'
 
 // 그룹 이름 무한스크롤 조회
@@ -46,6 +46,40 @@ export const useCreateGroupMutation = () => {
   return useMutation({
     mutationFn: groupService.createGroup,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myGroups'] })
+      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
+    },
+  })
+}
+// 그룹 탈퇴(본인)
+export const useLeaveGroupMutation = (groupId: number) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => groupService.leaveGroup(groupId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myGroups'] })
+      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
+    },
+  })
+}
+// 그룹 정보 조회
+export const useGroupQuery = (groupId: number) => {
+  return useQuery({
+    queryKey: ['group', groupId],
+    queryFn: () => groupService.getGroup(groupId),
+    staleTime: 1000 * 60 * 15,
+    retry: 1,
+  })
+}
+// 그룹 정보 수정
+export const useUpdateGroupMutation = (groupId: number) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (payload: UpdateGroupRequest) => groupService.updateGroup(payload, groupId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['group', groupId] })
       queryClient.invalidateQueries({ queryKey: ['myGroups'] })
       queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
     },
