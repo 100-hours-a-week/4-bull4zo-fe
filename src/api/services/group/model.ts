@@ -1,4 +1,5 @@
 import { PageNation } from '@/types'
+import { ParticipatedVote } from '../vote/model'
 
 export interface GroupName {
   groupId: number
@@ -50,4 +51,49 @@ export interface CreateGroupData {
   imageName: string
   inviteCode: string
   createdAt: string
+}
+
+export interface UpdateGroupRequest {
+  name?: string
+  description?: string
+  imageUrl?: string
+  changeInviteCode?: boolean
+}
+
+export interface GroupMember {
+  userId: number
+  name: string
+  role: GroupRole
+}
+
+export interface GroupMembersResponse {
+  groupId: number
+  members: GroupMember[]
+}
+
+export interface GroupRoleChangeRequest {
+  role: GroupRole
+}
+
+export interface GroupRoleChangeResponse {
+  userId: number
+  role: GroupRole
+}
+
+export interface GroupMemberDeleteResponse {
+  userId: number
+}
+
+// export interface GroupVote {
+//   voteId: number
+//   groupId: number
+//   content: string
+//   createdAt: string
+//   closedAt: string
+//   results: ParticipatedVoteResult
+// }
+
+export type GroupVoteListResponse = PageNation<'votes', ParticipatedVote[]> & {
+  groupId: number
+  groupName: string
 }

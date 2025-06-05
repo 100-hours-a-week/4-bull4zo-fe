@@ -1,4 +1,5 @@
 import { HttpResponse, http } from 'msw'
+import { GroupRoleChangeRequest, UpdateGroupRequest } from '@/api/services/group/model'
 
 const fullGroupList = [
   { groupId: 1, name: '공개' },
@@ -17,6 +18,30 @@ const fullGroupList = [
   { groupId: 14, name: '그룹J' },
   { groupId: 15, name: '그룹K' },
 ]
+
+const allMockVotes = Array.from({ length: 30 }, (_, i) => {
+  const voteId = 1000 + i
+  const createdAt = new Date(2025, 3, 30, 23, 59, 59 + i)
+  return {
+    voteId,
+    groupId: 3,
+    content: `Mock 투표 ${i + 1}`,
+    createdAt: createdAt.toISOString(),
+    closedAt: new Date(createdAt.getTime() + 3600 * 1000).toISOString(),
+    results: [
+      {
+        optionNumber: 1,
+        count: Math.floor(Math.random() * 50),
+        ratio: Math.floor(Math.random() * 100),
+      },
+      {
+        optionNumber: 2,
+        count: Math.floor(Math.random() * 50),
+        ratio: Math.floor(Math.random() * 100),
+      },
+    ],
+  }
+})
 
 export const groupHandlers = [
   http.get('/api/v1/user/groups/labels', ({ request }) => {
@@ -159,6 +184,142 @@ export const groupHandlers = [
         },
       },
       { status: 201 },
+    )
+  }),
+  http.delete('/api/v1/groups/:groupId/members/me', ({ params }) => {
+    const { groupId } = params
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+      },
+    })
+  }),
+  http.get('/api/v1/groups/:groupId', ({ params }) => {
+    const { groupId } = params
+
+    if (groupId === '2') {
+      return HttpResponse.json(
+        {
+          message: 'FORBIDDEN',
+          data: null,
+        },
+        { status: 403 },
+      )
+    }
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+        name: `그룹${groupId}`,
+        description: `그룹 ${groupId}의 설명입니다.`,
+        imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
+        inviteCode: `CODE${groupId}`,
+        role: 'OWNER',
+      },
+    })
+  }),
+  http.patch('/api/v1/groups/:groupId', async ({ params, request }) => {
+    const { groupId } = params
+
+    const body = (await request.json()) as UpdateGroupRequest
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          groupId: parseInt(groupId as string, 10),
+          ...body,
+        },
+      },
+      { status: 200 },
+    )
+  }),
+  http.delete('/api/v1/groups/:groupId', ({ params }) => {
+    const { groupId } = params
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+      },
+    })
+  }),
+  http.get('/api/v1/groups/:groupId/members', ({ params }) => {
+    const { groupId } = params
+
+    const members = Array.from({ length: 30 }, (_, i) => ({
+      userId: i + 1,
+      name: `사용자${i + 1}`,
+      role: i % 3 === 0 ? 'OWNER' : i % 3 === 1 ? 'MANAGER' : 'MEMBER',
+    }))
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+        members,
+      },
+    })
+  }),
+  http.delete('/api/v1/groups/:groupId/members/:userId', ({ params }) => {
+    const { userId } = params
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        userId: parseInt(userId as string, 10),
+      },
+    })
+  }),
+  http.patch('/api/v1/groups/:groupId/members/:userId', async ({ params, request }) => {
+    const { userId } = params
+
+    const body = (await request.json()) as GroupRoleChangeRequest
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        userId: parseInt(userId as string, 10),
+        role: body.role,
+      },
+    })
+  }),
+  http.get('/api/v1/groups/:groupId/votes', ({ request, params }) => {
+    const url = new URL(request.url)
+    const groupId = Number(params.groupId ?? '1')
+    const cursor = url.searchParams.get('cursor')
+    const size = Number(url.searchParams.get('size') ?? '10')
+
+    // 커서 기반 필터링
+    let startIndex = 0
+    if (cursor) {
+      const index = allMockVotes.findIndex((vote) => {
+        return `${vote.createdAt}_${vote.voteId}` === cursor
+      })
+      if (index === -1) {
+        return HttpResponse.json({ message: 'INVALID_CURSOR_FORMAT', data: null }, { status: 400 })
+      }
+      startIndex = index + 1
+    }
+
+    const pagedVotes = allMockVotes.slice(startIndex, startIndex + size)
+    const last = pagedVotes.at(-1)
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          groupId: groupId,
+          groupName: 'KTB',
+          votes: pagedVotes,
+          nextCursor: last ? `${last.createdAt}_${last.voteId}` : null,
+          hasNext: startIndex + size < allMockVotes.length,
+          size: pagedVotes.length,
+        },
+      },
+      { status: 200 },
     )
   }),
 ]
