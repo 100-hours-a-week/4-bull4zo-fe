@@ -85,3 +85,24 @@ export const useUpdateGroupMutation = (groupId: number) => {
     },
   })
 }
+// 그룹 삭제
+export const useDeleteGroupMutation = (groupId: number) => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => groupService.deleteGroup(groupId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['myGroups'] })
+      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
+    },
+  })
+}
+// 그룹 멤버 목록 조회
+export const useGroupMembersQuery = (groupId: number) => {
+  return useQuery({
+    queryKey: ['groupMembers', groupId],
+    queryFn: () => groupService.getGroupMembers(groupId),
+    staleTime: 1000 * 60 * 15,
+    retry: 1,
+  })
+}

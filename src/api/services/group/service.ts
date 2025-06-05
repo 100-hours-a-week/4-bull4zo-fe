@@ -3,6 +3,7 @@ import {
   CreateGroupData,
   CreateGroupPayload,
   Group,
+  GroupMembersResponse,
   InviteCodePayload,
   InviteGroupData,
   MyGroupList,
@@ -49,6 +50,16 @@ export const groupService = {
   // Patch: 그룹 정보 수정
   async updateGroup(payload: UpdateGroupRequest, groupId: number): Promise<Group> {
     const response = await authAxiosInstance.patch(`/api/v1/groups/${groupId}`, payload)
+    return response.data.data
+  },
+  // Delete: 그룹 삭제
+  async deleteGroup(groupId: number): Promise<{ groupId: number }> {
+    const response = await authAxiosInstance.delete(`/api/v1/groups/${groupId}`)
+    return response.data.data
+  },
+  // Get: 그룹 멤버 목록 조회
+  async getGroupMembers(groupId: number): Promise<GroupMembersResponse> {
+    const response = await authAxiosInstance.get(`/api/v1/groups/${groupId}/members`)
     return response.data.data
   },
 }

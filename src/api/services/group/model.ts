@@ -55,3 +55,14 @@ export interface UpdateGroupRequest {
   imageUrl?: string
   changeInviteCode?: boolean
 }
+
+export interface GroupMember {
+  userId: number
+  nickname: string
+  role: GroupRole
+}
+
+export interface GroupMembersResponse {
+  groupId: number
+  members: GroupMember[]
+}
