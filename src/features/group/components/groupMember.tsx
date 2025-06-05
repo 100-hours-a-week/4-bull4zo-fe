@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { FaSearch } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 import { useGroupMembersQuery } from '@/api/services/group/queries'
 import { MemberList } from '@/components/list/memberList'
@@ -33,12 +34,13 @@ const MemberSearchBar = ({
   onChange: (value: string) => void
 }) => {
   return (
-    <div className="mb-4">
+    <div className="mb-4 flex flex-row items-center bg-white gap-1 px-3 py-1.5 shadow-md rounded-2xl">
+      <FaSearch />
       <Input
         placeholder="멤버 닉네임 검색"
         value={search}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full"
+        className="w-full border-none outline-none focus-visible:ring-0 shadow-none"
       />
     </div>
   )
