@@ -212,4 +212,31 @@ export const groupHandlers = [
       { status: 200 },
     )
   }),
+  http.delete('/api/v1/groups/:groupId', ({ params }) => {
+    const { groupId } = params
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+      },
+    })
+  }),
+  http.get('/api/v1/groups/:groupId/members', ({ params }) => {
+    const { groupId } = params
+
+    const members = Array.from({ length: 30 }, (_, i) => ({
+      userId: i + 1,
+      name: `사용자${i + 1}`,
+      role: i % 3 === 0 ? 'OWNER' : i % 3 === 1 ? 'MANAGER' : 'MEMBER',
+    }))
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+        members,
+      },
+    })
+  }),
 ]
