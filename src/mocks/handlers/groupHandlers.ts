@@ -190,7 +190,7 @@ export const groupHandlers = [
         groupId: parseInt(groupId as string, 10),
         name: `그룹${groupId}`,
         description: `그룹 ${groupId}의 설명입니다.`,
-        imageUrl: '',
+        imageUrl: 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d',
         inviteCode: `CODE${groupId}`,
         role: 'OWNER',
       },

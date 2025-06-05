@@ -13,6 +13,7 @@ import {
 export const groupService = {
   async groupNameList(size: number, cursor?: string): Promise<MyGroupNamesData> {
     const params = new URLSearchParams()
+
     if (cursor) params.append('cursor', cursor)
     if (size) params.append('size', size.toString())
 
@@ -42,12 +43,12 @@ export const groupService = {
   },
   // Get: 그룹 정보 조회
   async getGroup(groupId: number): Promise<Group> {
-    const response = await authAxiosInstance.get(`/api/v1/group/${groupId}`)
+    const response = await authAxiosInstance.get(`/api/v1/groups/${groupId}`)
     return response.data.data
   },
   // Patch: 그룹 정보 수정
   async updateGroup(payload: UpdateGroupRequest, groupId: number): Promise<Group> {
-    const response = await authAxiosInstance.patch(`/api/v1/group/${groupId}`, payload)
+    const response = await authAxiosInstance.patch(`/api/v1/groups/${groupId}`, payload)
     return response.data.data
   },
 }
