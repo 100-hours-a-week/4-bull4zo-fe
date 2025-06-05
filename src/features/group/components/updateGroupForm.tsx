@@ -6,6 +6,7 @@ import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
 import { useGroupQuery, useUpdateGroupMutation } from '@/api/services/group/queries'
+import { DeleteGroupModal } from '@/components/modal/deleteGroupModal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -21,12 +22,14 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { trackEvent } from '@/lib/trackEvent'
+import { useModalStore } from '@/stores/modalStore'
 import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'
 import { UpdateGroupSchema, updateGroupSchema } from '../lib/groupSchema'
 
 export const UpdateGroupForm = () => {
   const { groupId } = useParams()
+  const { openModal } = useModalStore()
 
   const form = useForm<UpdateGroupSchema>({
     resolver: zodResolver(updateGroupSchema),
@@ -270,6 +273,9 @@ export const UpdateGroupForm = () => {
                 type="button"
                 className="text-sm underline text-gray cursor-pointer"
                 disabled={!form.formState.isValid}
+                onClick={() => {
+                  openModal(<DeleteGroupModal groupId={Number(groupId)} />)
+                }}
               >
                 그룹 삭제
               </button>
