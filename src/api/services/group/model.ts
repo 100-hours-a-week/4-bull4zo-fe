@@ -58,7 +58,7 @@ export interface UpdateGroupRequest {
 
 export interface GroupMember {
   userId: number
-  nickname: string
+  name: string
   role: GroupRole
 }
 
