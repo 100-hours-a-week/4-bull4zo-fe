@@ -83,7 +83,7 @@ const CommentDotsItem = ({
 
   if (isMine) {
     return (
-      <div className="absolute right-2 w-32 bg-white shadow-md rounded-2xl rounded-tr-none border-gray-400 border z-10 ">
+      <div className="absolute right-2 w-32 bg-white shadow-md rounded-2xl rounded-tr-none border-gray-300 border z-10 ">
         <button
           onClick={handleDelete}
           className="rounded-b-2xl cursor-pointer rounded-tl-2xl w-full px-3 py-2 text-sm hover:bg-gray-100 text-left"
@@ -94,14 +94,14 @@ const CommentDotsItem = ({
     )
   } else {
     return (
-      <div className="absolute right-2 w-32 bg-white shadow-md rounded-2xl rounded-tr-none border-gray-400 border z-10 ">
+      <div className="absolute right-2 w-32 bg-white shadow-md rounded-2xl rounded-tr-none border-gray-300 border z-10 ">
         <button
           onClick={handleHide}
           className="rounded-tl-2xl cursor-pointer w-full px-3 py-2 text-sm hover:bg-gray-100 text-left"
         >
           댓글 숨기기
         </button>
-        <hr className="text-gray-400" />
+        <hr className="text-gray-300" />
         <button
           onClick={handleDeclaration}
           className="rounded-b-2xl w-full px-3 cursor-pointer py-2 text-sm hover:bg-gray-100 text-left"

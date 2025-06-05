@@ -1,5 +1,6 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom'
 import CreateGroupPage from '@/features/group/pages/createGrupPage'
+import EditGroupPage from '@/features/group/pages/editGroupPage'
 import HomePage from '@/features/home/pages/homePage'
 import AuthCallback from '@/features/login/pages/authCallback'
 import LoginPage from '@/features/login/pages/loginPage'
@@ -48,8 +49,12 @@ export const router = createBrowserRouter([
         element: <UserPage />,
       },
       {
-        path: '/user/group/create',
+        path: '/group/create',
         element: <CreateGroupPage />,
+      },
+      {
+        path: '/group/:groupId',
+        element: <EditGroupPage />,
       },
     ],
   },
