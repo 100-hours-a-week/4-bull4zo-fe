@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import { FaChevronDown } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 import { GroupMember, GroupRole } from '@/api/services/group/model'
-import { useGroupQuery } from '@/api/services/group/queries'
+import {
+  useGroupMemberDeleteMutation,
+  useGroupQuery,
+  useGroupRoleChangeMutation,
+} from '@/api/services/group/queries'
 
 export const MemberList = ({
   members,
@@ -25,20 +29,38 @@ export const MemberList = ({
           className="px-4 py-3 flex flex-row items-center border-b border-gray-300 justify-between"
         >
           <span className="text-sm font-medium">{member.name}</span>
-          <MemberRoleLabel role={member.role} myRole={group?.role!} />
+          <MemberRoleLabel groupId={Number(groupId)} member={member} myRole={group?.role!} />
         </li>
       ))}
     </ul>
   )
 }
 
-export const MemberRoleLabel = ({ role, myRole }: { role: GroupRole; myRole: GroupRole }) => {
+export const MemberRoleLabel = ({
+  groupId,
+  member,
+  myRole,
+}: {
+  groupId: number
+  member: GroupMember
+  myRole: GroupRole
+}) => {
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const toggleDropdown = () => setOpen((prev) => !prev)
+  const { mutateAsync: changeRole } = useGroupRoleChangeMutation(groupId, member.userId)
+  const { mutateAsync: leaveGroup } = useGroupMemberDeleteMutation(groupId, member.userId)
 
-  const text = role === 'OWNER' ? '소유자' : role === 'MANAGER' ? '관리자' : '멤버'
+  const toggleDropdown = () => setOpen((prev) => !prev)
+  const text = member.role === 'OWNER' ? '소유자' : member.role === 'MANAGER' ? '관리자' : '멤버'
+
+  const handleRoleChange = async (role: GroupRole | 'LEAVE') => {
+    if (role === 'LEAVE') {
+      await leaveGroup()
+    } else {
+      await changeRole({ role })
+    }
+  }
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -80,6 +102,7 @@ export const MemberRoleLabel = ({ role, myRole }: { role: GroupRole; myRole: Gro
               <button
                 className="w-full px-3 py-2 text-left text-sm hover:bg-gray-100"
                 onClick={() => {
+                  handleRoleChange(item.key)
                   setOpen(false)
                 }}
               >
