@@ -1,5 +1,5 @@
 import { HttpResponse, http } from 'msw'
-import { UpdateGroupRequest } from '@/api/services/group/model'
+import { GroupRoleChangeRequest, UpdateGroupRequest } from '@/api/services/group/model'
 
 const fullGroupList = [
   { groupId: 1, name: '공개' },
@@ -236,6 +236,29 @@ export const groupHandlers = [
       data: {
         groupId: parseInt(groupId as string, 10),
         members,
+      },
+    })
+  }),
+  http.delete('/api/v1/groups/:groupId/members/:userId', ({ params }) => {
+    const { userId } = params
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        userId: parseInt(userId as string, 10),
+      },
+    })
+  }),
+  http.patch('/api/v1/groups/:groupId/members/:userId', async ({ params, request }) => {
+    const { userId } = params
+
+    const body = (await request.json()) as GroupRoleChangeRequest
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        userId: parseInt(userId as string, 10),
+        role: body.role,
       },
     })
   }),

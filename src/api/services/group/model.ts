@@ -66,3 +66,16 @@ export interface GroupMembersResponse {
   groupId: number
   members: GroupMember[]
 }
+
+export interface GroupRoleChangeRequest {
+  role: GroupRole
+}
+
+export interface GroupRoleChangeResponse {
+  userId: number
+  role: GroupRole
+}
+
+export interface GroupMemberDeleteResponse {
+  userId: number
+}

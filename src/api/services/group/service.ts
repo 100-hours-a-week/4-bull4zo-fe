@@ -3,7 +3,10 @@ import {
   CreateGroupData,
   CreateGroupPayload,
   Group,
+  GroupMemberDeleteResponse,
   GroupMembersResponse,
+  GroupRoleChangeRequest,
+  GroupRoleChangeResponse,
   InviteCodePayload,
   InviteGroupData,
   MyGroupList,
@@ -60,6 +63,23 @@ export const groupService = {
   // Get: 그룹 멤버 목록 조회
   async getGroupMembers(groupId: number): Promise<GroupMembersResponse> {
     const response = await authAxiosInstance.get(`/api/v1/groups/${groupId}/members`)
+    return response.data.data
+  },
+  // Patch: 그룹 멤버 역할 변경
+  async updateGroupMemberRole(
+    groupId: number,
+    userId: number,
+    payload: GroupRoleChangeRequest,
+  ): Promise<GroupRoleChangeResponse> {
+    const response = await authAxiosInstance.patch(
+      `/api/v1/groups/${groupId}/members/${userId}`,
+      payload,
+    )
+    return response.data.data
+  },
+  // Delete: 그룹 멤버 삭제
+  async deleteGroupMember(groupId: number, userId: number): Promise<GroupMemberDeleteResponse> {
+    const response = await authAxiosInstance.delete(`/api/v1/groups/${groupId}/members/${userId}`)
     return response.data.data
   },
 }
