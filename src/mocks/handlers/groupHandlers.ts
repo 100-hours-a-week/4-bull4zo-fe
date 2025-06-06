@@ -19,6 +19,30 @@ const fullGroupList = [
   { groupId: 15, name: '그룹K' },
 ]
 
+const allMockVotes = Array.from({ length: 30 }, (_, i) => {
+  const voteId = 1000 + i
+  const createdAt = new Date(2025, 3, 30, 23, 59, 59 + i)
+  return {
+    voteId,
+    groupId: 3,
+    content: `Mock 투표 ${i + 1}`,
+    createdAt: createdAt.toISOString(),
+    closedAt: new Date(createdAt.getTime() + 3600 * 1000).toISOString(),
+    results: [
+      {
+        optionNumber: 1,
+        count: Math.floor(Math.random() * 50),
+        ratio: Math.floor(Math.random() * 100),
+      },
+      {
+        optionNumber: 2,
+        count: Math.floor(Math.random() * 50),
+        ratio: Math.floor(Math.random() * 100),
+      },
+    ],
+  }
+})
+
 export const groupHandlers = [
   http.get('/api/v1/user/groups/labels', ({ request }) => {
     const url = new URL(request.url, 'http://localhost:5173')
@@ -261,5 +285,41 @@ export const groupHandlers = [
         role: body.role,
       },
     })
+  }),
+  http.get('/api/v1/groups/:groupId/votes', ({ request, params }) => {
+    const url = new URL(request.url)
+    const groupId = Number(params.groupId ?? '1')
+    const cursor = url.searchParams.get('cursor')
+    const size = Number(url.searchParams.get('size') ?? '10')
+
+    // 커서 기반 필터링
+    let startIndex = 0
+    if (cursor) {
+      const index = allMockVotes.findIndex((vote) => {
+        return `${vote.createdAt}_${vote.voteId}` === cursor
+      })
+      if (index === -1) {
+        return HttpResponse.json({ message: 'INVALID_CURSOR_FORMAT', data: null }, { status: 400 })
+      }
+      startIndex = index + 1
+    }
+
+    const pagedVotes = allMockVotes.slice(startIndex, startIndex + size)
+    const last = pagedVotes.at(-1)
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          groupId: groupId,
+          groupName: 'KTB',
+          votes: pagedVotes,
+          nextCursor: last ? `${last.createdAt}_${last.voteId}` : null,
+          hasNext: startIndex + size < allMockVotes.length,
+          size: pagedVotes.length,
+        },
+      },
+      { status: 200 },
+    )
   }),
 ]

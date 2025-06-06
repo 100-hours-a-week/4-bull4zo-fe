@@ -1,6 +1,12 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
-import { GroupRoleChangeRequest, MyGroupList, MyGroupNamesData, UpdateGroupRequest } from './model'
+import {
+  GroupRoleChangeRequest,
+  GroupVoteListResponse,
+  MyGroupList,
+  MyGroupNamesData,
+  UpdateGroupRequest,
+} from './model'
 import { groupService } from './service'
 
 // 그룹 이름 무한스크롤 조회
@@ -127,5 +133,16 @@ export const useGroupMemberDeleteMutation = (groupId: number, userId: number) =>
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['groupMembers', groupId] })
     },
+  })
+}
+// 그룹 내 투표 목록 조회
+export const useGroupVotesInfiniteQuery = (groupId: number, size: number = 10) => {
+  return useInfiniteQuery<GroupVoteListResponse, AxiosError>({
+    queryKey: ['groupVotes', groupId],
+    queryFn: ({ pageParam }) =>
+      groupService.getGroupVotes(groupId, size, pageParam as string | undefined),
+    getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
+    staleTime: 1000 * 60 * 15,
+    initialPageParam: undefined,
   })
 }

@@ -7,6 +7,7 @@ import {
   GroupMembersResponse,
   GroupRoleChangeRequest,
   GroupRoleChangeResponse,
+  GroupVoteListResponse,
   InviteCodePayload,
   InviteGroupData,
   MyGroupList,
@@ -80,6 +81,22 @@ export const groupService = {
   // Delete: 그룹 멤버 삭제
   async deleteGroupMember(groupId: number, userId: number): Promise<GroupMemberDeleteResponse> {
     const response = await authAxiosInstance.delete(`/api/v1/groups/${groupId}/members/${userId}`)
+    return response.data.data
+  },
+  // Get: 그룹 내 모든 투표 조회
+  async getGroupVotes(
+    groupId: number,
+    size: number,
+    cursor?: string,
+  ): Promise<GroupVoteListResponse> {
+    const params = new URLSearchParams()
+
+    if (cursor) params.append('cursor', cursor)
+    if (size) params.append('size', size.toString())
+
+    const response = await authAxiosInstance.get(
+      `/api/v1/groups/${groupId}/votes?${params.toString()}`,
+    )
     return response.data.data
   },
 }
