@@ -199,7 +199,7 @@ export const groupHandlers = [
   http.get('/api/v1/groups/:groupId', ({ params }) => {
     const { groupId } = params
 
-    if (groupId === ' 2') {
+    if (groupId === '2') {
       return HttpResponse.json(
         {
           message: 'FORBIDDEN',
