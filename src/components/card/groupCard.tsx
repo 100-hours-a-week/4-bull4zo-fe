@@ -27,9 +27,10 @@ export const GroupCard = (group: Partial<Group>) => {
     <Card className="flex flex-col rounded-[1.875rem] shadow-md border-none bg-white min-h-[9.5rem] gap-4">
       <CardHeader className="flex flex-row justify-between px-5">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 border rounded-full bg-gray-200 overflow-hidden flex items-center justify-center relative">
-            {group.imageUrl && <img src={group.imageUrl} alt={group.name || 'Group image'} />}
-          </div>
+          <div
+            className="w-7 h-7 border rounded-full overflow-hidden flex items-center justify-center relative bg-gray-200 bg-cover bg-center"
+            style={group.imageUrl ? { backgroundImage: `url(${group.imageUrl})` } : {}}
+          />
           <h1 className="font-semibold text-lg">{group.name}</h1>
         </div>
         {/* <EllipsisVertical /> */}

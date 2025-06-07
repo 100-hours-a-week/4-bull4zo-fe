@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
-import { axiosInstance } from '@/api/axios'
+import { authAxiosInstance } from '@/api/axios'
 import { useCreateGroupMutation } from '@/api/services/group/queries'
 import { InviteCodeCheckModal } from '@/components/modal/inviteCodeCheckModal'
 import { Button } from '@/components/ui/button'
@@ -30,7 +30,7 @@ export const CreateGroupForm = () => {
     defaultValues: {
       name: '',
       description: '',
-      image: '',
+      image: undefined,
     },
     mode: 'onChange',
   })
@@ -46,10 +46,11 @@ export const CreateGroupForm = () => {
     try {
       const image = form.getValues('image')
       let imageUrl = ''
+      let imageName = ''
 
       if (image) {
         // 1. presigned URL 요청
-        const { data: presignedRes } = await axiosInstance.post('/api/v1/image/presigned-url', {
+        const { data: presignedRes } = await authAxiosInstance.post('/api/v1/image/presigned-url', {
           fileName: image.name,
         })
         if (presignedRes.message !== 'SUCCESS') {
@@ -71,9 +72,10 @@ export const CreateGroupForm = () => {
         }
 
         imageUrl = fileUrl
+        imageName = image.name
       }
       await mutateAsync(
-        { name: values.name, description: values.description, imageUrl },
+        { name: values.name, description: values.description, imageUrl, imageName },
         {
           onSuccess: (data) => {
             openModal(<InviteCodeCheckModal code={data.inviteCode} />)
@@ -87,11 +89,12 @@ export const CreateGroupForm = () => {
           },
         },
       )
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      const errorObject = err as {
-        message: string
-      }
-      toast.error(errorObject.message || '그룹 생성에 실패했습니다.')
+      // const errorObject = err as {
+      //   message: string
+      // }
+      // toast.error(errorObject.message || '그룹 생성에 실패했습니다.')
     } finally {
       trackEvent({
         cta_id: 'group_create',
@@ -119,14 +122,14 @@ export const CreateGroupForm = () => {
                     <div>
                       <Input
                         type="file"
-                        accept="image/*"
+                        accept="image/png, image/jpeg, image/jpg"
                         ref={fileInputRef}
                         className="hidden"
                         onChange={(e) => {
                           const file = e.target.files?.[0]
                           if (file) {
                             setPreview(URL.createObjectURL(file))
-                            field.onChange(e.target.files)
+                            field.onChange(file)
                           }
                         }}
                       />

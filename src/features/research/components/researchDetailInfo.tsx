@@ -23,10 +23,17 @@ const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
           <h1 className="text-xs font-semibold">
             {groups.find((f) => f.groupId === voteDetail?.groupId)?.name}
           </h1>
-          <p className="mt-2 text-[1.125rem] font-bold whitespace-pre-line break-all">
+          <p className="mt-2 text-[1.125rem] font-medium whitespace-pre-line break-all">
             {voteDetail?.content}
           </p>
-          <p className="mt-3">{voteDetail?.authorNickname}</p>
+          {voteDetail?.imageUrl && (
+            <img
+              src={voteDetail?.imageUrl}
+              className="my-4 w-full max-h-[400px] object-contain rounded-lg mx-auto"
+              alt="투표 내 이미지"
+            />
+          )}
+          <p className="mt-3 text-sm">{voteDetail?.authorNickname}</p>
         </div>
         <div className="mt-3 flex flex-col gap-4">
           <p className="font-semibold text-end">{voteResult?.totalCount}표</p>

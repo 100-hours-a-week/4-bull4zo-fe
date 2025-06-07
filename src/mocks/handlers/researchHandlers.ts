@@ -27,7 +27,9 @@ export const researchHandlers = [
             groupId: 1,
             authorNickname: 'jenny',
             content: '점심 안 먹은 사람?',
-            imageUrl: '',
+            imageUrl:
+              'https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1600&q=80',
+            imageName: 'lunch.jpg',
             createdAt: '2025-04-20T12:59:00',
             closedAt: '2025-04-20T13:59:00',
           },

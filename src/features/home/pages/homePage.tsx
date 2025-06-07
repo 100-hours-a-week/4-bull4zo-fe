@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-// import { AiFillQuestionCircle } from 'react-icons/ai'
 import { FaQuestion } from 'react-icons/fa'
 import { useUserInfoQuery } from '@/api/services/user/queries'
 import { useInfiniteVotesQuery } from '@/api/services/vote/queries'
@@ -20,7 +19,7 @@ const HomePage = () => {
   const { selectedId: groupId } = useGroupStore()
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteVotesQuery({ groupId, isLogin })
-  const { data: user } = useUserInfoQuery()
+  const { data: user } = useUserInfoQuery({ enabled: isLogin })
 
   const { openModal } = useModalStore()
   const { isHidden, open } = useTutorialStore()
@@ -36,10 +35,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (user) {
-      setIsLogin(true)
       setNickName(user.nickname || '')
-    } else {
-      setIsLogin(false)
     }
   }, [user, setNickName, setIsLogin])
 

@@ -8,12 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 type Props = {
   content: string
-  image?: File
+  image?: File | string
   closedAt: string
   anonymous: boolean
 }
 
-const usePreviewImageUrl = (file?: File) => {
+const usePreviewImageUrl = (file?: File | string) => {
   const [url, setUrl] = useState<string | null>(null)
 
   useEffect(() => {
@@ -21,6 +21,11 @@ const usePreviewImageUrl = (file?: File) => {
       setUrl(null)
       return
     }
+    if (typeof file === 'string') {
+      setUrl(file)
+      return
+    }
+
     const objectUrl = URL.createObjectURL(file)
     setUrl(objectUrl)
 
@@ -78,7 +83,12 @@ export const VoteCardPreview = ({ content, image, closedAt, anonymous }: Props) 
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/40 to-transparent rounded-[3.125rem]" />
         )}
 
-        <div className="min-h-[90%] flex items-end justify-center px-2">
+        <div
+          className={cn(
+            'min-h-[90%] flex items-end justify-center px-2',
+            !isImageValid && 'items-center',
+          )}
+        >
           <p
             data-testid="vote-content"
             className="sm:text-xl whitespace-pre-line break-all text-center py-2 z-30"

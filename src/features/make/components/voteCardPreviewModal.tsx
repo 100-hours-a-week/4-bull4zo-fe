@@ -11,7 +11,7 @@ import { Button } from '../../../components/ui/button'
 type Props = {
   groupId: number
   content: string
-  image?: File
+  image?: File | string
   closedAt: string
   anonymous: boolean
 }
@@ -33,11 +33,13 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
 
     try {
       let imageUrl = ''
+      let imageName = ''
 
-      if (image) {
+      if (image instanceof File) {
+        imageName = image.name
         // 1. presigned URL 요청
         const { data: presignedRes } = await authAxiosInstance.post('/api/v1/image/presigned-url', {
-          fileName: image.name,
+          fileName: imageName,
         })
         if (presignedRes.message !== 'SUCCESS') {
           throw new Error('Presigned URL 발급 실패')
@@ -59,19 +61,31 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
 
         imageUrl = fileUrl
       }
+      if (typeof image === 'string') {
+        imageUrl = image
+
+        const urlParts = image.split('/')
+        imageName = urlParts[urlParts.length - 1].split('?')[0]
+      }
 
       if (voteId) {
-        await updateVote({ groupId, content, imageUrl, closedAt, anonymous })
+        await updateVote({ groupId, content, imageUrl, imageName, closedAt, anonymous })
         toast('투표를 수정했습니다.')
       } else {
-        await mutateAsync({ groupId, content, imageUrl, closedAt, anonymous })
+        await mutateAsync({
+          groupId,
+          content,
+          imageUrl,
+          imageName,
+          closedAt,
+          anonymous,
+        })
         toast('투표를 등록했습니다.')
       }
       navigation('/research')
       closeModal()
       // eslint-disable-next-line no-unused-vars
     } catch (err: unknown) {
-      toast.error('투표 등록에 실패했습니다.')
       submit.current = false // 재시도 가능하게
     } finally {
       trackEvent({

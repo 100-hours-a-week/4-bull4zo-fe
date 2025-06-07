@@ -11,6 +11,7 @@ export interface Vote {
   authorNickname: string
   content: string
   imageUrl: string
+  imageName: string
   createdAt: string
   closedAt: string
   adminVote: 0 | 1 // 0이면 admin, 1이면 아님
@@ -40,6 +41,7 @@ export interface CreateVotePayload {
   groupId: number
   content: string
   imageUrl?: string
+  imageName?: string
   closedAt: string
   anonymous: boolean
 }
@@ -76,6 +78,7 @@ export interface VoteDetail {
   authorNickname: string
   content: string
   imageUrl: string
+  imageName: string
   createdAt: string
   closedAt: string
   adminVote: number

@@ -50,11 +50,7 @@ export const MakeVoteForm = () => {
   })
 
   const onSubmit = () => {
-    const groupId = form.getValues('groupId')
-    const content = form.getValues('content')
-    const image = form.getValues('image')
-    const closedAt = form.getValues('closedAt')
-    const anonymous = form.getValues('anonymous')
+    const data = form.getValues()
 
     trackEvent({
       cta_id: 'vote_submit_modal',
@@ -62,13 +58,15 @@ export const MakeVoteForm = () => {
       page: location.pathname,
     })
 
+    const imageToUse = data.image instanceof File ? data.image : data.image
+
     openModal(
       <VoteCardPreviewModal
-        groupId={groupId}
-        content={content}
-        image={image}
-        closedAt={closedAt}
-        anonymous={anonymous}
+        groupId={data.groupId}
+        content={data.content}
+        image={imageToUse}
+        closedAt={data.closedAt}
+        anonymous={data.anonymous}
       />,
     )
   }
@@ -104,7 +102,12 @@ export const MakeVoteForm = () => {
         content: editData.content,
         closedAt: editData.closedAt,
         anonymous: editData.authorNickname.includes('익명'),
+        image: editData.imageUrl,
       })
+      if (editData.imageUrl) {
+        form.setValue('image', editData.imageUrl)
+        setFileName(editData.imageName)
+      }
     }
   }, [editData, form])
 
@@ -183,14 +186,14 @@ export const MakeVoteForm = () => {
                     <div className="relative">
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/png, image/jpeg, image/jpg"
                         className="hidden"
                         id={id}
                         onChange={(e) => {
                           const file = e.target.files?.[0]
                           if (file) {
                             field.onChange(file)
-                            setFileName(file.name.replace(/\.[^/.]+$/, ''))
+                            setFileName(file.name)
                           }
                         }}
                       />
@@ -204,8 +207,8 @@ export const MakeVoteForm = () => {
                           }
                         }}
                       >
-                        <span>{field.value ? fileName : '이미지 올리기'}</span>
-                        {field.value && (
+                        <span>{fileName ? fileName : '이미지 올리기'}</span>
+                        {fileName && (
                           <span
                             onClick={(e) => {
                               e.stopPropagation()

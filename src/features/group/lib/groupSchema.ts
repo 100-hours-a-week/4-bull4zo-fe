@@ -9,15 +9,16 @@ export const createGroupSchema = z.object({
     .refine((val) => getContentLength(val) <= 50, {
       message: '최대 50자까지 입력 가능합니다.',
     }),
-  image: z
-    .any()
-    .optional()
-    .refine(
-      (file) => {
-        if (!file) return true
-        return file?.length === 1
-      },
-      { message: '10MB 미만의 png, jpeg만 가능합니다.' },
-    ),
+  image: z.union([z.instanceof(File), z.undefined()]).refine(
+    (val) => {
+      if (val instanceof File) {
+        const isValidType = ['image/png', 'image/jpeg', 'image/jpg'].includes(val.type)
+        const isValidSize = val.size <= 10 * 1024 * 1024 // 10MB
+        return isValidType && isValidSize
+      }
+      return true
+    },
+    { message: '지원 형식: PNG, JPEG (최대 10MB)' },
+  ),
 })
 export type CreateGroupSchema = z.infer<typeof createGroupSchema>

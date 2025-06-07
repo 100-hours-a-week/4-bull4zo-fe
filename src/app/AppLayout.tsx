@@ -25,11 +25,6 @@ export const AppLayout = () => {
   }, [user, setNickName])
 
   useEffect(() => {
-    if (isLogin === undefined) return
-
-    if (isLogin === false) {
-      navigation('/home')
-    }
     setTab(location.pathname)
   }, [location.pathname, setTab, isLogin, navigation])
 

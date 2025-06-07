@@ -7,6 +7,7 @@ type ScrollStore = {
   setScroll: (path: string, y: number) => void
   // eslint-disable-next-line no-unused-vars
   getScroll: (path: string) => number
+  reset: () => void
 }
 
 export const useScrollStore = create(
@@ -21,6 +22,7 @@ export const useScrollStore = create(
           },
         })),
       getScroll: (path) => get().scrollMap[path] ?? 0,
+      reset: () => set({ scrollMap: {} }),
     }),
     {
       name: 'scroll-storage',

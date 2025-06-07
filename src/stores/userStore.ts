@@ -20,5 +20,5 @@ export const useUserStore = create<UserStore>((set) => ({
   setIsLogin: (isLogin) => set({ isLogin }),
   setNickName: (nickname) => set({ nickname: nickname }),
   setAccessToken: (token) => set({ accessToken: token }),
-  logout: () => set({ isLogin: false, accessToken: '' }),
+  logout: () => set({ isLogin: false, accessToken: '', nickname: '' }),
 }))

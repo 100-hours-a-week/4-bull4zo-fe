@@ -9,6 +9,7 @@ export interface Group {
   name: string
   description: string
   imageUrl: string
+  imageName: string
   inviteCode: string
   role: GroupRole
 }
@@ -38,6 +39,7 @@ export interface CreateGroupPayload {
   name: string
   description: string
   imageUrl: string
+  imageName: string
 }
 
 export interface CreateGroupData {
@@ -45,6 +47,7 @@ export interface CreateGroupData {
   name: string
   description: string
   imageUrl: string
+  imageName: string
   inviteCode: string
   createdAt: string
 }

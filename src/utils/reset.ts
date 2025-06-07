@@ -2,6 +2,7 @@ import { useVoteCardStore } from '@/features/home/stores/voteCardStore'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
 import { useNavigationStore } from '@/stores/navigationStore'
+import { useScrollStore } from '@/stores/scrollStore'
 import { useUserStore } from '@/stores/userStore'
 
 export const logoutAndResetStores = () => {
@@ -10,4 +11,5 @@ export const logoutAndResetStores = () => {
   useNavigationStore.getState().reset()
   useGroupStore.getState().reset()
   useVoteCardStore.getState().reset()
+  useScrollStore.getState().reset()
 }

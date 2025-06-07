@@ -9,9 +9,16 @@ export const voteSchema = z.object({
     .refine((val) => getContentLength(val) <= 100, {
       message: '최대 100자 이하 입니다.',
     }),
-  image: z.custom<File | undefined>(
-    (val) => val === undefined || val instanceof File,
-    '지원 형식: JPEG, PNG (최대 10MB)',
+  image: z.union([z.instanceof(File), z.string(), z.undefined()]).refine(
+    (val) => {
+      if (val instanceof File) {
+        const isValidType = ['image/png', 'image/jpeg', 'image/jpg'].includes(val.type)
+        const isValidSize = val.size <= 10 * 1024 * 1024 // 10MB
+        return isValidType && isValidSize
+      }
+      return true
+    },
+    { message: '지원 형식: PNG, JPEG (최대 10MB)' },
   ),
   closedAt: z.string().min(1, '종료시간을 선택해주세요.'),
   anonymous: z.boolean(),
