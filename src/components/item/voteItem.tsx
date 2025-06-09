@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaQuestionCircle } from 'react-icons/fa'
+import { FaRegComment } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import { ParticipatedVote, ParticipatedVoteStatus } from '@/api/services/vote/model'
 import { trackEvent } from '@/lib/trackEvent'
@@ -46,7 +47,11 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
         <div className="flex items-center justify-between text-xs">
           {formatRelativeTime(vote.closedAt as string)}
-          {vote.comments && <span className="font-semibold">💬 {vote.comments}</span>}
+          {vote.comments && (
+            <div className="font-semibold flex flex-row items-center gap-1">
+              <FaRegComment /> {vote.comments}
+            </div>
+          )}
         </div>
       )}
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (

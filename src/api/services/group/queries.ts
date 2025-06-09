@@ -22,7 +22,7 @@ export const useInfiniteGroupNameListQuery = (size: number = 10) => {
   })
 }
 // 그룹 정보 무한스크롤 조회
-export const useInfiniteGroupsQuery = (size: number = 10) => {
+export const useInfiniteGroupsQuery = (size: number = 10, enabled: boolean = true) => {
   return useInfiniteQuery<MyGroupList, Error>({
     queryKey: ['myGroups'],
     queryFn: ({ pageParam }) => groupService.getAllGroupList(size, pageParam as string | undefined),
@@ -31,6 +31,7 @@ export const useInfiniteGroupsQuery = (size: number = 10) => {
     },
     initialPageParam: undefined,
     staleTime: 1000 * 60 * 15,
+    enabled,
   })
 }
 // 초대 코드로 그룹 가입
