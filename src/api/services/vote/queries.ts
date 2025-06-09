@@ -86,20 +86,20 @@ export const useCreateVotesInfinityQuery = ({
   })
 }
 // 투표 상세 내용 조회
-export const useVoteDetailInfo = (voteId: string) => {
+export const useVoteDetailInfo = (voteId: string, enabled: boolean = true) => {
   return useQuery<VoteDetail>({
     queryKey: ['voteDetail', voteId],
     queryFn: () => voteService.getVote(voteId),
-    enabled: !!voteId,
+    enabled: !!voteId && enabled,
     staleTime: 1000 * 60 * 1,
   })
 }
 // 투표 상세 결과 조회
-export const useVoteDetailResults = (voteId: string) => {
+export const useVoteDetailResults = (voteId: string, enabled: boolean = true) => {
   return useQuery<voteDetailResult>({
     queryKey: ['voteResult', voteId],
     queryFn: () => voteService.getVoteResult(voteId),
-    enabled: !!voteId,
+    enabled: !!voteId && enabled,
     staleTime: 1000 * 60 * 1,
   })
 }

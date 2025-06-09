@@ -11,6 +11,17 @@ export const commentService = {
     return (await authAxiosInstance.get(`/api/v1/votes/${voteId}/comments?${params.toString()}`))
       .data.data
   },
+  // GET: 댓글 롱 폴링
+  async getLongPollingCommentList(
+    voteId: number,
+    cursor: string | undefined,
+  ): Promise<CommentListData> {
+    const params = new URLSearchParams()
+    if (cursor) params.append('cursor', cursor)
+    return (
+      await authAxiosInstance.get(`/api/v1/votes/${voteId}/comments/poll?${params.toString()}`)
+    ).data.data
+  },
   // POST: 댓글 생성
   async createComment(
     voteId: number,

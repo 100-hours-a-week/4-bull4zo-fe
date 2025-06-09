@@ -27,10 +27,7 @@ export const CommentInput = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="rounded-4xl flex flex-row gap-2 px-4 py-2 mx-4 border bg-white"
-      >
+      <form className="rounded-4xl flex flex-row gap-2 px-4 py-1 mx-4 border bg-white">
         <FormField
           control={form.control}
           name="anonymous"
@@ -59,7 +56,7 @@ export const CommentInput = () => {
               <FormControl>
                 <Textarea
                   className="w-full bg-transparent resize-none border-none shadow-none overflow-y-auto leading-[1.5]
-                  min-h-[1lh] max-h-[5lh] focus-visible:ring-0"
+                  min-h-[1lh] max-h-[5lh] focus-visible:ring-0 py-1 sm:py-2"
                   placeholder="댓글을 입력해주세요."
                   {...field}
                   onKeyDown={(e) => {
@@ -75,8 +72,9 @@ export const CommentInput = () => {
         />
         <div className="flex items-center justify-center">
           <Button
-            type="submit"
+            type="button"
             className="w-8 h-8 p-0 flex items-center justify-center bg-inline shadow-none"
+            onClick={form.handleSubmit(onSubmit)}
           >
             <TbSend2 size={24} />
           </Button>

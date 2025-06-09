@@ -10,13 +10,14 @@ import {
 import { groupService } from './service'
 
 // 그룹 이름 무한스크롤 조회
-export const useInfiniteGroupNameListQuery = (size: number = 10) => {
+export const useInfiniteGroupNameListQuery = (size: number = 10, enabled: boolean = true) => {
   return useInfiniteQuery<MyGroupNamesData, AxiosError>({
     queryKey: ['groupNameList'],
     queryFn: ({ pageParam }) => groupService.groupNameList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
       return lastPage?.hasNext ? lastPage.nextCursor : undefined
     },
+    enabled,
     staleTime: 1000 * 60 * 15,
     initialPageParam: undefined,
   })

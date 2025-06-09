@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { useParticipatedVotesInfinityQuery } from '@/api/services/vote/queries'
 import { VoteItem } from '../item/voteItem'
 
@@ -17,27 +18,13 @@ export const VoteList = ({
 }: VoteListProps) => {
   const votes = data?.pages.flatMap((page) => page.votes) ?? []
 
-  const loadMoreRef = useRef<HTMLDivElement | null>(null)
+  const { ref: loadMoreRef, inView } = useInView({ rootMargin: '100px' })
 
   useEffect(() => {
-    if (!hasNextPage || isFetchingNextPage) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage()
-        }
-      },
-      { rootMargin: '100px' },
-    )
-
-    const target = loadMoreRef.current
-    if (target) observer.observe(target)
-
-    return () => {
-      if (target) observer.unobserve(target)
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
     }
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage])
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage])
 
   return (
     <ul className="flex flex-col gap-4 pt-2">

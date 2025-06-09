@@ -1,15 +1,23 @@
 import { useParams } from 'react-router-dom'
 import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/queries'
 import { CommentList } from '@/components/list/commentList'
+import { useUserStore } from '@/stores/userStore'
 import { CommentInput } from '../components/commentInput'
 import ResearchDetailInfo from '../components/researchDetailInfo'
 
 const ResearchDetailPage = () => {
+  const { isLogin } = useUserStore()
   const { voteId } = useParams()
-  const { data: voteDetail, isLoading: detailLoading } = useVoteDetailInfo(voteId as string)
-  const { data: voteResult, isLoading: resultLoading } = useVoteDetailResults(voteId as string)
+  const { data: voteDetail, isLoading: detailLoading } = useVoteDetailInfo(
+    voteId as string,
+    isLogin,
+  )
+  const { data: voteResult, isLoading: resultLoading } = useVoteDetailResults(
+    voteId as string,
+    isLogin,
+  )
 
-  if (detailLoading || resultLoading) return
+  if (detailLoading || resultLoading || !voteDetail || !voteResult) return null
 
   return (
     <article>
