@@ -1,4 +1,4 @@
-import { HttpResponse, http } from 'msw'
+import { HttpResponse, delay, http } from 'msw'
 import { CommentCreateRequest } from '@/api/services/comment/model'
 
 export const commentHandlers = [
@@ -6,21 +6,9 @@ export const commentHandlers = [
     const { voteId } = params
     const url = new URL(request.url)
     const cursor = url.searchParams.get('cursor')
-    const sizeParam = url.searchParams.get('size')
-    const size = sizeParam ? parseInt(sizeParam) : 10
+    const size = Number(url.searchParams.get('size') ?? '10')
 
-    // 커서 형식 검증 예시
-    if (cursor && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}_\d+$/.test(cursor)) {
-      return HttpResponse.json(
-        {
-          message: 'INVALID_CURSOR_FORMAT',
-          data: null,
-        },
-        { status: 400 },
-      )
-    }
-
-    const comments = Array.from({ length: size }).map((_, idx) => {
+    const totalComments = Array.from({ length: 30 }).map((_, idx) => {
       const commentId = idx + 1
       return {
         commentId,
@@ -36,19 +24,87 @@ export const commentHandlers = [
       }
     })
 
+    if (cursor && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}_\d+$/.test(cursor)) {
+      return HttpResponse.json({ message: 'INVALID_CURSOR_FORMAT', data: null }, { status: 400 })
+    }
+
+    let startIndex = 0
+    if (cursor) {
+      const [createdAt, commentIdStr] = cursor.split('_')
+      const commentId = Number(commentIdStr)
+      const index = totalComments.findIndex(
+        (comment) => comment.createdAt === createdAt && comment.commentId === commentId,
+      )
+      if (index !== -1) {
+        startIndex = index + 1
+      }
+    }
+
+    const pagedComments = totalComments.slice(startIndex, startIndex + size)
+    const last = pagedComments.at(-1)
+
+    const hasNext = startIndex + size < totalComments.length
+    const nextCursor = hasNext && last ? `${last.createdAt}_${last.commentId}` : null
+
     return HttpResponse.json(
       {
         message: 'SUCCESS',
         data: {
           voteId: Number(voteId),
-          comments,
-          nextCursor: `2025-04-22T14:40:00_${comments.length + 1}`,
-          hasNext: false,
-          size: comments.length,
+          comments: pagedComments,
+          nextCursor,
+          hasNext,
+          size: pagedComments.length,
         },
       },
       { status: 200 },
     )
+  }),
+  http.get('/api/v1/votes/:voteId/comments/poll', async ({ params, request }) => {
+    const { voteId } = params
+    const url = new URL(request.url)
+    const cursor = url.searchParams.get('cursor')
+
+    if (!cursor) {
+      await delay(10000)
+      return HttpResponse.json({
+        message: 'SUCCESS',
+        data: {
+          voteId: Number(voteId),
+          comments: [],
+          nextCursor: null,
+          hasNext: false,
+          size: 0,
+        },
+      })
+    }
+
+    const newComments = Array.from({ length: 5 }).map((_, idx) => {
+      const commentId = idx + 100
+      return {
+        commentId,
+        content: `새로운 댓글 ${commentId}`,
+        authorNickname: `익명${commentId}`,
+        createdAt: `2025-06-10T10:${(10 + idx).toString().padStart(2, '0')}:00`,
+        isMine: false,
+      }
+    })
+
+    const slice = newComments.slice(0, 2)
+    const last = slice.at(-1)
+
+    await delay(5000)
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        voteId: Number(voteId),
+        comments: slice,
+        nextCursor: last ? `${last.createdAt}_${last.commentId}` : 'dummy_cursor',
+        hasNext: false,
+        size: slice.length,
+      },
+    })
   }),
   http.post('/api/v1/votes/:voteId/comments', async ({ request }) => {
     const body = (await request.json()) as CommentCreateRequest

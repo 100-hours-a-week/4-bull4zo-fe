@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import { useInfiniteGroupNameListQuery } from '@/api/services/group/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
+import { useUserStore } from '@/stores/userStore'
 import { Button } from '../ui/button'
 import {
   DropdownMenu,
@@ -14,11 +16,12 @@ import {
 } from '../ui/dropdown-menu'
 
 export const GroupDropDown = () => {
+  const { isLogin } = useUserStore()
   const { groups, setId, setGroups, selectedId } = useGroupStore()
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
-    useInfiniteGroupNameListQuery()
+    useInfiniteGroupNameListQuery(undefined, isLogin)
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -35,34 +38,13 @@ export const GroupDropDown = () => {
     }
   }, [isSuccess, data, setGroups, location.pathname])
 
-  const loadMoreRef = useRef<HTMLDivElement | null>(null)
+  const { ref: loadMoreRef, inView } = useInView({ rootMargin: '100px' })
 
   useEffect(() => {
-    if (!open) return
-    if (!hasNextPage) return
-
-    const timeout = setTimeout(() => {
-      const target = loadMoreRef.current
-      if (!target) return
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-            fetchNextPage()
-          }
-        },
-        { rootMargin: '100px' },
-      )
-
-      observer.observe(target)
-
-      return () => {
-        observer.unobserve(target)
-      }
-    }, 0)
-
-    return () => clearTimeout(timeout)
-  }, [open, fetchNextPage, hasNextPage, isFetchingNextPage])
+    if (open && inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }, [open, inView, fetchNextPage, hasNextPage, isFetchingNextPage])
 
   const selectedGroup = groups.find((g) => g.groupId === selectedId)
 

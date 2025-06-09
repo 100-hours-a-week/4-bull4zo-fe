@@ -13,7 +13,7 @@ const Header = () => {
   const isLogin = useUserStore((state) => state.isLogin)
   const { open } = useSliderStore()
 
-  const { data: notifications } = useInfiniteNotificationQuery()
+  const { data: notifications } = useInfiniteNotificationQuery(undefined, isLogin)
 
   const hasUnread = notifications?.pages.slice(0, 1).some((page) => {
     return page.notifications.some((notification) => notification.read === 0)

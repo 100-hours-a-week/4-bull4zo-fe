@@ -3,7 +3,7 @@ import { AxiosError } from 'axios'
 import { NotificationListResponse } from './model'
 import { notificationService } from './service'
 
-export const useInfiniteNotificationQuery = (size: number = 10) => {
+export const useInfiniteNotificationQuery = (size: number = 10, enabled: boolean = true) => {
   return useInfiniteQuery<NotificationListResponse, AxiosError>({
     queryKey: ['notifications'],
     queryFn: ({ pageParam }) =>
@@ -11,6 +11,7 @@ export const useInfiniteNotificationQuery = (size: number = 10) => {
     getNextPageParam: (lastPage) => {
       return lastPage?.hasNext ? lastPage.nextCursor : undefined
     },
+    enabled,
     initialPageParam: undefined,
     refetchOnWindowFocus: true,
     refetchIntervalInBackground: true,

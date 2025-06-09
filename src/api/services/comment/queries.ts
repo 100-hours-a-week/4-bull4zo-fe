@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { CommentCreateRequest, CommentListData } from './model'
 import { commentService } from './service'
@@ -14,8 +14,20 @@ export const useInfiniteCommentListQuery = (voteId: number, size: number = 10) =
     },
     initialPageParam: undefined,
     enabled: !!voteId,
-    // refetchInterval: 5000,
-    // refetchIntervalInBackground: true,
+  })
+}
+// 댓글 롱 폴링 호출
+export const useLongPollingCommentListQuery = (
+  voteId: number,
+  cursor: string | undefined,
+  enabled: boolean = true,
+) => {
+  return useQuery<CommentListData, AxiosError>({
+    queryKey: ['longPollingComments', voteId, cursor],
+    queryFn: () => commentService.getLongPollingCommentList(voteId, cursor),
+    enabled,
+    retry: false,
+    refetchOnWindowFocus: false,
   })
 }
 // 댓글 생성 호출
