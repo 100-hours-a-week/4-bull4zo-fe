@@ -18,21 +18,23 @@ export const Slider = () => {
             exit={{ opacity: 0 }}
             onClick={close}
           />
-          <motion.div
-            className="absolute top-0 right-0 h-full w-[80%] bg-white shadow-lg z-70 py-4 overflow-y-auto flex flex-col"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'tween', duration: 0.3 }}
-          >
-            <div className="flex justify-between items-center mb-4 px-4">
-              <h2 className="text-lg font-semibold">알림</h2>
-              <button className="cursor-pointer" onClick={close} aria-label="닫기">
-                <IoClose size={24} />
-              </button>
-            </div>
-            <NotificationSlider />
-          </motion.div>
+          <div className="fixed top-0 z-60 h-full w-full max-w-[450px] flex justify-end overflow-hidden">
+            <motion.div
+              className="w-[80%] max-w-[315px] h-full bg-white shadow-lg py-4 overflow-y-auto flex flex-col"
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+            >
+              <div className="flex justify-between items-center mb-4 px-4">
+                <h2 className="text-lg font-semibold">알림</h2>
+                <button className="cursor-pointer" onClick={close} aria-label="닫기">
+                  <IoClose size={24} />
+                </button>
+              </div>
+              <NotificationSlider />
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
@@ -50,7 +52,7 @@ const NotificationSlider = () => {
   return (
     <div className="flex-1 items-center justify-center flex">
       {!notifications ? (
-        <p className="font-medium text-lg">
+        <p className="font-medium text-lg px-4">
           아직 알림이 없어요.
           <br />
           투표 결과나 댓글 알림이 여기에 표시돼요!

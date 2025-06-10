@@ -4,6 +4,8 @@ export type VoteType = 'USER' | 'AI' | 'EVENT'
 
 export type VoteChoice = '찬성' | '반대' | '기권' | null
 
+export type TopVoteDay = 'weekly' | 'daily'
+
 export interface Vote {
   voteId: number
   groupId: number
@@ -95,4 +97,13 @@ export interface voteDetailResult {
 export interface VoteReportReason {
   voteId: number
   reviewReason: string
+}
+
+// Top3 투표 Response
+export interface Top3VoteResponse {
+  groupId: number
+  type: TopVoteDay
+  rankedFrom: string
+  rankedTo: string
+  topVotes: ParticipatedVote[]
 }
