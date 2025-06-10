@@ -1,5 +1,6 @@
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
 import { ResearchList } from '../components/researchList'
+import { TopList } from '../components/topList'
 
 const ResearchPage = () => {
   return (
@@ -8,7 +9,8 @@ const ResearchPage = () => {
         <GroupDropDown />
       </div>
       <div className="bg-gray w-full h-[0.625rem] mt-1" />
-      {/* <TopList /> */}
+      <TopList />
+      <div className="bg-gray w-full h-[0.625rem] mt-1" />
       <ResearchList />
     </article>
   )
