@@ -51,9 +51,12 @@ export const CommentList = ({ voteId }: Props) => {
 
     let timer: ReturnType<typeof setTimeout>
     let hasRetried = false
+    let isMounted = true
 
     const poll = async () => {
       const result = await refetchLongPolling()
+
+      if (!isMounted) return
 
       if (result?.status === 'success') {
         hasRetried = false
@@ -68,7 +71,10 @@ export const CommentList = ({ voteId }: Props) => {
 
     poll()
 
-    return () => clearTimeout(timer)
+    return () => {
+      isMounted = false
+      clearTimeout(timer)
+    }
   }, [longPollingEnabled, refetchLongPolling])
 
   // 무한 스크롤 처리
