@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { toast } from 'sonner'
 import { Comment } from '@/api/services/comment/model'
@@ -18,6 +18,7 @@ export const CommentList = ({ voteId }: Props) => {
   const { ref: lastItemRef, inView } = useInView({ threshold: 0 })
 
   const [newComments, setNewComments] = useState<Comment[]>([])
+  const isMounted = useRef(true)
 
   const allComments = useMemo(
     () => [...(data?.pages.flatMap((page) => page.comments) ?? []), ...newComments],
@@ -51,12 +52,11 @@ export const CommentList = ({ voteId }: Props) => {
 
     let timer: ReturnType<typeof setTimeout>
     let hasRetried = false
-    let isMounted = true
 
     const poll = async () => {
       const result = await refetchLongPolling()
 
-      if (!isMounted) return
+      if (!isMounted.current) return
 
       if (result?.status === 'success') {
         hasRetried = false
@@ -72,7 +72,7 @@ export const CommentList = ({ voteId }: Props) => {
     poll()
 
     return () => {
-      isMounted = false
+      isMounted.current = false
       clearTimeout(timer)
     }
   }, [longPollingEnabled, refetchLongPolling])
