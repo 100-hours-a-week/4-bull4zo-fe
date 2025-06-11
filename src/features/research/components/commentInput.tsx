@@ -1,17 +1,21 @@
+import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { TbSend2 } from 'react-icons/tb'
 import { useParams } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CommentCreateRequest } from '@/api/services/comment/model'
 import { useCreateCommentMutation } from '@/api/services/comment/queries'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { commentSchema } from '../lib/commentSchema'
 
 export const CommentInput = () => {
   const { voteId } = useParams()
 
   const form = useForm<CommentCreateRequest>({
+    resolver: zodResolver(commentSchema),
     defaultValues: {
       content: '',
       anonymous: true,
@@ -19,11 +23,21 @@ export const CommentInput = () => {
   })
 
   const { mutateAsync } = useCreateCommentMutation(Number(voteId))
+  const submitRef = useRef(false)
 
   const onSubmit = async (values: CommentCreateRequest) => {
-    await mutateAsync(values)
-    form.reset()
+    if (submitRef.current) return
+    submitRef.current = true
+
+    try {
+      await mutateAsync(values)
+      form.reset()
+    } finally {
+      submitRef.current = false
+    }
   }
+
+  const handleValidSubmit = form.handleSubmit(onSubmit)
 
   return (
     <Form {...form}>
@@ -60,9 +74,11 @@ export const CommentInput = () => {
                   placeholder="댓글을 입력해주세요."
                   {...field}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+
+                    if (!isMobile && e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault()
-                      form.handleSubmit(onSubmit)()
+                      handleValidSubmit()
                     }
                   }}
                 />
@@ -74,7 +90,7 @@ export const CommentInput = () => {
           <Button
             type="button"
             className="w-8 h-8 p-0 flex items-center justify-center bg-inline shadow-none"
-            onClick={form.handleSubmit(onSubmit)}
+            onClick={handleValidSubmit}
           >
             <TbSend2 size={24} />
           </Button>

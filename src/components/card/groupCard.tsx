@@ -107,17 +107,13 @@ const GroupDotsItem = ({
       >
         떠나기
       </button>
-      {isMine && (
-        <>
-          <hr className="text-gray-300" />
-          <button
-            onClick={() => router(`/group/${groupId}`)}
-            className="rounded-b-2xl w-full px-3 py-2 text-sm hover:bg-gray-100 text-left cursor-pointer"
-          >
-            그룹 관리
-          </button>
-        </>
-      )}
+      <hr className="text-gray-300" />
+      <button
+        onClick={() => router(`/group/${groupId}`)}
+        className="rounded-b-2xl w-full px-3 py-2 text-sm hover:bg-gray-100 text-left cursor-pointer"
+      >
+        {isMine ? '그룹 상세 보기' : '그룹 관리 '}
+      </button>
     </div>
   )
 }
