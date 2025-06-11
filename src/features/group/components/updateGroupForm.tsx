@@ -5,7 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
-import { useGroupQuery, useUpdateGroupMutation } from '@/api/services/group/queries'
+import { Group } from '@/api/services/group/model'
+import { useUpdateGroupMutation } from '@/api/services/group/queries'
 import { DeleteGroupModal } from '@/components/modal/deleteGroupModal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -22,12 +23,18 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { trackEvent } from '@/lib/trackEvent'
+import { cn } from '@/lib/utils'
 import { useModalStore } from '@/stores/modalStore'
+import { ableManage, ableOwner } from '@/utils/authority'
 import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'
 import { UpdateGroupSchema, updateGroupSchema } from '../lib/groupSchema'
 
-export const UpdateGroupForm = () => {
+interface Props {
+  group: Group
+}
+
+export const UpdateGroupForm = ({ group }: Props) => {
   const { groupId } = useParams()
   const { openModal } = useModalStore()
 
@@ -41,7 +48,6 @@ export const UpdateGroupForm = () => {
     mode: 'onChange',
   })
 
-  const { data: group } = useGroupQuery(Number(groupId))
   const { mutateAsync: updateGroup } = useUpdateGroupMutation(Number(groupId))
 
   const [preview, setPreview] = useState<string | null>(null)
@@ -172,7 +178,12 @@ export const UpdateGroupForm = () => {
                     <FormLabel className="font-semibold text-lg">그룹 이름</FormLabel>
                     <FormControl>
                       <Input
+                        className={cn(
+                          !ableManage(group?.role) &&
+                            '!ring-0 !focus:ring-0 !focus-visible:ring-0 !outline-none !border-gray-400',
+                        )}
                         placeholder="그룹 이름을 입력하세요"
+                        readOnly={!ableManage(group?.role)}
                         {...field}
                         onChange={(e) => {
                           field.onChange(filterAllowedKoreanInput(e.target.value))
@@ -191,14 +202,20 @@ export const UpdateGroupForm = () => {
                 <FormItem>
                   <div className="flex items-center justify-between">
                     <FormLabel className="font-semibold text-lg">그룹 소개</FormLabel>
-                    <Label className="text-xs">{getContentLength(field.value)}/50</Label>
+                    {ableManage(group?.role) && (
+                      <Label className="text-xs">{getContentLength(field.value)}/50</Label>
+                    )}
                   </div>
                   <FormControl>
                     <Textarea
                       placeholder="그룹을 소개해주세요 (최대 50자)"
-                      className="resize-none"
+                      className={cn(
+                        'resize-none',
+                        !ableManage(group?.role) && 'focus-visible:ring-0 border-gray-400',
+                      )}
                       {...field}
                       maxLength={50}
+                      readOnly={!ableManage(group?.role)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -216,34 +233,36 @@ export const UpdateGroupForm = () => {
                   <FormControl>
                     <div className="flex flex-row items-center justify-between">
                       <p>{group?.inviteCode}</p>
-                      <TooltipProvider>
-                        <Tooltip open={field.value} onOpenChange={() => {}}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className="flex items-center gap-1 cursor-pointer"
-                              onClick={() => field.onChange(!field.value)}
+                      {ableManage(group?.role) && (
+                        <TooltipProvider>
+                          <Tooltip open={field.value} onOpenChange={() => {}}>
+                            <TooltipTrigger asChild>
+                              <div
+                                className="flex items-center gap-1 cursor-pointer"
+                                onClick={() => field.onChange(!field.value)}
+                              >
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                  className="cursor-pointer"
+                                />
+                                <span className="text-sm">재생성</span>
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent
+                              side="top"
+                              align="end"
+                              sideOffset={8} // ← 상단 여백 조절
+                              className="text-black text-xs px-3 py-1.5 rounded-md shadow-md relative"
                             >
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                className="cursor-pointer"
-                              />
-                              <span className="text-sm">재생성</span>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent
-                            side="top"
-                            align="end"
-                            sideOffset={8} // ← 상단 여백 조절
-                            className="text-black text-xs px-3 py-1.5 rounded-md shadow-md relative"
-                          >
-                            <p>
-                              초대 코드 재생성 시, <br className="sm:hidden" /> 기존 멤버는 변경되지
-                              않습니다.
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                              <p>
+                                초대 코드 재생성 시, <br className="sm:hidden" /> 기존 멤버는
+                                변경되지 않습니다.
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -251,16 +270,18 @@ export const UpdateGroupForm = () => {
               )}
             />
           </div>
-          <div className="flex justify-center items-center">
-            <Button
-              className={`py-1 h-full text-lg ${form.formState.isValid && 'bg-primary text-white'}`}
-              type="submit"
-              disabled={!form.formState.isValid}
-            >
-              변경사항 저장
-            </Button>
-          </div>
-          {group?.role === 'OWNER' && (
+          {ableManage(group?.role) && (
+            <div className="flex justify-center items-center">
+              <Button
+                className={`py-1 h-full text-lg ${form.formState.isValid && 'bg-primary text-white'}`}
+                type="submit"
+                disabled={!form.formState.isValid}
+              >
+                변경사항 저장
+              </Button>
+            </div>
+          )}
+          {ableOwner(group?.role) && (
             <div className="flex justify-center items-center">
               <button
                 type="button"

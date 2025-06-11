@@ -11,16 +11,16 @@ export const Slider = () => {
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div
-            className="fixed top-0 h-full z-60 flex items-center justify-center bg-black/50 max-w-[450px] w-full overflow-hidden backdrop-blur-xs"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={close}
-          />
           <div className="fixed top-0 z-60 h-full w-full max-w-[450px] flex justify-end overflow-hidden">
             <motion.div
-              className="w-[80%] max-w-[315px] h-full bg-white shadow-lg py-4 overflow-y-auto flex flex-col"
+              className="fixed top-0 h-full bg-black/50 max-w-[450px] w-full overflow-hidden backdrop-blur-xs"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={close}
+            />
+            <motion.div
+              className="w-[80%] max-w-[315px] z-10 h-full bg-white shadow-lg py-4 overflow-y-auto flex flex-col hide-scrollbar "
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}

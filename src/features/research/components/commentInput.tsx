@@ -60,7 +60,9 @@ export const CommentInput = () => {
                   placeholder="댓글을 입력해주세요."
                   {...field}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+
+                    if (!isMobile && e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault()
                       form.handleSubmit(onSubmit)()
                     }

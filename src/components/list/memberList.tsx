@@ -7,14 +7,14 @@ import {
   useGroupQuery,
   useGroupRoleChangeMutation,
 } from '@/api/services/group/queries'
+import { ableManage } from '@/utils/authority'
 
-export const MemberList = ({
-  members,
-  isLoading,
-}: {
+interface Props {
   members: GroupMember[]
   isLoading: boolean
-}) => {
+}
+
+export const MemberList = ({ members, isLoading }: Props) => {
   const { groupId } = useParams()
   const { data: group } = useGroupQuery(Number(groupId))
 
@@ -29,7 +29,9 @@ export const MemberList = ({
           className="px-4 py-3 flex flex-row items-center border-b border-gray-300 justify-between"
         >
           <span className="text-sm font-medium">{member.name}</span>
-          <MemberRoleLabel groupId={Number(groupId)} member={member} myRole={group?.role!} />
+          {ableManage(group?.role) && (
+            <MemberRoleLabel groupId={Number(groupId)} member={member} myRole={group?.role!} />
+          )}
         </li>
       ))}
     </ul>
@@ -72,17 +74,28 @@ export const MemberRoleLabel = ({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const roleOptions: { key: GroupRole | 'LEAVE'; label: string }[] =
-    myRole === 'OWNER'
-      ? [
-          { key: 'OWNER', label: '소유자로 변경' },
+  const roleOptions: { key: GroupRole | 'LEAVE'; label: string }[] = (() => {
+    if (myRole === 'OWNER') {
+      return [
+        { key: 'OWNER', label: '소유자로 변경' },
+        { key: 'MANAGER', label: '관리자로 변경' },
+        { key: 'MEMBER', label: '멤버로 변경' },
+        { key: 'LEAVE', label: '그룹에서 추방' },
+      ]
+    }
+
+    if (myRole === 'MANAGER') {
+      if (member.role === 'MEMBER') {
+        return [
           { key: 'MANAGER', label: '관리자로 변경' },
-          { key: 'MEMBER', label: '멤버로 변경' },
           { key: 'LEAVE', label: '그룹에서 추방' },
         ]
-      : myRole === 'MANAGER'
-        ? [{ key: 'MANAGER', label: '관리자로 변경' }]
-        : []
+      }
+      return []
+    }
+
+    return []
+  })()
 
   return (
     <div className="relative inline-block" ref={dropdownRef}>
@@ -91,7 +104,7 @@ export const MemberRoleLabel = ({
         onClick={toggleDropdown}
       >
         <span>{text}</span>
-        <FaChevronDown className="w-3 h-3" />
+        {roleOptions.length > 0 && <FaChevronDown className="w-3 h-3" />}
       </div>
 
       {open && roleOptions.length > 0 && (

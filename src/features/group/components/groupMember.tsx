@@ -17,7 +17,7 @@ export const GroupMember = () => {
   }, [data, search])
 
   return (
-    <div>
+    <div className="min-h-[80svh]">
       <h1 className="text-2xl font-bold mb-4">멤버 목록</h1>
       <MemberSearchBar search={search} onChange={setSearch} />
       <MemberList members={filteredMembers} isLoading={!data} />
