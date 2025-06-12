@@ -19,7 +19,9 @@ export const commentService = {
     const params = new URLSearchParams()
     if (cursor) params.append('cursor', cursor)
     return (
-      await authAxiosInstance.get(`/api/v1/votes/${voteId}/comments/poll?${params.toString()}`)
+      await authAxiosInstance.get(`/api/v1/votes/${voteId}/comments/poll?${params.toString()}`, {
+        timeout: 30000, // 30s
+      })
     ).data.data
   },
   // POST: 댓글 생성

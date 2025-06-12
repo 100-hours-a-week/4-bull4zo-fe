@@ -36,7 +36,7 @@ export const CommentItem = forwardRef<HTMLLIElement, Partial<Comment>>((comment,
           <h1 className="text-sm font-semibold">{comment.authorNickname}</h1>
         </div>
         <div className="relative" ref={menuRef}>
-          <button onClick={toggleMenu}>
+          <button onClick={toggleMenu} aria-label="댓글 메뉴 열기">
             <HiDotsVertical size={16} />
           </button>
           {open && (

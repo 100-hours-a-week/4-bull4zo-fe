@@ -2,6 +2,7 @@ import { unstable_HistoryRouter as Router } from 'react-router-dom'
 import type { StoryObj } from '@storybook/react'
 import { expect, userEvent, within } from '@storybook/test'
 import { createMemoryHistory } from 'history'
+import { QueryProvider } from '@/app/QueryProvider'
 import { useUserStore } from '@/stores/userStore'
 import Header from './header'
 
@@ -24,7 +25,9 @@ const meta = {
       useUserStore.setState({ isLogin: args.isLogin })
       return (
         <Router history={history}>
-          <Story />
+          <QueryProvider>
+            <Story />
+          </QueryProvider>
         </Router>
       )
     },
