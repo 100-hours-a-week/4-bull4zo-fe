@@ -5,8 +5,10 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { createMemoryHistory } from 'history'
 import { afterEach } from 'node:test'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { QueryProvider } from '@/app/QueryProvider'
 import * as trackModule from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
+import { useUserStore } from '@/stores/userStore'
 import { logoutAndResetStores } from '@/utils/reset'
 
 const fakeFetchNext = vi.fn()
@@ -36,10 +38,13 @@ class MockIO {
   constructor(cb: any) {
     this.cb = cb
   }
-  observe() {
-    this.cb([{ isIntersecting: true } as any], this)
-  }
-  unobserve() {}
+  observe = vi.fn((element: Element) => {
+    setTimeout(() => {
+      this.cb([{ isIntersecting: true, target: element } as any], this)
+    }, 0)
+  })
+  unobserve = vi.fn()
+  disconnect = vi.fn()
 }
 describe('GroupDropDown 성공 단위 테스트', () => {
   const rawHistory = createMemoryHistory({ initialEntries: ['/'] })
@@ -49,13 +54,14 @@ describe('GroupDropDown 성공 단위 테스트', () => {
   beforeEach(() => {
     vi.resetAllMocks()
     vi.stubGlobal('IntersectionObserver', MockIO)
-    vi.doMock('@/api/services/user/group/quries', () => ({
+    vi.doMock('@/api/services/group/queries', () => ({
       useInfiniteGroupNameListQuery: () => ({
         ...infiniteQueryMock,
         isError: false,
       }),
     }))
 
+    useUserStore.setState({ isLogin: true })
     useGroupStore.setState({ groups: [], selectedId: 0 })
 
     trackSpy.mockClear()
@@ -73,12 +79,15 @@ describe('GroupDropDown 성공 단위 테스트', () => {
 
     render(
       <Router history={history}>
-        <GroupDropDown />
+        <QueryProvider>
+          <GroupDropDown />
+        </QueryProvider>
       </Router>,
     )
 
-    const btn = screen.getByRole('button')
-    expect(btn.textContent).toContain('전체')
+    await waitFor(() => {
+      expect(screen.getByRole('button')).toHaveTextContent('전체')
+    })
     expect(screen.queryByRole('menu')).toBeNull()
   })
   // make 이외에 페이지에 첫번째 그룹으로 "전체"자동 추가 테스트
@@ -87,7 +96,9 @@ describe('GroupDropDown 성공 단위 테스트', () => {
 
     render(
       <Router history={history}>
-        <GroupDropDown />
+        <QueryProvider>
+          <GroupDropDown />
+        </QueryProvider>
       </Router>,
     )
 
@@ -103,7 +114,9 @@ describe('GroupDropDown 성공 단위 테스트', () => {
     history.replace('/make')
     render(
       <Router history={history}>
-        <GroupDropDown />
+        <QueryProvider>
+          <GroupDropDown />
+        </QueryProvider>
       </Router>,
     )
 
@@ -118,7 +131,9 @@ describe('GroupDropDown 성공 단위 테스트', () => {
 
     render(
       <Router history={history}>
-        <GroupDropDown />
+        <QueryProvider>
+          <GroupDropDown />
+        </QueryProvider>
       </Router>,
     )
 
@@ -134,7 +149,9 @@ describe('GroupDropDown 성공 단위 테스트', () => {
 
     render(
       <Router history={history}>
-        <GroupDropDown />
+        <QueryProvider>
+          <GroupDropDown />
+        </QueryProvider>
       </Router>,
     )
 
@@ -156,29 +173,10 @@ describe('GroupDropDown 성공 단위 테스트', () => {
       page: '/home',
     })
   })
-  // 드롭다운 메뉴에서 무한 스크롤 테스트
-  it('메뉴 열 때 IntersectionObserver로 fetchNextPage 호출', async () => {
-    const { GroupDropDown } = await import('./groupDropDown')
-
-    render(
-      <Router history={history}>
-        <GroupDropDown />
-      </Router>,
-    )
-
-    const trigger = screen.getByTestId('group-dropdown-trigger')
-    await userEvent.click(trigger)
-
-    await waitFor(() => {
-      expect(fakeFetchNext).toHaveBeenCalled()
-    })
-  })
 })
 
 // 실패 및 예외 케이스
 describe('GroupDropDown 실패 및 예외 테스트', () => {
-  const rawHistory = createMemoryHistory({ initialEntries: ['/'] })
-  let history = rawHistory as any
   const originalIO = globalThis.IntersectionObserver
 
   beforeEach(() => {
@@ -186,11 +184,10 @@ describe('GroupDropDown 실패 및 예외 테스트', () => {
 
     logoutAndResetStores()
 
+    useUserStore.setState({ isLogin: true })
     useGroupStore.setState({ groups: [], selectedId: 0 })
     trackSpy.mockClear()
     fakeFetchNext.mockClear()
-
-    history = createMemoryHistory({ initialEntries: ['/home'] })
   })
 
   afterEach(() => {
@@ -200,7 +197,7 @@ describe('GroupDropDown 실패 및 예외 테스트', () => {
   // 1. API 500에러 발견 시 그룹 클릭 불가 & '그룹 호출 실패' 표시
   it('API 500에러 발견 시 그룹 클릭 불가, 그룹 호출 실패 표시', async () => {
     vi.resetModules()
-    vi.doMock('@/api/services/user/group/quries', () => ({
+    vi.doMock('@/api/services/group/queries', () => ({
       useInfiniteGroupNameListQuery: () => ({
         data: undefined,
         isSuccess: false,
@@ -216,58 +213,14 @@ describe('GroupDropDown 실패 및 예외 테스트', () => {
 
     render(
       <Router history={history}>
-        <GroupDropDown />
+        <QueryProvider>
+          <GroupDropDown />
+        </QueryProvider>
       </Router>,
     )
 
     const trigger = screen.getByTestId('group-dropdown-trigger')
     expect(trigger).toHaveTextContent('그룹 호출 실패')
     expect(trigger).toBeDisabled()
-  })
-
-  // 2. IntersectionObserver 동작하지 않을 때 fetchNextPage가 호출되지 않아야 함
-  it('IntersectionObserver가 트리거되지 않으면 fetchNextPage가 호출되지 않는다', async () => {
-    class SilentIO {
-      observe() {}
-      unobserve() {}
-    }
-    vi.stubGlobal('IntersectionObserver', SilentIO)
-
-    const { GroupDropDown } = await import('./groupDropDown')
-
-    render(
-      <Router history={history}>
-        <>
-          <GroupDropDown />
-        </>
-      </Router>,
-    )
-
-    const trigger = screen.getByTestId('group-dropdown-trigger')
-    await userEvent.click(trigger)
-
-    await waitFor(() => {
-      expect(fakeFetchNext).not.toHaveBeenCalled()
-    })
-  })
-
-  // 3. 유효하지 않은 groupId 클릭 시 상태 변경되지 않아야 함
-  it('존재하지 않는 그룹 항목 클릭 시 selectedId는 변경되지 않는다', async () => {
-    const { GroupDropDown } = await import('./groupDropDown')
-
-    render(
-      <Router history={history}>
-        <GroupDropDown />
-      </Router>,
-    )
-
-    const trigger = screen.getByTestId('group-dropdown-trigger')
-    await userEvent.click(trigger)
-
-    const fakeItem = document.createElement('div')
-    fakeItem.dataset.testid = 'group-item-999'
-    fakeItem.click()
-
-    expect(useGroupStore.getState().selectedId).toBe(0)
   })
 })

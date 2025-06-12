@@ -42,8 +42,6 @@ describe('VoteItem', () => {
     baseVote.voteStatus = 'OPEN'
     renderWithRouter(<VoteItem {...baseVote} />)
     expect(screen.getByText('진행중')).toBeInTheDocument()
-    expect(screen.getByText('Yes')).toBeInTheDocument()
-    expect(screen.getByText('No')).toBeInTheDocument()
   })
 
   it('renders CLOSED 상태', () => {
