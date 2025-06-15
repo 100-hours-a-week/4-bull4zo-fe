@@ -57,4 +57,5 @@ export const typeMap: Record<NotificationType, string> = {
   VOTE_REJECTED: '투표 등록 실패',
   MY_VOTE_COMMENT: '내 투표에 댓글',
   TOP3_UPDATED: 'Top3 투표 알림',
+  GROUP_DELETED: '가입한 그룹 삭제',
 }

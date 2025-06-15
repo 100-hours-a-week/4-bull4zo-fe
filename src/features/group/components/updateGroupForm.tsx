@@ -142,6 +142,7 @@ export const UpdateGroupForm = ({ group }: Props) => {
                           accept="image/*"
                           ref={fileInputRef}
                           className="hidden"
+                          disabled={!ableManage(group?.role)}
                           onChange={(e) => {
                             const file = e.target.files?.[0]
                             if (file) {
@@ -152,7 +153,10 @@ export const UpdateGroupForm = ({ group }: Props) => {
                         />
                         <div
                           onClick={() => fileInputRef.current?.click()}
-                          className="w-24 h-24 border rounded-[1rem] bg-gray-200 overflow-hidden cursor-pointer flex items-center justify-center relative"
+                          className={cn(
+                            'w-24 h-24 border rounded-[1rem] bg-gray-200 overflow-hidden cursor-pointer flex items-center justify-center relative',
+                            !ableManage(group?.role) && 'cursor-auto',
+                          )}
                         >
                           {preview ? (
                             <img
@@ -180,7 +184,7 @@ export const UpdateGroupForm = ({ group }: Props) => {
                       <Input
                         className={cn(
                           !ableManage(group?.role) &&
-                            '!ring-0 !focus:ring-0 !focus-visible:ring-0 !outline-none !border-gray-400',
+                            '!ring-0 !focus:ring-0 !focus-visible:ring-0 !outline-none !border-gray-300',
                         )}
                         placeholder="그룹 이름을 입력하세요"
                         readOnly={!ableManage(group?.role)}
@@ -211,7 +215,7 @@ export const UpdateGroupForm = ({ group }: Props) => {
                       placeholder="그룹을 소개해주세요 (최대 50자)"
                       className={cn(
                         'resize-none',
-                        !ableManage(group?.role) && 'focus-visible:ring-0 border-gray-400',
+                        !ableManage(group?.role) && 'focus-visible:ring-0 border-gray-300',
                       )}
                       {...field}
                       maxLength={50}

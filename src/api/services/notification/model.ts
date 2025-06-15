@@ -7,6 +7,7 @@ export type NotificationType =
   | 'VOTE_REJECTED'
   | 'MY_VOTE_COMMENT'
   | 'TOP3_UPDATED'
+  | 'GROUP_DELETED'
 
 export interface Notification {
   notificationId: number
