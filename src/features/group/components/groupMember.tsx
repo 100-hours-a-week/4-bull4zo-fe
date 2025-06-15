@@ -12,12 +12,15 @@ export const GroupMember = () => {
   const [search, setSearch] = useState('')
 
   const filteredMembers = useMemo(() => {
-    if (!data) return []
-    return data.members.filter((member) => member.name.toLowerCase().includes(search.toLowerCase()))
+    return (
+      data?.members?.filter((member) =>
+        member.nickname.toLowerCase().includes(search.toLowerCase()),
+      ) ?? []
+    )
   }, [data, search])
 
   return (
-    <div className="min-h-[80svh]">
+    <div className="min-h-[80svh] px-5">
       <h1 className="text-2xl font-bold mb-4">멤버 목록</h1>
       <MemberSearchBar search={search} onChange={setSearch} />
       <MemberList members={filteredMembers} isLoading={!data} />

@@ -120,7 +120,7 @@ export const UpdateGroupForm = ({ group }: Props) => {
   }, [group, form])
 
   return (
-    <div>
+    <div className="px-5">
       <h1 className="font-bold text-2xl mb-4">그룹 정보</h1>
       <Form {...form}>
         <form

@@ -62,7 +62,7 @@ export interface UpdateGroupRequest {
 
 export interface GroupMember {
   userId: number
-  name: string
+  nickname: string
   role: GroupRole
 }
 

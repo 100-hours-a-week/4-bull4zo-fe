@@ -28,7 +28,7 @@ export const MemberList = ({ members, isLoading }: Props) => {
           key={member.userId}
           className="px-4 py-3 flex flex-row items-center border-b border-gray-300 justify-between"
         >
-          <span className="text-sm font-medium">{member.name}</span>
+          <span className="text-sm font-medium">{member.nickname}</span>
           {ableManage(group?.role) && (
             <MemberRoleLabel groupId={Number(groupId)} member={member} myRole={group?.role!} />
           )}

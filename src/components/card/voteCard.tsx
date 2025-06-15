@@ -39,12 +39,21 @@ export const VoteCard = (props: Partial<Vote>) => {
       <CardHeader className="flex flex-row justify-between px-4 pt-9">
         <div className="flex flex-row gap-1">
           <div className="flex flex-col gap-1">
-            <CardTitle className="font-pyeojinGothic text-xl line-clamp-1">
-              {props.authorNickname}
-            </CardTitle>
+            <div className="flex flex-row items-center gap-2">
+              <CardTitle className="font-pyeojinGothic text-xl line-clamp-1">
+                {props.authorNickname}
+              </CardTitle>
+              {props.adminVote === 1 && (
+                <Icon className="items-start" src={META_ICON} alt="공인 뱃지" size={20} />
+              )}
+              {props.voteType === 'AI' && (
+                <div className="rounded-full bg-primary size-5 flex items-center justify-center border-white border-[1px] text-sm shadow-md">
+                  AI
+                </div>
+              )}
+            </div>
             {groupId === 0 && <span className="text-sm line-clamp-1">{props.groupName}</span>}
           </div>
-          {props.adminVote === 1 && <Icon src={META_ICON} alt="공인 뱃지" size={20} />}
         </div>
         <span className="text-xs pr-2">{formatRelativeTime(props.closedAt as string)}</span>
       </CardHeader>

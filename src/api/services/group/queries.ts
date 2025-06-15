@@ -123,6 +123,7 @@ export const useGroupRoleChangeMutation = (groupId: number, userId: number) => {
       groupService.updateGroupMemberRole(groupId, userId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['groupMembers', groupId] })
+      queryClient.invalidateQueries({ queryKey: ['group', groupId] })
     },
   })
 }
@@ -134,6 +135,7 @@ export const useGroupMemberDeleteMutation = (groupId: number, userId: number) =>
     mutationFn: () => groupService.deleteGroupMember(groupId, userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['groupMembers', groupId] })
+      queryClient.invalidateQueries({ queryKey: ['group', groupId] })
     },
   })
 }

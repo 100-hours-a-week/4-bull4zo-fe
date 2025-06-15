@@ -14,11 +14,11 @@ const ManageGroupPage = () => {
   }
 
   return (
-    <article className="px-5 py-5 min-h-full">
+    <article className="py-5 min-h-full">
       <UpdateGroupForm group={group} />
-      <div className="w-[450px] my-3 bg-gray h-[0.625rem] transform -translate-x-5" />
+      <div className="w-full max-w-[450px] my-3 bg-gray h-[0.625rem]" />
       <GroupReport group={group} />
-      <div className="w-[450px] my-3 bg-gray h-[0.625rem] transform -translate-x-5" />
+      <div className="w-full max-w-[450px] my-3 bg-gray h-[0.625rem]" />
       <GroupMember />
     </article>
   )
