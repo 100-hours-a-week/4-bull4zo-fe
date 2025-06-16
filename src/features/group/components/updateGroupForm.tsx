@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
-import { axiosInstance } from '@/api/axios'
+import { authAxiosInstance } from '@/api/axios'
 import { Group } from '@/api/services/group/model'
 import { useUpdateGroupMutation } from '@/api/services/group/queries'
 import { DeleteGroupModal } from '@/components/modal/deleteGroupModal'
@@ -62,7 +62,7 @@ export const UpdateGroupForm = ({ group }: Props) => {
         const file = image[0]
 
         // 1. presigned URL 요청
-        const { data: presignedRes } = await axiosInstance.post('/api/v1/image/presigned-url', {
+        const { data: presignedRes } = await authAxiosInstance.post('/api/v1/image/presigned-url', {
           fileName: file.name,
         })
         if (presignedRes.message !== 'SUCCESS') {
@@ -86,10 +86,17 @@ export const UpdateGroupForm = ({ group }: Props) => {
         imageUrl = fileUrl
       }
       await updateGroup(
-        { name: values.name, description: values.description, imageUrl },
+        {
+          name: values.name,
+          description: values.description,
+          imageUrl,
+          imageName: image?.[0].name || '',
+          changeInviteCode: values.changeInviteCode,
+        },
         {
           onSuccess: () => {
             toast.success('그룹 정보가 성공적으로 업데이트되었습니다.')
+            form.reset()
           },
         },
       )
