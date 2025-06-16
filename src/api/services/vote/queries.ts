@@ -4,6 +4,7 @@ import {
   CreateVotePayload,
   ParticipatedVoteList,
   ParticipatedVotesQueryOptions,
+  TopVoteDay,
   UseInfiniteVotesQueryOptions,
   VoteData,
   VoteDetail,
@@ -86,20 +87,20 @@ export const useCreateVotesInfinityQuery = ({
   })
 }
 // 투표 상세 내용 조회
-export const useVoteDetailInfo = (voteId: string) => {
+export const useVoteDetailInfo = (voteId: string, enabled: boolean = true) => {
   return useQuery<VoteDetail>({
     queryKey: ['voteDetail', voteId],
     queryFn: () => voteService.getVote(voteId),
-    enabled: !!voteId,
+    enabled: !!voteId && enabled,
     staleTime: 1000 * 60 * 1,
   })
 }
 // 투표 상세 결과 조회
-export const useVoteDetailResults = (voteId: string) => {
+export const useVoteDetailResults = (voteId: string, enabled: boolean = true) => {
   return useQuery<voteDetailResult>({
     queryKey: ['voteResult', voteId],
     queryFn: () => voteService.getVoteResult(voteId),
-    enabled: !!voteId,
+    enabled: !!voteId && enabled,
     staleTime: 1000 * 60 * 1,
   })
 }
@@ -132,5 +133,18 @@ export const useDeleteVoteMutation = (voteId: string) => {
       queryClient.invalidateQueries({ queryKey: ['createdVotes'] })
       queryClient.invalidateQueries({ queryKey: ['participatedVotes'] })
     },
+  })
+}
+// Top3 투표 조회
+export const useTop3VotesQuery = (
+  groupId: number,
+  type: TopVoteDay = 'daily',
+  enabled: boolean = true,
+) => {
+  return useQuery({
+    queryKey: ['top3Votes', groupId, type],
+    queryFn: () => voteService.getTop3Votes(groupId, type),
+    enabled,
+    staleTime: 1000 * 60 * 60 * 23, // 23h: 매일 오전 9시 재요청
   })
 }

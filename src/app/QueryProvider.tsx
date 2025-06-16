@@ -9,10 +9,7 @@ const errorHandler = (error: any) => {
   const message =
     error?.response?.data?.message || '문제가 발생했습니다. 잠시 후 다시 시도해주세요.'
 
-  if (status === 403) {
-    toast('권한이 부족합니다.')
-  }
-  if (status === 400 || status === 404 || status === 409) {
+  if (status === 400 || status === 403 || status === 404 || status === 409) {
     const userMessage = messageMap[message] || '서버측의 오류가 발생했습니다.'
     toast(userMessage)
   }

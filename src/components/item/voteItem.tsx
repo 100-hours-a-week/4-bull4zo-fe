@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FaQuestionCircle } from 'react-icons/fa'
+import { FaRegComment } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import { ParticipatedVote, ParticipatedVoteStatus } from '@/api/services/vote/model'
 import { trackEvent } from '@/lib/trackEvent'
@@ -9,7 +10,32 @@ import { formatRelativeTime } from '@/utils/time'
 import { VoteCreateFailModal } from '../modal/voteCreateFailModal'
 import { Label } from '../ui/label'
 
-export const VoteItem = (vote: Partial<ParticipatedVote>) => {
+interface Props extends Partial<ParticipatedVote> {
+  rank?: number
+}
+
+const rankMap = {
+  1: {
+    label: '🥇',
+    medalText: '금메달',
+    bgColor: 'bg-[#FFE28A]',
+    textColor: 'text-[#9A6A00]',
+  },
+  2: {
+    label: '🥈',
+    medalText: '은메달',
+    bgColor: 'bg-[#D6E4F0]',
+    textColor: 'text-[#5A6D84]',
+  },
+  3: {
+    label: '🥉',
+    medalText: '동메달',
+    bgColor: 'bg-[#F9D3B4]',
+    textColor: 'text-[#B35B2A]',
+  },
+}
+
+export const VoteItem = (vote: Props) => {
   const navigation = useNavigate()
   const { openModal } = useModalStore()
 
@@ -37,16 +63,29 @@ export const VoteItem = (vote: Partial<ParticipatedVote>) => {
           'bg-red-200': vote.voteStatus === 'REJECTED',
           'bg-zinc-200 cursor-not-allowed': vote.voteStatus === 'PENDING',
         },
+        vote.rank && `${rankMap[vote.rank as keyof typeof rankMap].bgColor}`,
       )}
     >
       <div className="flex flex-row justify-between relative">
-        <Label className="font-medium text-lg line-clamp-2">{vote.content}</Label>
+        <Label
+          className={cn(
+            'font-medium text-lg line-clamp-2',
+            vote.rank && `${rankMap[vote.rank as keyof typeof rankMap].textColor}`,
+          )}
+        >
+          {vote.rank && `${rankMap[vote.rank as keyof typeof rankMap].label} `}
+          {vote.content}
+        </Label>
         {vote.voteStatus && <VoteStatusLabel status={vote.voteStatus} />}
       </div>
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
         <div className="flex items-center justify-between text-xs">
           {formatRelativeTime(vote.closedAt as string)}
-          {vote.comments && <span className="font-semibold">💬 {vote.comments}</span>}
+          {vote.comments && (
+            <div className="font-semibold flex flex-row items-center gap-1">
+              <FaRegComment /> {vote.comments}
+            </div>
+          )}
         </div>
       )}
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (

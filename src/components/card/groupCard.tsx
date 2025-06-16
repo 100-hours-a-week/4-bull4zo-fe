@@ -1,12 +1,18 @@
-import { useState } from 'react'
-import { Check, Copy } from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Check, Copy, EllipsisVertical } from 'lucide-react'
 import { toast } from 'sonner'
 import { Group } from '@/api/services/group/model'
+import { useLeaveGroupMutation } from '@/api/services/group/queries'
 import { trackEvent } from '@/lib/trackEvent'
+import { cn } from '@/lib/utils'
 import { Card, CardContent, CardHeader } from '../ui/card'
 
 export const GroupCard = (group: Partial<Group>) => {
   const [copied, setCopied] = useState(false)
+  const [open, setOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const router = useNavigate()
 
   const handleCopy = () => {
     navigator.clipboard.writeText(group.inviteCode as string)
@@ -23,8 +29,26 @@ export const GroupCard = (group: Partial<Group>) => {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const toggleMenu = () => setOpen((prev) => !prev)
+
+  useEffect(() => {
+    const handleClickOutSide = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutSide)
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutSide)
+    }
+  }, [])
+
   return (
-    <Card className="flex flex-col rounded-[1.875rem] shadow-md border-none bg-white min-h-[9.5rem] gap-4">
+    <Card
+      onClick={() => router(`/group/${group.groupId}`)}
+      className="flex flex-col rounded-[1.875rem] shadow-md border-none bg-white min-h-[9.5rem] gap-4 cursor-pointer"
+    >
       <CardHeader className="flex flex-row justify-between px-5">
         <div className="flex items-center gap-2">
           <div
@@ -33,7 +57,18 @@ export const GroupCard = (group: Partial<Group>) => {
           />
           <h1 className="font-semibold text-lg">{group.name}</h1>
         </div>
-        {/* <EllipsisVertical /> */}
+        <div className="relative" ref={menuRef} onClick={(e) => e.stopPropagation()}>
+          <button onClick={toggleMenu} className={cn(group.role === 'OWNER' && 'hidden')}>
+            <EllipsisVertical className="cursor-pointer" />
+          </button>
+          {open && (
+            <GroupDotsItem
+              isMine={group.role === 'MANAGER' || group.role === 'OWNER'}
+              groupId={group.groupId!}
+              setOpen={setOpen}
+            />
+          )}
+        </div>
       </CardHeader>
       <CardContent className="flex flex-col flex-grow justify-between h-full">
         <p className="font-medium mb-7">{group.description}</p>
@@ -49,5 +84,32 @@ export const GroupCard = (group: Partial<Group>) => {
         </pre>
       </CardContent>
     </Card>
+  )
+}
+const GroupDotsItem = ({
+  groupId,
+  setOpen,
+}: {
+  isMine: boolean
+  groupId: number
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
+  const { mutateAsync } = useLeaveGroupMutation(groupId)
+
+  const handleLeaveGroup = async () => {
+    await mutateAsync()
+    toast.success('그룹을 떠났습니다.')
+    setOpen(false)
+  }
+
+  return (
+    <div className="absolute right-2 top-6 w-32 bg-white shadow-md rounded-2xl rounded-tr-none border-gray-300 border z-10">
+      <button
+        onClick={handleLeaveGroup}
+        className="rounded-tl-2xl rounded-b-2xl w-full px-3 py-2 text-sm hover:bg-gray-100 text-left cursor-pointer"
+      >
+        떠나기
+      </button>
+    </div>
   )
 }
