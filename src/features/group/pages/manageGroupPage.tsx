@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
 import { useGroupQuery } from '@/api/services/group/queries'
-import NotFoundPage from '@/app/NotFound'
 import { GroupMember } from '../components/groupMember'
 import { GroupReport } from '../components/groupReport'
 import { UpdateGroupForm } from '../components/updateGroupForm'
@@ -9,9 +8,7 @@ const ManageGroupPage = () => {
   const { groupId } = useParams()
   const { data: group } = useGroupQuery(Number(groupId))
 
-  if (!group) {
-    return <NotFoundPage />
-  }
+  if (!group) return
 
   return (
     <article className="py-5 min-h-full">

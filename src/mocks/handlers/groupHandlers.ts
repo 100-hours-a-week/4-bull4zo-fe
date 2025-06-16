@@ -251,7 +251,7 @@ export const groupHandlers = [
 
     const members = Array.from({ length: 30 }, (_, i) => ({
       userId: i + 1,
-      name: `사용자${i + 1}`,
+      nickname: `사용자${i + 1}`,
       role: i % 3 === 0 ? 'OWNER' : i % 3 === 1 ? 'MANAGER' : 'MEMBER',
     }))
 

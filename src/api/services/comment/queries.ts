@@ -33,13 +33,8 @@ export const useInfiniteCommentListQuery = (voteId: number, size: number = 10) =
 // }
 // 댓글 생성 호출
 export const useCreateCommentMutation = (voteId: number) => {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (payload: CommentCreateRequest) => commentService.createComment(voteId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', voteId] })
-    },
   })
 }
 // 댓글 삭제 호출

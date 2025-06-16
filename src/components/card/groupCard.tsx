@@ -5,12 +5,14 @@ import { toast } from 'sonner'
 import { Group } from '@/api/services/group/model'
 import { useLeaveGroupMutation } from '@/api/services/group/queries'
 import { trackEvent } from '@/lib/trackEvent'
+import { cn } from '@/lib/utils'
 import { Card, CardContent, CardHeader } from '../ui/card'
 
 export const GroupCard = (group: Partial<Group>) => {
   const [copied, setCopied] = useState(false)
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const router = useNavigate()
 
   const handleCopy = () => {
     navigator.clipboard.writeText(group.inviteCode as string)
@@ -43,7 +45,10 @@ export const GroupCard = (group: Partial<Group>) => {
   }, [])
 
   return (
-    <Card className="flex flex-col rounded-[1.875rem] shadow-md border-none bg-white min-h-[9.5rem] gap-4">
+    <Card
+      onClick={() => router(`/group/${group.groupId}`)}
+      className="flex flex-col rounded-[1.875rem] shadow-md border-none bg-white min-h-[9.5rem] gap-4 cursor-pointer"
+    >
       <CardHeader className="flex flex-row justify-between px-5">
         <div className="flex items-center gap-2">
           <div
@@ -52,9 +57,9 @@ export const GroupCard = (group: Partial<Group>) => {
           />
           <h1 className="font-semibold text-lg">{group.name}</h1>
         </div>
-        <div className="relative" ref={menuRef}>
-          <button onClick={toggleMenu}>
-            <EllipsisVertical />
+        <div className="relative" ref={menuRef} onClick={(e) => e.stopPropagation()}>
+          <button onClick={toggleMenu} className={cn(group.role === 'OWNER' && 'hidden')}>
+            <EllipsisVertical className="cursor-pointer" />
           </button>
           {open && (
             <GroupDotsItem
@@ -82,7 +87,6 @@ export const GroupCard = (group: Partial<Group>) => {
   )
 }
 const GroupDotsItem = ({
-  isMine,
   groupId,
   setOpen,
 }: {
@@ -90,7 +94,6 @@ const GroupDotsItem = ({
   groupId: number
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const router = useNavigate()
   const { mutateAsync } = useLeaveGroupMutation(groupId)
 
   const handleLeaveGroup = async () => {
@@ -103,16 +106,9 @@ const GroupDotsItem = ({
     <div className="absolute right-2 top-6 w-32 bg-white shadow-md rounded-2xl rounded-tr-none border-gray-300 border z-10">
       <button
         onClick={handleLeaveGroup}
-        className="rounded-tl-2xl w-full px-3 py-2 text-sm hover:bg-gray-100 text-left cursor-pointer"
+        className="rounded-tl-2xl rounded-b-2xl w-full px-3 py-2 text-sm hover:bg-gray-100 text-left cursor-pointer"
       >
         떠나기
-      </button>
-      <hr className="text-gray-300" />
-      <button
-        onClick={() => router(`/group/${groupId}`)}
-        className="rounded-b-2xl w-full px-3 py-2 text-sm hover:bg-gray-100 text-left cursor-pointer"
-      >
-        {isMine ? '그룹 상세 보기' : '그룹 관리 '}
       </button>
     </div>
   )

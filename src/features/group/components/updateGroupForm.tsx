@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
-import { axiosInstance } from '@/api/axios'
+import { authAxiosInstance } from '@/api/axios'
 import { Group } from '@/api/services/group/model'
 import { useUpdateGroupMutation } from '@/api/services/group/queries'
 import { DeleteGroupModal } from '@/components/modal/deleteGroupModal'
@@ -62,7 +62,7 @@ export const UpdateGroupForm = ({ group }: Props) => {
         const file = image[0]
 
         // 1. presigned URL 요청
-        const { data: presignedRes } = await axiosInstance.post('/api/v1/image/presigned-url', {
+        const { data: presignedRes } = await authAxiosInstance.post('/api/v1/image/presigned-url', {
           fileName: file.name,
         })
         if (presignedRes.message !== 'SUCCESS') {
@@ -86,10 +86,17 @@ export const UpdateGroupForm = ({ group }: Props) => {
         imageUrl = fileUrl
       }
       await updateGroup(
-        { name: values.name, description: values.description, imageUrl },
+        {
+          name: values.name,
+          description: values.description,
+          imageUrl,
+          imageName: image?.[0].name || '',
+          changeInviteCode: values.changeInviteCode,
+        },
         {
           onSuccess: () => {
             toast.success('그룹 정보가 성공적으로 업데이트되었습니다.')
+            form.reset()
           },
         },
       )
@@ -112,8 +119,10 @@ export const UpdateGroupForm = ({ group }: Props) => {
       form.reset({
         name: group.name,
         description: group.description,
+        changeInviteCode: false,
       })
     }
+
     if (group?.imageUrl) {
       setPreview(group.imageUrl)
     }
@@ -239,24 +248,26 @@ export const UpdateGroupForm = ({ group }: Props) => {
                       <p>{group?.inviteCode}</p>
                       {ableManage(group?.role) && (
                         <TooltipProvider>
-                          <Tooltip open={field.value} onOpenChange={() => {}}>
+                          <Tooltip>
                             <TooltipTrigger asChild>
-                              <div
-                                className="flex items-center gap-1 cursor-pointer"
-                                onClick={() => field.onChange(!field.value)}
-                              >
+                              <div className="flex items-center gap-1 cursor-pointer">
                                 <Checkbox
                                   checked={field.value}
                                   onCheckedChange={field.onChange}
                                   className="cursor-pointer"
                                 />
-                                <span className="text-sm">재생성</span>
+                                <span
+                                  className="text-sm"
+                                  onClick={() => field.onChange(!field.value)}
+                                >
+                                  재생성
+                                </span>
                               </div>
                             </TooltipTrigger>
                             <TooltipContent
                               side="top"
                               align="end"
-                              sideOffset={8} // ← 상단 여백 조절
+                              sideOffset={8}
                               className="text-black text-xs px-3 py-1.5 rounded-md shadow-md relative"
                             >
                               <p>

@@ -15,6 +15,7 @@ export const commentService = {
   async getLongPollingCommentList(
     voteId: number,
     cursor: string | undefined,
+    options?: { signal?: AbortSignal },
   ): Promise<{ status: string; comments: Comment[] }> {
     const params = new URLSearchParams()
     if (cursor) params.append('cursor', cursor)
@@ -23,6 +24,7 @@ export const commentService = {
       `/api/v1/votes/${voteId}/comments/poll?${params.toString()}`,
       {
         timeout: 30000,
+        signal: options?.signal,
       },
     )
 

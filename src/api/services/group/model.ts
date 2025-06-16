@@ -57,6 +57,7 @@ export interface UpdateGroupRequest {
   name?: string
   description?: string
   imageUrl?: string
+  imageName?: string
   changeInviteCode?: boolean
 }
 

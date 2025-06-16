@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { toast } from 'sonner'
 import { Comment } from '@/api/services/comment/model'
 import { useInfiniteCommentListQuery } from '@/api/services/comment/queries'
 import { commentService } from '@/api/services/comment/service'
@@ -15,6 +14,7 @@ export const CommentList = ({ voteId }: Props) => {
 
   const { ref: lastItemRef, inView } = useInView({ threshold: 0 })
 
+  const newCommentsRef = useRef<Comment[]>([])
   const [newComments, setNewComments] = useState<Comment[]>([])
   const isMounted = useRef(true)
   const isPolling = useRef(false)
@@ -24,44 +24,60 @@ export const CommentList = ({ voteId }: Props) => {
     [data, newComments],
   )
 
-  // 마지막 커서 계산
-  const lastCursor = useMemo(() => {
-    const lastAll = [...(data?.pages.flatMap((p) => p.comments) ?? []), ...newComments].at(-1)
-    return lastAll ? `${lastAll.createdAt}_${lastAll.commentId}` : undefined
-  }, [data, newComments])
-
-  const longPollingEnabled = !hasNextPage && !!lastCursor
-
   // 롱폴링 로직
-  useEffect(() => {
-    if (!longPollingEnabled || isPolling.current) return
+  // const pollingKey = useRef(Symbol())
 
+  const hasStartedPolling = useRef(false)
+
+  useEffect(() => {
+    if (!data || isPolling.current || hasStartedPolling.current) return
+    if (hasNextPage) return
+
+    hasStartedPolling.current = true
     isMounted.current = true
     isPolling.current = true
-    let timer: ReturnType<typeof setTimeout>
+
+    // pollingKey.current = Symbol()
+    // const currentKey = pollingKey.current
+
+    let timer: ReturnType<typeof setTimeout> | undefined
     let hasRetried = false
 
     const poll = async () => {
+      const all = [...(data.pages.flatMap((p) => p.comments) ?? []), ...newCommentsRef.current]
+      const last = all.at(-1)
+      const lastCursor = last ? `${last.createdAt}_${last.commentId}` : undefined
+
       try {
-        const data = await commentService.getLongPollingCommentList(voteId, lastCursor)
+        const result = await commentService.getLongPollingCommentList(voteId, lastCursor)
 
-        if (!isMounted.current) return
+        // if (!isMounted.current || pollingKey.current !== currentKey) return
 
-        if (data?.comments?.length > 0) {
-          setNewComments((prev) => [...prev, ...data.comments])
+        if (result?.comments?.length > 0) {
+          setNewComments((prev) => {
+            const existing = new Set(
+              [...(data.pages.flatMap((p) => p.comments) ?? []), ...prev].map(
+                (c) => `${c.createdAt}_${c.commentId}`,
+              ),
+            )
+            const filtered = result.comments.filter(
+              (c) => !existing.has(`${c.createdAt}_${c.commentId}`),
+            )
+            const updated = [...prev, ...filtered]
+            newCommentsRef.current = updated
+            return updated
+          })
         }
 
         hasRetried = false
-        timer = setTimeout(poll)
+        timer = setTimeout(poll, 0)
         // eslint-disable-next-line no-unused-vars
       } catch (e) {
+        // if (!isMounted.current || pollingKey.current !== currentKey) return
         if (!isMounted.current) return
-
         if (!hasRetried) {
           hasRetried = true
-          timer = setTimeout(poll)
-        } else {
-          toast.error('댓글을 불러오는 중 오류가 발생했습니다.')
+          timer = setTimeout(poll, 2000)
         }
       }
     }
@@ -71,9 +87,10 @@ export const CommentList = ({ voteId }: Props) => {
     return () => {
       isMounted.current = false
       isPolling.current = false
-      clearTimeout(timer)
+      if (timer) clearTimeout(timer)
+      // abortControllerRef.current?.abort()
     }
-  }, [longPollingEnabled])
+  }, [data, hasNextPage])
 
   // 무한 스크롤 처리
   useEffect(() => {
