@@ -1,5 +1,5 @@
 import { authAxiosInstance } from '@/api/axios'
-import { CommentCreateRequest, CommentCreateResponse, CommentListData } from './model'
+import { Comment, CommentCreateRequest, CommentCreateResponse, CommentListData } from './model'
 
 export const commentService = {
   // GET: 댓글 리스트 페이지 네이션
@@ -15,14 +15,18 @@ export const commentService = {
   async getLongPollingCommentList(
     voteId: number,
     cursor: string | undefined,
-  ): Promise<CommentListData> {
+  ): Promise<{ status: string; comments: Comment[] }> {
     const params = new URLSearchParams()
     if (cursor) params.append('cursor', cursor)
-    return (
-      await authAxiosInstance.get(`/api/v1/votes/${voteId}/comments/poll?${params.toString()}`, {
-        timeout: 30000, // 30s
-      })
-    ).data.data
+
+    const res = await authAxiosInstance.get(
+      `/api/v1/votes/${voteId}/comments/poll?${params.toString()}`,
+      {
+        timeout: 30000,
+      },
+    )
+
+    return res.data.data
   },
   // POST: 댓글 생성
   async createComment(

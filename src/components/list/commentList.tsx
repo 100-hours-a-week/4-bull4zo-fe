@@ -2,10 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { toast } from 'sonner'
 import { Comment } from '@/api/services/comment/model'
-import {
-  useInfiniteCommentListQuery,
-  useLongPollingCommentListQuery,
-} from '@/api/services/comment/queries'
+import { useInfiniteCommentListQuery } from '@/api/services/comment/queries'
+import { commentService } from '@/api/services/comment/service'
 import { CommentItem } from '../comment/commentItem'
 
 interface Props {
@@ -19,6 +17,7 @@ export const CommentList = ({ voteId }: Props) => {
 
   const [newComments, setNewComments] = useState<Comment[]>([])
   const isMounted = useRef(true)
+  const isPolling = useRef(false)
 
   const allComments = useMemo(
     () => [...(data?.pages.flatMap((page) => page.comments) ?? []), ...newComments],
@@ -27,45 +26,43 @@ export const CommentList = ({ voteId }: Props) => {
 
   // 마지막 커서 계산
   const lastCursor = useMemo(() => {
-    const last = data?.pages.at(-1)?.comments.at(-1)
-    return last ? `${last.createdAt}_${last.commentId}` : undefined
-  }, [data])
+    const lastAll = [...(data?.pages.flatMap((p) => p.comments) ?? []), ...newComments].at(-1)
+    return lastAll ? `${lastAll.createdAt}_${lastAll.commentId}` : undefined
+  }, [data, newComments])
 
   const longPollingEnabled = !hasNextPage && !!lastCursor
 
-  const { data: newData, refetch: refetchLongPolling } = useLongPollingCommentListQuery(
-    voteId,
-    lastCursor,
-    longPollingEnabled,
-  )
-
-  // 신규 댓글 추가
+  // 롱폴링 로직
   useEffect(() => {
-    if (newData?.comments?.length) {
-      setNewComments((prev) => [...prev, ...newData.comments])
-    }
-  }, [newData])
+    if (!longPollingEnabled || isPolling.current) return
 
-  // 롱 폴링 주기 설정
-  useEffect(() => {
-    if (!longPollingEnabled) return
-
+    isMounted.current = true
+    isPolling.current = true
     let timer: ReturnType<typeof setTimeout>
     let hasRetried = false
 
     const poll = async () => {
-      const result = await refetchLongPolling()
+      try {
+        const data = await commentService.getLongPollingCommentList(voteId, lastCursor)
 
-      if (!isMounted.current) return
+        if (!isMounted.current) return
 
-      if (result?.status === 'success') {
+        if (data?.comments?.length > 0) {
+          setNewComments((prev) => [...prev, ...data.comments])
+        }
+
         hasRetried = false
         timer = setTimeout(poll)
-      } else if (!hasRetried) {
-        hasRetried = true
-        timer = setTimeout(poll, 3000)
-      } else {
-        toast.error('댓글을 불러오는 중 오류가 발생했습니다. 새로고침 후 다시 시도해주세요.')
+        // eslint-disable-next-line no-unused-vars
+      } catch (e) {
+        if (!isMounted.current) return
+
+        if (!hasRetried) {
+          hasRetried = true
+          timer = setTimeout(poll)
+        } else {
+          toast.error('댓글을 불러오는 중 오류가 발생했습니다.')
+        }
       }
     }
 
@@ -73,9 +70,10 @@ export const CommentList = ({ voteId }: Props) => {
 
     return () => {
       isMounted.current = false
+      isPolling.current = false
       clearTimeout(timer)
     }
-  }, [longPollingEnabled, refetchLongPolling])
+  }, [longPollingEnabled])
 
   // 무한 스크롤 처리
   useEffect(() => {
