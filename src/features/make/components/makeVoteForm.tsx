@@ -20,6 +20,7 @@ import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
 import { useGroupStore } from '@/stores/groupStore'
 import { useModalStore } from '@/stores/modalStore'
+import { useUserStore } from '@/stores/userStore'
 import { getContentLength } from '@/utils/textLength'
 import { buildLocalDateTimeString } from '@/utils/time'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
@@ -28,6 +29,7 @@ export const MakeVoteForm = () => {
   const { voteId } = useParams()
   const router = useNavigate()
 
+  const { isLogin } = useUserStore()
   const { selectedId, setId } = useGroupStore()
   const { openModal } = useModalStore()
 
@@ -35,7 +37,7 @@ export const MakeVoteForm = () => {
   const [minDateTime, setMinDateTime] = useState('')
   const [maxDateTime, setMaxDateTime] = useState('')
 
-  const { data: editData, isError } = useVoteDetailInfo(voteId ?? '')
+  const { data: editData, isError } = useVoteDetailInfo(voteId ?? '', isLogin)
 
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),

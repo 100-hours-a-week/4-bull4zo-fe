@@ -14,19 +14,27 @@ export const useInfiniteCommentListQuery = (voteId: number, size: number = 10) =
     },
     initialPageParam: undefined,
     enabled: !!voteId,
-    // refetchInterval: 5000,
-    // refetchIntervalInBackground: true,
   })
 }
+// 댓글 롱 폴링 호출
+// export const useLongPollingCommentListQuery = (
+//   voteId: number,
+//   cursor: string | undefined,
+//   enabled: boolean = true,
+// ) => {
+//   return useQuery<CommentListData, AxiosError>({
+//     queryKey: ['longPollingComments', voteId, cursor],
+//     queryFn: () => commentService.getLongPollingCommentList(voteId, cursor),
+//     enabled,
+//     retry: false,
+//     refetchOnWindowFocus: false,
+//     staleTime: 0,
+//   })
+// }
 // 댓글 생성 호출
 export const useCreateCommentMutation = (voteId: number) => {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: (payload: CommentCreateRequest) => commentService.createComment(voteId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', voteId] })
-    },
   })
 }
 // 댓글 삭제 호출

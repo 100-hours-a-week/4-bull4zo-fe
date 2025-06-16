@@ -1,17 +1,21 @@
+import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { TbSend2 } from 'react-icons/tb'
 import { useParams } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { CommentCreateRequest } from '@/api/services/comment/model'
 import { useCreateCommentMutation } from '@/api/services/comment/queries'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { commentSchema } from '../lib/commentSchema'
 
 export const CommentInput = () => {
   const { voteId } = useParams()
 
   const form = useForm<CommentCreateRequest>({
+    resolver: zodResolver(commentSchema),
     defaultValues: {
       content: '',
       anonymous: true,
@@ -19,18 +23,25 @@ export const CommentInput = () => {
   })
 
   const { mutateAsync } = useCreateCommentMutation(Number(voteId))
+  const submitRef = useRef(false)
 
   const onSubmit = async (values: CommentCreateRequest) => {
-    await mutateAsync(values)
-    form.reset()
+    if (submitRef.current) return
+    submitRef.current = true
+
+    try {
+      await mutateAsync(values)
+      form.reset()
+    } finally {
+      submitRef.current = false
+    }
   }
+
+  const handleValidSubmit = form.handleSubmit(onSubmit)
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="rounded-4xl flex flex-row gap-2 px-4 py-2 mx-4 border bg-white"
-      >
+      <form className="rounded-4xl flex flex-row gap-2 px-4 py-1 mx-4 border bg-white">
         <FormField
           control={form.control}
           name="anonymous"
@@ -58,14 +69,17 @@ export const CommentInput = () => {
             <FormItem className="flex-1">
               <FormControl>
                 <Textarea
+                  aria-label="댓글 입력"
                   className="w-full bg-transparent resize-none border-none shadow-none overflow-y-auto leading-[1.5]
-                  min-h-[1lh] max-h-[5lh] focus-visible:ring-0"
+                  min-h-[1lh] max-h-[5lh] focus-visible:ring-0 py-1 sm:py-2"
                   placeholder="댓글을 입력해주세요."
                   {...field}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
+                    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+
+                    if (!isMobile && e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault()
-                      form.handleSubmit(onSubmit)()
+                      handleValidSubmit()
                     }
                   }}
                 />
@@ -75,8 +89,10 @@ export const CommentInput = () => {
         />
         <div className="flex items-center justify-center">
           <Button
-            type="submit"
+            aria-label="댓글 작성"
+            type="button"
             className="w-8 h-8 p-0 flex items-center justify-center bg-inline shadow-none"
+            onClick={handleValidSubmit}
           >
             <TbSend2 size={24} />
           </Button>

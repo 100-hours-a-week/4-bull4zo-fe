@@ -12,9 +12,16 @@ export const voteSchema = z.object({
   image: z.union([z.instanceof(File), z.string(), z.undefined()]).refine(
     (val) => {
       if (val instanceof File) {
-        const isValidType = ['image/png', 'image/jpeg', 'image/jpg'].includes(val.type)
+        const isActuallyAFile = val.size > 0 && val.type.startsWith('image/')
+        const isValidType = ['image/png', 'image/jpeg'].includes(val.type)
+        const isValidExtension = /\.(png|jpe?g)$/i.test(val.name)
         const isValidSize = val.size <= 10 * 1024 * 1024 // 10MB
-        return isValidType && isValidSize
+        const isValidImage = isActuallyAFile && isValidType && isValidExtension && isValidSize
+
+        // 폴더 여부 검사
+        const isDisguisedFolder = val.size < 1024 || val.lastModified === 0
+
+        return isValidImage && !isDisguisedFolder
       }
       return true
     },

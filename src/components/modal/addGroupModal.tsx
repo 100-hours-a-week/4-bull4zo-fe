@@ -30,7 +30,7 @@ export const AddGroupModal = () => {
 
   const onNewGroupHandler = () => {
     closeModal()
-    navigation(`/user/group/create`)
+    navigation(`/group/create`)
   }
 
   const onSubmit = (values: InviteCodeSchema) => {

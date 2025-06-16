@@ -5,6 +5,7 @@ import { userService } from '@/api/services/user/service'
 import Header from '@/components/header/header'
 import { Modal } from '@/components/modal/modal'
 import Navigation from '@/components/navigation/navigation'
+import { Slider } from '@/components/slider/slider'
 import { useModalStore } from '@/stores/modalStore'
 import { useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
@@ -66,6 +67,7 @@ export const AppLayout = () => {
         <Outlet />
       </main>
       <Navigation />
+      <Slider />
       {isOpen && <Modal />}
     </div>
   )

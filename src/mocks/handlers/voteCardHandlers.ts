@@ -562,4 +562,62 @@ export const votesHandlers = [
       status: 200,
     })
   }),
+  http.get('/api/v1/votes/top', ({ request }) => {
+    const url = new URL(request.url)
+    const groupId = url.searchParams.get('groupId')
+    const type = url.searchParams.get('type') || 'daily'
+    const auth = request.headers.get('Authorization')
+
+    if (!auth) {
+      return HttpResponse.json({ message: 'NO_TOKEN', data: null }, { status: 401 })
+    }
+
+    return HttpResponse.json(
+      {
+        message: 'SUCCESS',
+        data: {
+          groupId: groupId ? Number(groupId) : null,
+          type,
+          rankedFrom: '2025-04-21T00:00:00',
+          rankedTo: '2025-04-21T23:59:59',
+          topVotes: [
+            {
+              voteId: 123,
+              groupId: 2,
+              content: '오늘 저녁 뭐 먹을래요?',
+              createdAt: '2025-04-22T14:30:00',
+              closedAt: '2025-04-23T14:30:00',
+              results: [
+                { optionNumber: 1, count: 3, ratio: 30 },
+                { optionNumber: 2, count: 7, ratio: 70 },
+              ],
+            },
+            {
+              voteId: 124,
+              groupId: 2,
+              content: '오늘 점심 뭐 먹을래요?',
+              createdAt: '2025-04-22T14:30:00',
+              closedAt: '2025-04-23T14:30:00',
+              results: [
+                { optionNumber: 1, count: 3, ratio: 30 },
+                { optionNumber: 2, count: 7, ratio: 70 },
+              ],
+            },
+            {
+              voteId: 125,
+              groupId: 2,
+              content: '오늘 아침 뭐 먹을래요?',
+              createdAt: '2025-04-22T14:30:00',
+              closedAt: '2025-04-23T14:30:00',
+              results: [
+                { optionNumber: 1, count: 3, ratio: 30 },
+                { optionNumber: 2, count: 7, ratio: 70 },
+              ],
+            },
+          ],
+        },
+      },
+      { status: 200 },
+    )
+  }),
 ]

@@ -1,25 +1,25 @@
-// import { useNavigate } from 'react-router-dom'
-// import { toast } from 'sonner'
-import { useVoteReportReasons } from '@/api/services/vote/queries'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+import { useDeleteVoteMutation, useVoteReportReasons } from '@/api/services/vote/queries'
 import { voteCreateFailMessage } from '@/lib/messageMap'
-// import { useModalStore } from '@/stores/modalStore'
-// import { Button } from '../ui/button'
+import { useModalStore } from '@/stores/modalStore'
+import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
-  // const navigation = useNavigate()
-  // const { closeModal } = useModalStore()
+  const navigation = useNavigate()
+  const { closeModal } = useModalStore()
 
   const { data } = useVoteReportReasons(voteId.toString())
-  // const { mutateAsync } = useDeleteVoteMutation(voteId.toString())
+  const { mutateAsync } = useDeleteVoteMutation(voteId.toString())
 
   const reason = (data?.reviewReason || 'OTHER') as keyof typeof voteCreateFailMessage
 
-  // const handleDeleteVote = async () => {
-  //   await mutateAsync()
-  //   toast.success('투표가 삭제되었어요.')
-  //   closeModal()
-  // }
+  const handleDeleteVote = async () => {
+    await mutateAsync()
+    toast.success('투표가 삭제되었어요.')
+    closeModal()
+  }
 
   return (
     <Card
@@ -37,7 +37,7 @@ export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
         <div className="text-[0.875rem]">
           <p className="text-center max-w-[20ch]">현재 투표는 {voteCreateFailMessage[reason]}</p>
         </div>
-        {/* <div className="w-full flex justify-around">
+        <div className="w-full flex justify-around">
           <Button
             className="px-7"
             onClick={() => {
@@ -50,7 +50,7 @@ export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
           <Button className="px-5" onClick={handleDeleteVote}>
             삭제
           </Button>
-        </div> */}
+        </div>
       </CardContent>
     </Card>
   )

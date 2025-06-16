@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { useInfiniteGroupsQuery } from '@/api/services/group/queries'
 import { GroupCard } from '../card/groupCard'
 
@@ -17,26 +18,13 @@ export const GroupList = ({
 }: GroupListProps) => {
   const groups = data?.pages.flatMap((page) => page.groups) ?? []
 
-  const loadMoreRef = useRef<HTMLDivElement | null>(null)
+  const { ref: loadMoreRef, inView } = useInView({ rootMargin: '200px' })
 
   useEffect(() => {
-    if (!hasNextPage || isFetchingNextPage) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchNextPage()
-        }
-      },
-      { rootMargin: '200px' },
-    )
-    const target = loadMoreRef.current
-    if (target) observer.observe(target)
-
-    return () => {
-      if (target) observer.unobserve(target)
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
     }
-  })
+  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage])
 
   return (
     <ul className="flex flex-col gap-4 pt-5">
