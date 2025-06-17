@@ -10,8 +10,7 @@ interface Props {
 }
 
 export const CommentList = ({ voteId }: Props) => {
-  const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteCommentListQuery(voteId)
-
+  const { data, hasNextPage, fetchNextPage } = useInfiniteCommentListQuery(voteId)
   const { ref: lastItemRef, inView } = useInView({ threshold: 0 })
 
   const newCommentsRef = useRef<Comment[]>([])
@@ -24,10 +23,17 @@ export const CommentList = ({ voteId }: Props) => {
     [data, newComments],
   )
 
-  // 롱폴링 로직
-  // const pollingKey = useRef(Symbol())
+  const deleteComment = (commentId: number) => {
+    setNewComments((prev) => {
+      const updated = prev.filter((c) => c.commentId !== commentId)
+      newCommentsRef.current = updated
+      return updated
+    })
+  }
 
+  // 롱폴링 로직
   const hasStartedPolling = useRef(false)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     if (!data || isPolling.current || hasStartedPolling.current) return
@@ -37,9 +43,7 @@ export const CommentList = ({ voteId }: Props) => {
     isMounted.current = true
     isPolling.current = true
 
-    // pollingKey.current = Symbol()
-    // const currentKey = pollingKey.current
-
+    // 롱 폴링 1회 재시작
     let timer: ReturnType<typeof setTimeout> | undefined
     let hasRetried = false
 
@@ -48,10 +52,13 @@ export const CommentList = ({ voteId }: Props) => {
       const last = all.at(-1)
       const lastCursor = last ? `${last.createdAt}_${last.commentId}` : undefined
 
-      try {
-        const result = await commentService.getLongPollingCommentList(voteId, lastCursor)
+      abortControllerRef.current = new AbortController()
+      const signal = abortControllerRef.current.signal
 
-        // if (!isMounted.current || pollingKey.current !== currentKey) return
+      try {
+        const result = await commentService.getLongPollingCommentList(voteId, lastCursor, {
+          signal,
+        })
 
         if (result?.comments?.length > 0) {
           setNewComments((prev) => {
@@ -87,17 +94,18 @@ export const CommentList = ({ voteId }: Props) => {
     return () => {
       isMounted.current = false
       isPolling.current = false
+      hasStartedPolling.current = false
       if (timer) clearTimeout(timer)
-      // abortControllerRef.current?.abort()
+      abortControllerRef.current?.abort()
     }
   }, [data, hasNextPage])
 
   // 무한 스크롤 처리
   useEffect(() => {
-    if (inView && hasNextPage && !isFetching) {
+    if (inView && hasNextPage) {
       fetchNextPage()
     }
-  }, [inView, hasNextPage, isFetching, fetchNextPage])
+  }, [inView, hasNextPage, fetchNextPage])
 
   return (
     <ul className="mt-4 flex flex-col mx-9 gap-4 mb-16">
@@ -106,6 +114,7 @@ export const CommentList = ({ voteId }: Props) => {
         return (
           <CommentItem
             key={comment.commentId}
+            onDelete={deleteComment}
             ref={isLast && hasNextPage ? lastItemRef : undefined}
             {...comment}
           />

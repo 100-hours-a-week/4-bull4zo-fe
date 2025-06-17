@@ -1,31 +1,39 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+
+// 스크롤 위치를 저장하는 key
+type ScrollKey = 'research' | 'user' | 'group'
+export const ScrollKeys = {
+  research: 'research',
+  user: 'user',
+  group: 'group',
+} as const
 
 type ScrollStore = {
-  scrollMap: Record<string, number>
+  scrollMap: Record<ScrollKey, number>
   // eslint-disable-next-line no-unused-vars
-  setScroll: (path: string, y: number) => void
+  setScroll: (path: ScrollKey, y: number) => void
   // eslint-disable-next-line no-unused-vars
-  getScroll: (path: string) => number
+  getScroll: (path: ScrollKey) => number
   reset: () => void
 }
 
-export const useScrollStore = create(
-  persist<ScrollStore>(
-    (set, get) => ({
-      scrollMap: {},
-      setScroll: (path, y) =>
-        set((state) => ({
-          scrollMap: {
-            ...state.scrollMap,
-            [path]: y,
-          },
-        })),
-      getScroll: (path) => get().scrollMap[path] ?? 0,
-      reset: () => set({ scrollMap: {} }),
+export const useScrollStore = create<ScrollStore>((set, get) => ({
+  scrollMap: {
+    research: 0,
+    user: 0,
+    group: 0,
+  },
+  setScroll: (key, y) =>
+    set((state) => ({
+      scrollMap: { ...state.scrollMap, [key]: y },
+    })),
+  getScroll: (key) => get().scrollMap[key] ?? 0,
+  reset: () =>
+    set({
+      scrollMap: {
+        research: 0,
+        user: 0,
+        group: 0,
+      },
     }),
-    {
-      name: 'scroll-storage',
-    },
-  ),
-)
+}))

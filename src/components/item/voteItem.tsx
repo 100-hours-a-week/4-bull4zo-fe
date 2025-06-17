@@ -71,6 +71,7 @@ export const VoteItem = (vote: Props) => {
           className={cn(
             'font-medium text-lg line-clamp-2',
             vote.rank && `${rankMap[vote.rank as keyof typeof rankMap].textColor}`,
+            vote.voteStatus === 'PENDING' ? 'cursor-not-allowed' : 'cursor-pointer',
           )}
         >
           {vote.rank && `${rankMap[vote.rank as keyof typeof rankMap].label} `}

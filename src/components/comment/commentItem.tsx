@@ -7,7 +7,12 @@ import { Comment } from '@/api/services/comment/model'
 import { useDeleteCommentMutation } from '@/api/services/comment/queries'
 import { formatRelativeTime } from '@/utils/time'
 
-export const CommentItem = forwardRef<HTMLLIElement, Partial<Comment>>((comment, ref) => {
+interface CommentItemProps extends Partial<Comment> {
+  // eslint-disable-next-line no-unused-vars
+  onDelete?: (commentId: number) => void
+}
+
+export const CommentItem = forwardRef<HTMLLIElement, CommentItemProps>((comment, ref) => {
   const { voteId } = useParams()
 
   const [open, setOpen] = useState(false)
@@ -45,12 +50,17 @@ export const CommentItem = forwardRef<HTMLLIElement, Partial<Comment>>((comment,
               commentId={comment.commentId!}
               voteId={Number(voteId)}
               setOpen={setOpen}
+              onDelete={comment.onDelete}
             />
           )}
         </div>
       </div>
       <p className=" whitespace-pre-line mb-1">{comment.content}</p>
-      <span className="text-xs text-gray">{formatRelativeTime(comment.createdAt!)}</span>
+      <span className="text-xs text-gray">
+        {formatRelativeTime(comment.createdAt!).includes('종료')
+          ? '0분 전'
+          : formatRelativeTime(comment.createdAt!)}
+      </span>
       <hr className="border-t border-gray-300 mt-4" />
     </li>
   )
@@ -60,16 +70,20 @@ const CommentDotsItem = ({
   commentId,
   voteId,
   setOpen,
+  onDelete,
 }: {
   isMine: boolean
   commentId: number
   voteId: number
   setOpen: Dispatch<React.SetStateAction<boolean>>
+  // eslint-disable-next-line no-unused-vars
+  onDelete?: (commentId: number) => void
 }) => {
   const { mutateAsync } = useDeleteCommentMutation(voteId)
 
   const handleDelete = async () => {
     await mutateAsync(commentId)
+    onDelete?.(commentId)
     setOpen(false)
   }
   const handleHide = () => {
