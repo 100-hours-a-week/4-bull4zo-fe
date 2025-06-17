@@ -14,7 +14,7 @@ export interface Notification {
   type: NotificationType
   content: string
   read: number // 0: unread, 1: read
-  redirect_url: string
+  redirectUrl: string
   createdAt: string
 }
 

@@ -1,4 +1,9 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
   GroupRoleChangeRequest,
@@ -10,21 +15,20 @@ import {
 import { groupService } from './service'
 
 // 그룹 이름 무한스크롤 조회
-export const useInfiniteGroupNameListQuery = (size: number = 10, enabled: boolean = true) => {
-  return useInfiniteQuery<MyGroupNamesData, AxiosError>({
+export const useInfiniteGroupNameListQuery = (size: number = 10) => {
+  return useSuspenseInfiniteQuery<MyGroupNamesData, AxiosError>({
     queryKey: ['groupNameList'],
     queryFn: ({ pageParam }) => groupService.groupNameList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
       return lastPage?.hasNext ? lastPage.nextCursor : undefined
     },
-    enabled,
     staleTime: 1000 * 60 * 15,
     initialPageParam: undefined,
   })
 }
 // 그룹 정보 무한스크롤 조회
-export const useInfiniteGroupsQuery = (size: number = 10, enabled: boolean = true) => {
-  return useInfiniteQuery<MyGroupList, Error>({
+export const useInfiniteGroupsQuery = (size: number = 10) => {
+  return useSuspenseInfiniteQuery<MyGroupList, Error>({
     queryKey: ['myGroups'],
     queryFn: ({ pageParam }) => groupService.getAllGroupList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
@@ -32,7 +36,6 @@ export const useInfiniteGroupsQuery = (size: number = 10, enabled: boolean = tru
     },
     initialPageParam: undefined,
     staleTime: 1000 * 60 * 15,
-    enabled,
   })
 }
 // 초대 코드로 그룹 가입
@@ -73,7 +76,7 @@ export const useLeaveGroupMutation = (groupId: number) => {
 }
 // 그룹 정보 조회
 export const useGroupQuery = (groupId: number) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['group', groupId],
     queryFn: () => groupService.getGroup(groupId),
     staleTime: 1000 * 60 * 15,
@@ -107,7 +110,7 @@ export const useDeleteGroupMutation = (groupId: number) => {
 }
 // 그룹 멤버 목록 조회
 export const useGroupMembersQuery = (groupId: number) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['groupMembers', groupId],
     queryFn: () => groupService.getGroupMembers(groupId),
     staleTime: 1000 * 60 * 15,
@@ -141,7 +144,7 @@ export const useGroupMemberDeleteMutation = (groupId: number, userId: number) =>
 }
 // 그룹 내 투표 목록 조회
 export const useGroupVotesInfiniteQuery = (groupId: number, size: number = 10) => {
-  return useInfiniteQuery<GroupVoteListResponse, AxiosError>({
+  return useSuspenseInfiniteQuery<GroupVoteListResponse, AxiosError>({
     queryKey: ['groupVotes', groupId],
     queryFn: ({ pageParam }) =>
       groupService.getGroupVotes(groupId, size, pageParam as string | undefined),

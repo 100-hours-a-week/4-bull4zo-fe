@@ -31,7 +31,6 @@ body {
 
   background: linear-gradient(62deg, #ffe6f0, #ffefba, #ffffff);
   background-size: 200% 200%;
-  animation: gradient-move 4s linear infinite;
 }
 
 @keyframes gradient-move {

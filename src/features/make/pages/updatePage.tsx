@@ -2,31 +2,28 @@ import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import NotFoundPage from '@/app/NotFound'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
-import { ResearchList } from '@/components/list/researchList'
 import { LoadingPage } from '@/components/loading/loadingPage'
+import { UpdateVoteForm } from '../components/updateVoteForm'
 
-const ResearchPage = () => {
+const UpdatePage = () => {
   return (
     <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
       <Suspense fallback={<LoadingPage />}>
-        <ResearchPageContent />
+        <UpdatePageContent />
       </Suspense>
     </ErrorBoundary>
   )
 }
 
-export default ResearchPage
+export default UpdatePage
 
-const ResearchPageContent = () => {
+const UpdatePageContent = () => {
   return (
-    <article className="min-h-full">
+    <article className="min-h-full w-full overflow-y-auto pb-4">
       <div className="pl-4 py-3">
         <GroupDropDown />
       </div>
-      {/* <div className="bg-gray w-full h-[0.625rem] mt-1" />
-      <TopList /> */}
-      <div className="bg-line w-full h-[0.625rem] mt-1" />
-      <ResearchList />
+      <UpdateVoteForm />
     </article>
   )
 }

@@ -1,16 +1,22 @@
+import React from 'react'
 import { Navigate, createBrowserRouter } from 'react-router-dom'
-import CreateGroupPage from '@/features/group/pages/createGrupPage'
-import { GroupVotesPage } from '@/features/group/pages/groupVotesPage'
-import ManageGroupPage from '@/features/group/pages/manageGroupPage'
-import HomePage from '@/features/home/pages/homePage'
-import AuthCallback from '@/features/login/pages/authCallback'
-import LoginPage from '@/features/login/pages/loginPage'
-import MakePage from '@/features/make/pages/makePage'
-import ResearchDetailPage from '@/features/research/pages/researchDetail.Page'
-import ResearchPage from '@/features/research/pages/researchPage'
-import UserPage from '@/features/user/pages/userPage'
 import { AppLayout } from './AppLayout'
-import NotFoundPage from './NotFound'
+
+// lazy loading pages
+export const HomePage = React.lazy(() => import('@/features/home/pages/homePage'))
+export const LoginPage = React.lazy(() => import('@/features/login/pages/loginPage'))
+export const MakePage = React.lazy(() => import('@/features/make/pages/makePage'))
+export const UpdatePage = React.lazy(() => import('@/features/make/pages/updatePage'))
+export const ResearchPage = React.lazy(() => import('@/features/research/pages/researchPage'))
+export const ResearchDetailPage = React.lazy(
+  () => import('@/features/research/pages/researchDetail.Page'),
+)
+export const CreateGroupPage = React.lazy(() => import('@/features/group/pages/createGrupPage'))
+export const ManageGroupPage = React.lazy(() => import('@/features/group/pages/manageGroupPage'))
+export const GroupVotesPage = React.lazy(() => import('@/features/group/pages/groupVotesPage'))
+export const UserPage = React.lazy(() => import('@/features/user/pages/userPage'))
+export const AuthCallback = React.lazy(() => import('@/features/login/pages/authCallback'))
+export const NotFoundPage = React.lazy(() => import('@/app/NotFound'))
 
 export const router = createBrowserRouter([
   {
@@ -22,10 +28,6 @@ export const router = createBrowserRouter([
         element: <Navigate to="/home" replace />,
       },
       {
-        path: '/auth/callback',
-        element: <AuthCallback />,
-      },
-      {
         path: '/home',
         element: <HomePage />,
       },
@@ -35,7 +37,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/make/:voteId',
-        element: <MakePage />,
+        element: <UpdatePage />,
       },
       {
         path: '/research',
@@ -66,6 +68,10 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/auth/callback',
+    element: <AuthCallback />,
   },
   {
     path: '*',

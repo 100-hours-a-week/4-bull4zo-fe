@@ -12,8 +12,8 @@ export const NotificationItem = forwardRef<HTMLLIElement, Partial<Notification>>
     if (props.notificationId) {
       mutateAsync(props.notificationId)
 
-      if (props.redirect_url) {
-        window.location.href = props.redirect_url
+      if (props.redirectUrl) {
+        window.location.href = props.redirectUrl
       }
     }
   }
@@ -22,8 +22,9 @@ export const NotificationItem = forwardRef<HTMLLIElement, Partial<Notification>>
     <li
       ref={ref}
       className={cn(
-        'w-full border-b px-4 py-4 cursor-pointer',
+        'w-full border-b px-4 py-4',
         props.read ? 'bg-white' : 'bg-gray-100',
+        props.redirectUrl ? 'cursor-pointer' : 'cursor-default',
       )}
       onClick={handleClick}
     >
