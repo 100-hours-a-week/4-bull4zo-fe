@@ -1,7 +1,5 @@
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
-import { ResearchList } from '../components/researchList'
-
-// import { TopList } from '../components/topList'
+import { ResearchList } from '@/components/list/researchList'
 
 const ResearchPage = () => {
   return (

@@ -1,7 +1,7 @@
 import { useRef } from 'react'
+import { UserGroupList } from '@/components/list/userGroupList'
 import { UserCard } from '@/features/user/components/userCard'
 import { UserFeedbackWidget } from '../components/userFeedbackWidget'
-import { UserGroupList } from '../components/userGroupList'
 
 const UserPage = () => {
   const containerRef = useRef<HTMLDivElement>(null)

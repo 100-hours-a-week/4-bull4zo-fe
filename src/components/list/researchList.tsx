@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { useScrollStore } from '@/stores/scrollStore'
-import { useResearchTabStore } from '../stores/researchTapStore'
+import { useResearchTabStore } from '../../features/research/stores/researchTapStore'
 
 export const ResearchList = () => {
   const { index, setIndex } = useResearchTabStore()
