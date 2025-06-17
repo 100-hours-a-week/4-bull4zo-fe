@@ -63,9 +63,7 @@ export const AppLayout = () => {
   return (
     <div>
       <Header />
-      <main className="py-[4.25rem] min-h-screen bg-yellow">
-        <Outlet />
-      </main>
+      <main className="py-[4.25rem] min-h-screen bg-yellow">{isLogin && <Outlet />}</main>
       <Navigation />
       <Slider />
       {isOpen && <Modal />}

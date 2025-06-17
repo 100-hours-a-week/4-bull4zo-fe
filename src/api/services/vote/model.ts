@@ -1,3 +1,4 @@
+import { CustomQueryOptions } from '@/api/type'
 import { PageNation } from '@/types'
 
 export type VoteType = 'USER' | 'AI' | 'EVENT'
@@ -26,6 +27,7 @@ export interface UseInfiniteVotesQueryOptions {
   groupId?: number
   size?: number
   isLogin: boolean | undefined
+  options?: CustomQueryOptions<VoteData>
 }
 
 export interface UseInfiniteVotesRequest {

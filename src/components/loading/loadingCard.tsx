@@ -1,3 +1,4 @@
+import { SyncLoader } from 'react-spinners'
 import { Card, CardContent } from '../ui/card'
 
 export const LoadingCard = () => {
@@ -9,7 +10,7 @@ export const LoadingCard = () => {
         <div>
           투표를 불러오고 있어요. <br /> 잠시만 기다려주세요 :)
         </div>
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-white border-t-transparent" />
+        <SyncLoader color="#FFF085" speedMultiplier={0.7} />
       </CardContent>
     </Card>
   )

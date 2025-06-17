@@ -4,14 +4,9 @@ import { AddGroupModal } from '@/components/modal/addGroupModal'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useModalStore } from '@/stores/modalStore'
-import { useUserStore } from '@/stores/userStore'
 
 export const UserGroupList = () => {
-  const { isLogin } = useUserStore()
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteGroupsQuery(
-    undefined,
-    !!isLogin,
-  )
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteGroupsQuery(undefined)
   const { openModal } = useModalStore()
 
   return (

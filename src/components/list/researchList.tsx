@@ -1,15 +1,18 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { motion } from 'framer-motion'
 import {
   useCreateVotesInfinityQuery,
   useParticipatedVotesInfinityQuery,
 } from '@/api/services/vote/queries'
+import NotFoundPage from '@/app/NotFound'
 import { VoteList } from '@/components/list/voteList'
 import { Label } from '@/components/ui/label'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
 import { useScrollStore } from '@/stores/scrollStore'
 import { useResearchTabStore } from '../../features/research/stores/researchTapStore'
+import { LoadingPage } from '../loading/loadingPage'
 
 export const ResearchList = () => {
   const { index, setIndex } = useResearchTabStore()
@@ -97,12 +100,16 @@ export const ResearchList = () => {
           </div>
         ))}
       </div>
-      <VoteList
-        data={data}
-        fetchNextPage={fetchNextPage}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-      />
+      <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+        <Suspense fallback={<LoadingPage />}>
+          <VoteList
+            data={data}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+          />
+        </Suspense>
+      </ErrorBoundary>
     </section>
   )
 }

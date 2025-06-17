@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { FaQuestion } from 'react-icons/fa'
 import { useUserInfoQuery } from '@/api/services/user/queries'
 import { useInfiniteVotesQuery } from '@/api/services/vote/queries'
-import { VoteNoMoreCard } from '@/components/card/voteNoMoreCard'
+import NotFoundPage from '@/app/NotFound'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
 import { LoadingCard } from '@/components/loading/loadingCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
@@ -15,10 +16,30 @@ import VoteSwiperFramer from '../components/voteSwiper_framer'
 import { useVoteCardStore } from '../stores/voteCardStore'
 
 const HomePage = () => {
+  return (
+    <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+      <Suspense
+        fallback={
+          <div className="flex screen-minus-header-nav justify-center items-center">
+            <LoadingCard />
+          </div>
+        }
+      >
+        <HomePageContent />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
+export default HomePage
+
+const HomePageContent = () => {
   const { isLogin, setIsLogin, setNickName } = useUserStore()
   const { selectedId: groupId } = useGroupStore()
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteVotesQuery({ groupId, isLogin })
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteVotesQuery({
+    groupId,
+    isLogin,
+  })
   const { data: user } = useUserInfoQuery({ enabled: isLogin })
 
   const { openModal } = useModalStore()
@@ -50,23 +71,6 @@ const HomePage = () => {
     filterByGroupId(groupId)
   }, [groupId, filterByGroupId])
 
-  // 로딩 카드
-  if (!isLogin && isLoading) {
-    return (
-      <div className="flex screen-minus-header-nav justify-center items-center">
-        <LoadingCard />
-      </div>
-    )
-  }
-  // 더 이상 진행할 카드가 없는 경우 (에러 && 로그인 상황)
-  if (isError) {
-    return (
-      <div className="flex screen-minus-header-nav justify-center items-center">
-        <VoteNoMoreCard />
-      </div>
-    )
-  }
-
   return (
     <article className="overflow-hidden screen-minus-header-nav">
       {isLogin && (
@@ -86,4 +90,3 @@ const HomePage = () => {
     </article>
   )
 }
-export default HomePage

@@ -1,4 +1,10 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+  useSuspenseQuery,
+} from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
   CreateVotePayload,
@@ -22,8 +28,8 @@ export const useInfiniteVotesQuery = ({
   const effectiveSize = isLogin ? size : 3
   const effectiveGroupId = isLogin ? groupId : 1
 
-  return useInfiniteQuery<VoteData, AxiosError>({
-    queryKey: ['votes', effectiveGroupId, effectiveSize],
+  return useSuspenseInfiniteQuery<VoteData, AxiosError>({
+    queryKey: ['votes', effectiveGroupId as number, effectiveSize],
     queryFn: ({ pageParam }) =>
       voteService.getVotes({
         groupId: effectiveGroupId,
@@ -33,7 +39,6 @@ export const useInfiniteVotesQuery = ({
     getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
     staleTime: 1000 * 60 * 5,
     initialPageParam: undefined,
-    enabled: isLogin !== undefined,
   })
 }
 // 투표 참여
@@ -63,7 +68,7 @@ export const useParticipatedVotesInfinityQuery = ({
   groupId,
   size = 10,
 }: ParticipatedVotesQueryOptions) => {
-  return useInfiniteQuery<ParticipatedVoteList, AxiosError>({
+  return useSuspenseInfiniteQuery<ParticipatedVoteList, AxiosError>({
     queryKey: ['participatedVotes', groupId],
     queryFn: ({ pageParam }) =>
       voteService.getParticipatedVotes({ groupId, cursor: pageParam as string | undefined, size }),
@@ -77,7 +82,7 @@ export const useCreateVotesInfinityQuery = ({
   groupId,
   size = 10,
 }: ParticipatedVotesQueryOptions) => {
-  return useInfiniteQuery<ParticipatedVoteList, AxiosError>({
+  return useSuspenseInfiniteQuery<ParticipatedVoteList, AxiosError>({
     queryKey: ['createdVotes', groupId],
     queryFn: ({ pageParam }) =>
       voteService.getCreatedVotes({ groupId, cursor: pageParam as string | undefined, size }),
@@ -87,20 +92,18 @@ export const useCreateVotesInfinityQuery = ({
   })
 }
 // 투표 상세 내용 조회
-export const useVoteDetailInfo = (voteId: string, enabled: boolean = true) => {
-  return useQuery<VoteDetail>({
+export const useVoteDetailInfo = (voteId: string) => {
+  return useSuspenseQuery<VoteDetail>({
     queryKey: ['voteDetail', voteId],
     queryFn: () => voteService.getVote(voteId),
-    enabled: !!voteId && enabled,
     staleTime: 1000 * 60 * 1,
   })
 }
 // 투표 상세 결과 조회
-export const useVoteDetailResults = (voteId: string, enabled: boolean = true) => {
-  return useQuery<voteDetailResult>({
+export const useVoteDetailResults = (voteId: string) => {
+  return useSuspenseQuery<voteDetailResult>({
     queryKey: ['voteResult', voteId],
     queryFn: () => voteService.getVoteResult(voteId),
-    enabled: !!voteId && enabled,
     staleTime: 1000 * 60 * 1,
   })
 }
