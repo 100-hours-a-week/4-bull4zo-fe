@@ -6,6 +6,7 @@ import HomePage from '@/features/home/pages/homePage'
 import AuthCallback from '@/features/login/pages/authCallback'
 import LoginPage from '@/features/login/pages/loginPage'
 import MakePage from '@/features/make/pages/makePage'
+import UpdatePage from '@/features/make/pages/updatePage'
 import ResearchDetailPage from '@/features/research/pages/researchDetail.Page'
 import ResearchPage from '@/features/research/pages/researchPage'
 import UserPage from '@/features/user/pages/userPage'
@@ -35,7 +36,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/make/:voteId',
-        element: <MakePage />,
+        element: <UpdatePage />,
       },
       {
         path: '/research',

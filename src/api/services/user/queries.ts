@@ -1,11 +1,10 @@
-import { UseQueryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { CustomQueryOptions } from '@/api/type'
 import { UserInfo } from './model'
 import { userService } from './service'
 
 // 유저 정보 조회
-export const useUserInfoQuery = (
-  options?: Omit<UseQueryOptions<UserInfo, Error>, 'queryKey' | 'queryFn'>,
-) => {
+export const useUserInfoQuery = (options?: CustomQueryOptions<UserInfo>) => {
   return useQuery({
     queryKey: ['user'],
     queryFn: userService.getUserInfo,

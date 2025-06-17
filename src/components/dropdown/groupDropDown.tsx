@@ -5,7 +5,6 @@ import { ChevronDown } from 'lucide-react'
 import { useInfiniteGroupNameListQuery } from '@/api/services/group/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/groupStore'
-import { useUserStore } from '@/stores/userStore'
 import { Button } from '../ui/button'
 import {
   DropdownMenu,
@@ -16,12 +15,11 @@ import {
 } from '../ui/dropdown-menu'
 
 export const GroupDropDown = () => {
-  const { isLogin } = useUserStore()
   const { groups, setId, setGroups, selectedId } = useGroupStore()
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
-    useInfiniteGroupNameListQuery(undefined, isLogin)
+    useInfiniteGroupNameListQuery()
 
   useEffect(() => {
     if (isSuccess && data) {
