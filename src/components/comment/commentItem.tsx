@@ -50,7 +50,11 @@ export const CommentItem = forwardRef<HTMLLIElement, Partial<Comment>>((comment,
         </div>
       </div>
       <p className=" whitespace-pre-line mb-1">{comment.content}</p>
-      <span className="text-xs text-gray">{formatRelativeTime(comment.createdAt!)}</span>
+      <span className="text-xs text-gray">
+        {formatRelativeTime(comment.createdAt!).includes('종료')
+          ? '0분 전'
+          : formatRelativeTime(comment.createdAt!)}
+      </span>
       <hr className="border-t border-gray-300 mt-4" />
     </li>
   )
