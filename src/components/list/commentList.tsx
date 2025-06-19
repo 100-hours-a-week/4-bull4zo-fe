@@ -24,9 +24,15 @@ export const CommentList = ({ voteId }: Props) => {
     [data, newComments],
   )
 
-  // 롱폴링 로직
-  // const pollingKey = useRef(Symbol())
+  const deleteComment = (commentId: number) => {
+    setNewComments((prev) => {
+      const updated = prev.filter((c) => c.commentId !== commentId)
+      newCommentsRef.current = updated
+      return updated
+    })
+  }
 
+  // 롱폴링 로직
   const hasStartedPolling = useRef(false)
 
   useEffect(() => {
@@ -36,9 +42,6 @@ export const CommentList = ({ voteId }: Props) => {
     hasStartedPolling.current = true
     isMounted.current = true
     isPolling.current = true
-
-    // pollingKey.current = Symbol()
-    // const currentKey = pollingKey.current
 
     let timer: ReturnType<typeof setTimeout> | undefined
     let hasRetried = false
@@ -50,8 +53,6 @@ export const CommentList = ({ voteId }: Props) => {
 
       try {
         const result = await commentService.getLongPollingCommentList(voteId, lastCursor)
-
-        // if (!isMounted.current || pollingKey.current !== currentKey) return
 
         if (result?.comments?.length > 0) {
           setNewComments((prev) => {
@@ -106,6 +107,7 @@ export const CommentList = ({ voteId }: Props) => {
         return (
           <CommentItem
             key={comment.commentId}
+            onDelete={deleteComment}
             ref={isLast && hasNextPage ? lastItemRef : undefined}
             {...comment}
           />

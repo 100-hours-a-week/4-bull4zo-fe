@@ -25,7 +25,7 @@ const ResearchPageContent = () => {
       </div>
       {/* <div className="bg-gray w-full h-[0.625rem] mt-1" />
       <TopList /> */}
-      <div className="bg-gray w-full h-[0.625rem] mt-1" />
+      <div className="bg-line w-full h-[0.625rem] mt-1" />
       <ResearchList />
     </article>
   )

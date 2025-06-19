@@ -127,13 +127,13 @@ export const MakeVoteForm = () => {
                 <FormControl>
                   <div className="flex gap-2 ml-3">
                     <Checkbox
-                      className="w-5 h-5 bg-white"
+                      className="w-5 h-5 bg-white cursor-pointer"
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
                     <button
                       type="button"
-                      className="font-medium font-unbounded"
+                      className="font-medium font-unbounded cursor-pointer"
                       onClick={() => {
                         field.onChange(!field.value)
                       }}
@@ -210,7 +210,7 @@ export const MakeVoteForm = () => {
                 <FormLabel className="font-semibold text-lg">투표 종료 시간</FormLabel>
                 <FormControl>
                   <input
-                    className="rounded-[0.75rem] bg-gray px-8 py-3 shadow-md focus:ring-1 focus:outline-none"
+                    className="rounded-[0.75rem] bg-gray px-8 py-3 shadow-md focus:ring-1 focus:outline-none cursor-pointer"
                     {...field}
                     style={{ backgroundColor: 'white' }}
                     type="datetime-local"

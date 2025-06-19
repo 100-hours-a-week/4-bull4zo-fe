@@ -23,7 +23,7 @@ const Header = () => {
 
   const path = location.pathname
   const excludedPaths = ['/home', '/make', '/research', '/user']
-  const showBackbutton = !excludedPaths.includes(path)
+  const showBackButton = !excludedPaths.includes(path)
 
   const handleBack = () => {
     router(-1)
@@ -31,14 +31,14 @@ const Header = () => {
 
   return (
     <header className=" fixed w-full max-w-[450px] overflow-hidden shadow-header flex flex-row justify-between items-center z-50 bg-white">
-      {showBackbutton && (
+      {showBackButton && (
         <button className="ml-2 cursor-pointer" onClick={handleBack} aria-label="뒤로가기">
           <FaAngleLeft size={24} />
         </button>
       )}
-      <a href="/home" className="inline-block w-24 h-16 cursor-pointer">
+      <button onClick={() => router('/home')} className="inline-block w-24 h-16 cursor-pointer">
         <Icon src={MOA_HOME_ICON} className="h-full w-full" />
-      </a>
+      </button>
       <div className="mr-4">
         {isLogin ? (
           <div className="relative cursor-pointer" aria-label="알림">

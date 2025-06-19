@@ -20,7 +20,7 @@ export const GroupReport = ({ group }: Props) => {
       {ableManage(group.role) && (
         <Button
           onClick={() => route(`/group/${groupId}/votes`)}
-          className="mt-4 h-full w-full bg-white text-lg py-3 shadow-md cursor-pointer"
+          className="mt-4 h-full w-full bg-white text-lg py-3 shadow-md cursor-pointer mb-4"
         >
           그룹 내 투표 목록 확인하기
         </Button>

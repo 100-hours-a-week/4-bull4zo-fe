@@ -27,9 +27,9 @@ const ManageGroupPageContent = () => {
   return (
     <article className="py-5 min-h-full">
       <UpdateGroupForm group={group} />
-      <div className="w-full max-w-[450px] my-3 bg-gray h-[0.625rem]" />
+      <div className="w-full max-w-[450px] my-3 bg-line h-[0.625rem]" />
       <GroupReport group={group} />
-      <div className="w-full max-w-[450px] my-3 bg-gray h-[0.625rem]" />
+      <div className="w-full max-w-[450px] my-3 bg-line h-[0.625rem]" />
       <GroupMember />
     </article>
   )
