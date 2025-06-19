@@ -2,6 +2,9 @@
   .bg-gray {
     background-color: #f2f2f2;
   }
+  .bg-line {
+    background-color: #fffffb;
+  }
   .bg-yellow {
     background-color: rgba(232, 221, 194, 0.25);
   }

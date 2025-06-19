@@ -45,7 +45,7 @@ export const UserFeedbackWidget = () => {
           e.stopPropagation()
           setOpen((prev) => !prev)
         }}
-        className="fixed bottom-18 z-[999] w-14 h-14 rounded-full bg-primary text-white shadow-md flex items-center justify-center"
+        className="fixed bottom-18 z-[999] w-14 h-14 rounded-full bg-primary text-white shadow-md flex items-center justify-center cursor-pointer"
         style={{ right: rightOffset ?? 16 }}
       >
         <Icon src={MOA_LOGO} className="w-14 h-14" />

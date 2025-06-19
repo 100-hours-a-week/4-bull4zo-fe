@@ -50,7 +50,7 @@ export const GroupDropDown = () => {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild style={{ padding: 0, paddingLeft: '12px' }}>
         <Button
-          className="w-[10rem] justify-between border-none overflow-hidden text-sm shadow-md hover:bg-white"
+          className="w-[10rem] justify-between border-none overflow-hidden text-sm shadow-md hover:bg-white cursor-pointer"
           variant="outline"
           data-testid="group-dropdown-trigger"
           disabled={isError}
@@ -84,6 +84,7 @@ export const GroupDropDown = () => {
               key={group.groupId}
               value={group.groupId.toString()}
               data-testid={`group-item-${group.groupId}`}
+              className="cursor-pointer"
             >
               {group.name}
             </DropdownMenuRadioItem>
