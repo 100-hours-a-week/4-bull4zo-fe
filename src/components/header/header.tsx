@@ -37,7 +37,13 @@ const Header = () => {
         </button>
       )}
       <button onClick={() => router('/home')} className="inline-block w-24 h-16 cursor-pointer">
-        <Icon src={MOA_HOME_ICON} className="h-full w-full" />
+        <Icon
+          src={MOA_HOME_ICON}
+          className="h-full w-full"
+          width={96}
+          height={64}
+          alt="홈 아이콘"
+        />
       </button>
       <div className="mr-4">
         {isLogin ? (

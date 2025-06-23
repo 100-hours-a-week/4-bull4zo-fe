@@ -1,14 +1,17 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useUserInfoQuery } from '@/api/services/user/queries'
 import { userService } from '@/api/services/user/service'
 import Header from '@/components/header/header'
+import { LoadingPage } from '@/components/loading/loadingPage'
 import { Modal } from '@/components/modal/modal'
 import Navigation from '@/components/navigation/navigation'
 import { Slider } from '@/components/slider/slider'
 import { useModalStore } from '@/stores/modalStore'
 import { useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
+import NotFoundPage from './NotFound'
 
 export const AppLayout = () => {
   const location = useLocation()
@@ -64,7 +67,11 @@ export const AppLayout = () => {
     <div>
       <Header />
       <main className="py-[4.25rem] min-h-screen bg-yellow">
-        <Outlet />
+        <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+          <Suspense fallback={<LoadingPage />}>
+            <Outlet />
+          </Suspense>
+        </ErrorBoundary>
       </main>
       <Navigation />
       <Slider />
