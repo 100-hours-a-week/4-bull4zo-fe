@@ -22,7 +22,7 @@ const Header = () => {
   const location = useLocation()
 
   const path = location.pathname
-  const excludedPaths = ['/home', '/make', '/research', '/user']
+  const excludedPaths = ['/home', '/make', '/research', '/user', '/auth/callback']
   const showBackButton = !excludedPaths.includes(path)
 
   const handleBack = () => {

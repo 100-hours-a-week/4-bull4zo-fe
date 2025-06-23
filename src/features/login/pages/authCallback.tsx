@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
+import { LoadingPage } from '@/components/loading/loadingPage'
 import { useUserStore } from '@/stores/userStore'
 import { logoutAndResetStores } from '@/utils/reset'
 
@@ -64,7 +65,7 @@ const AuthCallback = () => {
     }
   }
 
-  return <div></div>
+  return <LoadingPage />
 }
 
 export default AuthCallback
