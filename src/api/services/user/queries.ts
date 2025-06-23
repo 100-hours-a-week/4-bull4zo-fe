@@ -1,11 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { CustomQueryOptions } from '@/api/type'
 import { UserInfo } from './model'
 import { userService } from './service'
 
 // 유저 정보 조회
 export const useUserInfoQuery = (options?: CustomQueryOptions<UserInfo>) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['user'],
     queryFn: userService.getUserInfo,
     staleTime: 1000 * 60 * 5,
