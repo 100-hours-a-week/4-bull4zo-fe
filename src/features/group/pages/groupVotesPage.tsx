@@ -6,7 +6,7 @@ import NotFoundPage from '@/app/NotFound'
 import { VoteList } from '@/components/list/voteList'
 import { LoadingPage } from '@/components/loading/loadingPage'
 
-export const GroupVotesPage = () => {
+const GroupVotesPage = () => {
   return (
     <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
       <Suspense fallback={<LoadingPage />}>
@@ -15,6 +15,7 @@ export const GroupVotesPage = () => {
     </ErrorBoundary>
   )
 }
+export default GroupVotesPage
 
 const GroupVotesPageContent = () => {
   const { groupId } = useParams()
