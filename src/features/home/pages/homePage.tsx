@@ -40,7 +40,7 @@ const HomePageContent = () => {
     groupId,
     isLogin,
   })
-  const { data: user } = useUserInfoQuery({ enabled: isLogin })
+  const { data: user } = useUserInfoQuery()
 
   const { openModal } = useModalStore()
   const { isHidden, open } = useTutorialStore()
