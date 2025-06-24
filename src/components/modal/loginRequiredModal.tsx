@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useModalStore } from '@/stores/modalStore'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
+import { useModalStore } from '@/stores/index'
 
 export const LoginRequiredCard = () => {
   const navigation = useNavigate()

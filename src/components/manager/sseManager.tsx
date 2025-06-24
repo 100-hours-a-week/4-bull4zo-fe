@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useSSE } from '@/hooks/useSSE'
-import { useUserStore } from '@/stores/userStore'
+import { useSSE } from '@/hooks/index'
+import { useUserStore } from '@/stores/index'
 
 export const SSEManager = () => {
   const { accessToken, isLogin } = useUserStore()

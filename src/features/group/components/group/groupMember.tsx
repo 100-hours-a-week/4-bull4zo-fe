@@ -2,8 +2,7 @@ import { useMemo, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 import { useGroupMembersQuery } from '@/api/services/group/queries'
-import { MemberList } from '@/components/list/memberList'
-import { Input } from '@/components/ui/input'
+import { Input, MemberList } from '@/components/index'
 
 export const GroupMember = () => {
   const { groupId } = useParams()

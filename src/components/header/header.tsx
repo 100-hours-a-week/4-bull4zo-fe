@@ -3,19 +3,16 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Bell } from 'lucide-react'
 import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
 import MOA_HOME_ICON from '@/assets/moa_home.webp'
-import { useNotificationStore } from '@/stores/notificationStore'
-import { useSliderStore } from '@/stores/sliderStore'
-import { useUserStore } from '@/stores/userStore'
-import { Icon } from '../Icon/icon'
-import { Button } from '../ui/button'
+import { Button, Icon } from '@/components/index'
+import { useNotificationStore, useSliderStore, useUserStore } from '@/stores/index'
 
-const Header = () => {
+export const Header = () => {
   const router = useNavigate()
   const { isLogin } = useUserStore()
   const { open } = useSliderStore()
   const { newNotification } = useNotificationStore()
   const { isOpen } = useSliderStore()
-  const { data } = useInfiniteNotificationQuery()
+  const { data } = useInfiniteNotificationQuery(isLogin)
 
   const location = useLocation()
 
@@ -81,4 +78,3 @@ const Header = () => {
     </header>
   )
 }
-export default Header

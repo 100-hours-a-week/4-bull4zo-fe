@@ -1,22 +1,31 @@
 import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { createdVotesKey, participatedVotesKey } from '@/api/services/vote/key'
 import { useDeleteVoteMutation, useVoteReportReasons } from '@/api/services/vote/queries'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { voteCreateFailMessage } from '@/lib/messageMap'
-import { useModalStore } from '@/stores/modalStore'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { useModalStore } from '@/stores/index'
 
 export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
   const navigation = useNavigate()
   const { closeModal } = useModalStore()
 
+  const queryClient = useQueryClient()
+
   const { data } = useVoteReportReasons(voteId.toString())
-  const { mutateAsync } = useDeleteVoteMutation(voteId.toString())
+  const { mutateAsync } = useMutation({
+    ...useDeleteVoteMutation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: createdVotesKey() })
+      queryClient.invalidateQueries({ queryKey: participatedVotesKey() })
+    },
+  })
 
   const reason = (data?.reviewReason || 'OTHER') as keyof typeof voteCreateFailMessage
 
   const handleDeleteVote = async () => {
-    await mutateAsync()
+    await mutateAsync(voteId.toString())
     toast.success('투표가 삭제되었어요.')
     closeModal()
   }

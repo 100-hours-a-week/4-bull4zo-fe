@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import NotFoundPage from '@/app/NotFound'
+import { NotFoundPage } from '@/app/NotFound'
 // import { useParams } from 'react-router-dom'
 // import { useTop3VotesQuery } from '@/api/services/vote/queries'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'

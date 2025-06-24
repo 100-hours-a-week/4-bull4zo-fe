@@ -3,12 +3,11 @@ import { FaQuestionCircle } from 'react-icons/fa'
 import { FaRegComment } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 import { ParticipatedVote, ParticipatedVoteStatus } from '@/api/services/vote/model'
+import { Label, VoteCreateFailModal } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
-import { useModalStore } from '@/stores/modalStore'
+import { useModalStore } from '@/stores/index'
 import { formatRelativeTime } from '@/utils/time'
-import { VoteCreateFailModal } from '../modal/voteCreateFailModal'
-import { Label } from '../ui/label'
 
 interface Props extends Partial<ParticipatedVote> {
   rank?: number

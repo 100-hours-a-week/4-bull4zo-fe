@@ -126,7 +126,7 @@ describe('<CommentItem />', () => {
 
   it('삭제하기 버튼 클릭 시 mutation 함수가 호출된다', async () => {
     const mockMutate = vi.fn().mockResolvedValue({})
-    vi.spyOn(commentQueries, 'useDeleteCommentMutation').mockReturnValue({
+    vi.spyOn(commentQueries as any, 'useDeleteCommentMutation').mockReturnValue({
       mutateAsync: mockMutate,
     } as any)
 

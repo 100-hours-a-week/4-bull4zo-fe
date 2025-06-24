@@ -1,12 +1,51 @@
 import { forwardRef } from 'react'
-import { Notification } from '@/api/services/notification/model'
-import { useMutationReadNotification } from '@/api/services/notification/queries'
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
+import { InfiniteNotificationKey } from '@/api/services/notification/key'
+import { Notification, NotificationListResponse } from '@/api/services/notification/model'
+import { useReadNotificationMutation } from '@/api/services/notification/queries'
 import { notificationMessageMap } from '@/lib/messageMap'
 import { cn } from '@/lib/utils'
 import { formatRelativeTime } from '@/utils/time'
 
 export const NotificationItem = forwardRef<HTMLLIElement, Partial<Notification>>((props, ref) => {
-  const { mutateAsync } = useMutationReadNotification()
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    ...useReadNotificationMutation,
+    onMutate: async (notificationId) => {
+      await queryClient.cancelQueries({ queryKey: InfiniteNotificationKey() })
+
+      const previous =
+        queryClient.getQueryData<InfiniteData<NotificationListResponse>>(InfiniteNotificationKey())
+
+      queryClient.setQueryData<InfiniteData<NotificationListResponse>>(
+        InfiniteNotificationKey(),
+        (old) => {
+          if (!old) return old
+          return {
+            ...old,
+            pages: old.pages.map((page) => ({
+              ...page,
+              notifications: page.notifications.map((n) =>
+                n.notificationId === notificationId ? { ...n, read: 1 } : n,
+              ),
+            })),
+          }
+        },
+      )
+
+      return { previous }
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData<InfiniteData<NotificationListResponse>>(
+        InfiniteNotificationKey(),
+        context?.previous,
+      )
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: InfiniteNotificationKey() })
+    },
+  })
 
   const handleClick = async () => {
     if (props.notificationId) {

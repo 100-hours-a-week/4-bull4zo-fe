@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { userService } from '@/api/services/user/service'
 import { useUserStore } from '@/stores/userStore'
 
-const TokenGate = ({ children }: { children: React.ReactNode }) => {
+export const TokenGate = ({ children }: { children: React.ReactNode }) => {
   const [checked, setChecked] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
@@ -37,5 +37,3 @@ const TokenGate = ({ children }: { children: React.ReactNode }) => {
 
   return <>{children}</>
 }
-
-export default TokenGate

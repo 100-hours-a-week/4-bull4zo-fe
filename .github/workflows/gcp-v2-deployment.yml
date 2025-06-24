@@ -3,7 +3,7 @@ name: React CI/CD - Unified
 on:
   push:
     branches:
-      - main
+      # - main
       - develop
       - release/**
       - cicd/**
@@ -12,7 +12,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'prod' || 'dev' }}
-    
+
     steps:
       - name: Set environment variables based on branch
         id: set-env
@@ -40,7 +40,7 @@ jobs:
         run: pnpm install
 
       - name: Build with Vite (with env)
-        run: | 
+        run: |
           ${{ steps.set-env.outputs.vite_command }}
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}

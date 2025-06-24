@@ -1,7 +1,6 @@
 import { VoteDetail, voteDetailResult } from '@/api/services/vote/model'
 import CheckIcon from '@/assets/voteCheckIcon.svg'
-import { Icon } from '@/components/Icon/icon'
-import { Label } from '@/components/ui/label'
+import { Icon, Label } from '@/components/index'
 import { formatDateTimeDetail } from '@/utils/time'
 
 interface Props {
@@ -9,7 +8,7 @@ interface Props {
   voteResult: voteDetailResult
 }
 
-const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
+export const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
   const agree = voteResult?.results[0]
   const disAgree = voteResult?.results[1]
 
@@ -80,4 +79,3 @@ const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
     </div>
   )
 }
-export default ResearchDetailInfo

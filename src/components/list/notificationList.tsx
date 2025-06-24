@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
-import { NotificationItem } from '../item/notificationItem'
+import { NotificationItem } from '@/components/index'
 
 interface Props {
   data: ReturnType<typeof useInfiniteNotificationQuery>['data']

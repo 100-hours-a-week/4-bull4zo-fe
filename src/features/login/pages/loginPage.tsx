@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/index'
 import KakaoButton from '@/features/login/components/kakaoButton'
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/index'
 
 const LoginPage = () => {
   const router = useNavigate()

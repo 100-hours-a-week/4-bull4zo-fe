@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { useUserFeedbackMutation } from '@/api/services/user/queries'
 import MESSAGEICON from '@/assets/message.webp'
 import MOA_LOGO from '@/assets/moa_logo.svg'
-import { Icon } from '@/components/Icon/icon'
-import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  Icon,
+} from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
 import { FeedbackSchema, feedbackSchema } from '../lib/userSchema'
 
@@ -72,7 +79,20 @@ export const FeedbackForm = ({ onClose, rightOffset, buttonRef }: FeedbackFormPr
   const [mode, setMode] = useState<'form' | 'sent'>('form')
   const ignoreClickRef = useRef(true)
 
-  const { mutate, isPending } = useUserFeedbackMutation()
+  const { mutate, isPending } = useMutation({
+    ...useUserFeedbackMutation,
+    onSuccess: () => {
+      setMode('sent')
+      form.reset()
+    },
+    onSettled: () => {
+      trackEvent({
+        cta_id: 'user_report',
+        action: 'submit',
+        page: location.pathname,
+      })
+    },
+  })
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -121,19 +141,7 @@ export const FeedbackForm = ({ onClose, rightOffset, buttonRef }: FeedbackFormPr
   const onSubmit = (data: FeedbackSchema) => {
     if (isPending) return
 
-    mutate(data, {
-      onSuccess: () => {
-        setMode('sent')
-        form.reset()
-      },
-      onSettled: () => {
-        trackEvent({
-          cta_id: 'user_report',
-          action: 'submit',
-          page: location.pathname,
-        })
-      },
-    })
+    mutate(data)
   }
 
   return (
