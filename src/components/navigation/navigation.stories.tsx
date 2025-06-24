@@ -4,7 +4,7 @@ import { expect, userEvent, within } from '@storybook/test'
 import { createMemoryHistory } from 'history'
 import { Tab, useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
-import Navigation from './navigation'
+import { Navigation } from './navigation'
 
 interface StroyArgs {
   isLogin: boolean

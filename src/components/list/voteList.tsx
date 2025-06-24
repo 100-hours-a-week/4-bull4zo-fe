@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useParticipatedVotesInfinityQuery } from '@/api/services/vote/queries'
-import { ScrollKeys, useScrollStore } from '@/stores/scrollStore'
-import { VoteItem } from '../item/voteItem'
+import { VoteItem } from '@/components/index'
+import { ScrollKeys, useScrollStore } from '@/stores/index'
 
 type VoteListProps = {
   data: ReturnType<typeof useParticipatedVotesInfinityQuery>['data']

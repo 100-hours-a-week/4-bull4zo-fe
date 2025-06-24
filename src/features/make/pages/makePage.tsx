@@ -1,9 +1,8 @@
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import NotFoundPage from '@/app/NotFound'
-import { GroupDropDown } from '@/components/dropdown/groupDropDown'
-import { LoadingPage } from '@/components/loading/loadingPage'
-import { MakeVoteForm } from '../components/makeVoteForm'
+import { NotFoundPage } from '@/app/index'
+import { GroupDropDown, LoadingPage } from '@/components/index'
+import { MakeVoteForm } from '../components/index'
 
 const MakePage = () => {
   return (

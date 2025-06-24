@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { axiosInstance } from '@/api/axios'
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/index'
 import { logoutAndResetStores } from '@/utils/reset'
 
 const AuthCallback = () => {

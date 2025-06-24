@@ -1,31 +1,32 @@
 import { useNavigate } from 'react-router-dom'
+import { useMutation } from '@tanstack/react-query'
 import { useUserDeleteMutation } from '@/api/services/user/queries'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
-import { useModalStore } from '@/stores/modalStore'
+import { useModalStore } from '@/stores/index'
 import { logoutAndResetStores } from '@/utils/reset'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const ExitUserModal = () => {
   const navigation = useNavigate()
   const { closeModal } = useModalStore()
 
-  const { mutate: deleteUserMutate } = useUserDeleteMutation()
+  const { mutate: deleteUserMutate } = useMutation({
+    ...useUserDeleteMutation,
+    onSuccess: () => {
+      logoutAndResetStores()
+      navigation(`/login`)
+    },
+    onSettled: () => {
+      trackEvent({
+        cta_id: 'user_delete',
+        action: 'click',
+        page: location.pathname,
+      })
+    },
+  })
 
   const deleteHandler = () => {
-    deleteUserMutate(undefined, {
-      onSuccess: () => {
-        logoutAndResetStores()
-        navigation(`/login`)
-      },
-      onSettled: () => {
-        trackEvent({
-          cta_id: 'user_delete',
-          action: 'click',
-          page: location.pathname,
-        })
-      },
-    })
+    deleteUserMutate()
   }
 
   return (

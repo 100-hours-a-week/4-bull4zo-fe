@@ -2,9 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Check, Copy } from 'lucide-react'
 import { toast } from 'sonner'
-import { useModalStore } from '@/stores/modalStore'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
+import { useModalStore } from '@/stores/index'
 
 type InviteCodeCheckModalProps = {
   code: string

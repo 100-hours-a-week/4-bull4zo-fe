@@ -1,6 +1,6 @@
 import React from 'react'
 import { useGroupAnalysisQuery } from '@/api/services/group/queries'
-import { Label } from '@/components/ui/label'
+import { Label } from '@/components/index'
 
 interface Props {
   data: ReturnType<typeof useGroupAnalysisQuery>['data']

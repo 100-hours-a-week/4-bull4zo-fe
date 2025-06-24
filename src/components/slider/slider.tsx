@@ -3,9 +3,8 @@ import { IoClose } from 'react-icons/io5'
 import { useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
-import { useNotificationStore } from '@/stores/notificationStore'
-import { useSliderStore } from '@/stores/sliderStore'
-import { NotificationList } from '../list/notificationList'
+import { NotificationList } from '@/components/index'
+import { useNotificationStore, useSliderStore } from '@/stores/index'
 
 export const Slider = () => {
   const { isOpen, close } = useSliderStore()

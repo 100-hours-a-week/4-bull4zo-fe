@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import { useInfiniteGroupNameListQuery } from '@/api/services/group/queries'
-import { trackEvent } from '@/lib/trackEvent'
-import { useGroupStore } from '@/stores/groupStore'
-import { Button } from '../ui/button'
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu'
+} from '@/components/index'
+import { trackEvent } from '@/lib/trackEvent'
+import { useGroupStore } from '@/stores/index'
 
 export const GroupDropDown = () => {
   const { groups, setId, setGroups, selectedId } = useGroupStore()
@@ -20,6 +20,8 @@ export const GroupDropDown = () => {
   const location = useLocation()
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
     useInfiniteGroupNameListQuery()
+
+  const selectRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -46,6 +48,14 @@ export const GroupDropDown = () => {
 
   const selectedGroup = groups.find((g) => g.groupId === selectedId)
 
+  // useEffect(() => {
+  //   if (open) {
+  //     setTimeout(() => {
+  //       selectRef.current?.focus()
+  //     }, 0)
+  //   }
+  // }, [open])
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild style={{ padding: 0, paddingLeft: '12px' }}>
@@ -64,6 +74,10 @@ export const GroupDropDown = () => {
       <DropdownMenuContent
         align="start"
         className="max-h-[10rem] w-[10rem] overflow-y-auto bg-white border-none"
+        onOpenAutoFocus={(e) => {
+          e.preventDefault()
+          selectRef.current?.focus()
+        }}
         onCloseAutoFocus={(e) => e.preventDefault()}
         data-testid="group-dropdown-content"
       >
@@ -85,6 +99,8 @@ export const GroupDropDown = () => {
               value={group.groupId.toString()}
               data-testid={`group-item-${group.groupId}`}
               className="cursor-pointer"
+              ref={group.groupId === selectedId ? selectRef : undefined}
+              tabIndex={0}
             >
               {group.name}
             </DropdownMenuRadioItem>

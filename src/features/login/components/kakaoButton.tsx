@@ -1,7 +1,6 @@
 import KAKAOICON from '@/assets/kako_icon.svg'
+import { Button, Icon } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
-import { Icon } from '../../../components/Icon/icon'
-import { Button } from '../../../components/ui/button'
 
 const KakaoButton = () => {
   const kakaoUrl =

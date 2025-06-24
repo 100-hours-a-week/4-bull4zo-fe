@@ -1,7 +1,6 @@
 import { useGroupAnalysisQuery } from '@/api/services/group/queries'
 import { useTop3VotesQuery } from '@/api/services/vote/queries'
-import { PieChart } from '@/components/chart/pieChart'
-import { VoteItem } from '@/components/item/voteItem'
+import { PieChart, VoteItem } from '@/components/index'
 import { formatDateTimeDetail } from '@/utils/time'
 
 interface Props {

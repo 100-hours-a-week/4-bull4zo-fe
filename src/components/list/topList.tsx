@@ -1,6 +1,5 @@
 import { useTop3VotesQuery } from '@/api/services/vote/queries'
-import { VoteItem } from '@/components/item/voteItem'
-import { Label } from '@/components/ui/label'
+import { Label, VoteItem } from '@/components/index'
 import { formatDateTimeDetail } from '@/utils/time'
 
 interface Props {

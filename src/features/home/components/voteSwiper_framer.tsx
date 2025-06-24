@@ -1,14 +1,11 @@
 import { memo, useEffect, useRef, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/queries'
-import { VoteEndCard } from '@/components/card/voteEndCard'
-import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
-import { useModalStore } from '@/stores/modalStore'
-import { useTutorialStore } from '@/stores/tutorialStore'
-import { useUserStore } from '@/stores/userStore'
+import { NoVoteAvailableModal, VoteEndCard } from '@/components/index'
+import { useModalStore, useTutorialStore, useUserStore } from '@/stores/index'
 import { useVoteCardStore } from '../stores/voteCardStore'
-import SwipeCard, { SwipeCardHandle } from './swipCard'
-import { VoteDirectionButtonGroup } from './voteDirectionButtonGroup'
+import { SwipeCard, SwipeCardHandle, VoteDirectionButtonGroup } from './index'
 
 type Props = {
   fetchNextPage: () => void
@@ -22,7 +19,9 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
 
   const { cards: cardList } = useVoteCardStore()
   const { isHidden } = useTutorialStore()
-  const { mutateAsync } = useSubmitVoteMutation()
+  const { mutateAsync } = useMutation({
+    ...useSubmitVoteMutation,
+  })
 
   // 남은 카드들을 관리
   const [swipeDir, setSwipeDir] = useState<VoteChoice>(null)
@@ -38,7 +37,7 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
     if (isInitializing) return
 
     if (!isLogin && cardList.length === 0 && !isOpen && isHidden) {
-      openModal(<NoVoteAvailAbleModal />)
+      openModal(<NoVoteAvailableModal />)
     } else if (cardList.length <= 3 && isLogin && hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
     }
