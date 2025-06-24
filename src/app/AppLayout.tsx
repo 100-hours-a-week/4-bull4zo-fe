@@ -2,6 +2,7 @@ import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useUserInfoQuery } from '@/api/services/user/queries'
+import { NotFoundPage, TokenGate } from '@/app/index'
 import Header from '@/components/header/header'
 import { LoadingPage } from '@/components/loading/loadingPage'
 import { Modal } from '@/components/modal/modal'
@@ -10,8 +11,6 @@ import { Slider } from '@/components/slider/slider'
 import { useModalStore } from '@/stores/modalStore'
 import { useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
-import NotFoundPage from './NotFound'
-import TokenGate from './TokenGate'
 
 export const AppLayout = () => {
   const location = useLocation()
