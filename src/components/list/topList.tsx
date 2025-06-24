@@ -1,8 +1,6 @@
 import { useTop3VotesQuery } from '@/api/services/vote/queries'
-import { VoteItem } from '@/components/item/voteItem'
-import { Label } from '@/components/ui/label'
-import { useGroupStore } from '@/stores/groupStore'
-import { useUserStore } from '@/stores/userStore'
+import { Label, VoteItem } from '@/components/index'
+import { useGroupStore, useUserStore } from '@/stores/index'
 import { formatDateTimeDetail } from '@/utils/time'
 
 export const TopList = () => {

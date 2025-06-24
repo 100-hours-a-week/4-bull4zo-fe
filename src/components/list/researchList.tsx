@@ -5,13 +5,11 @@ import {
   useCreateVotesInfinityQuery,
   useParticipatedVotesInfinityQuery,
 } from '@/api/services/vote/queries'
-import NotFoundPage from '@/app/NotFound'
-import { VoteList } from '@/components/list/voteList'
-import { Label } from '@/components/ui/label'
+import { NotFoundPage } from '@/app/index'
+import { Label, LoadingPage, VoteList } from '@/components/index'
+import { useResearchTabStore } from '@/features/research/stores/researchTapStore'
 import { trackEvent } from '@/lib/trackEvent'
-import { useGroupStore } from '@/stores/groupStore'
-import { useResearchTabStore } from '../../features/research/stores/researchTapStore'
-import { LoadingPage } from '../loading/loadingPage'
+import { useGroupStore } from '@/stores/index'
 
 export const ResearchList = () => {
   const { index, setIndex } = useResearchTabStore()

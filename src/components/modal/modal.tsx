@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useModalStore } from '@/stores/modalStore'
+import { useModalStore } from '@/stores/index'
 
 export const Modal = () => {
   const { isOpen, modalContent, closeModal } = useModalStore()

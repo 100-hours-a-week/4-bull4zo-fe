@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { MoveLeft, MoveRight, MoveUp } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
-import { useTutorialStore } from '@/stores/tutorialStore'
+import { useTutorialStore } from '@/stores/index'
 
 export const TutorialPage = () => {
   const { isHidden, close } = useTutorialStore()

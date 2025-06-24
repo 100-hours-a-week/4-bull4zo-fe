@@ -3,10 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { authAxiosInstance } from '@/api/axios'
 import { useCreateVoteMutation, useUpdateVoteMutation } from '@/api/services/vote/queries'
+import { Button, VoteCardPreview } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
-import { useModalStore } from '@/stores/modalStore'
-import { VoteCardPreview } from '../../../components/card/voteCardPreview'
-import { Button } from '../../../components/ui/button'
+import { useModalStore } from '@/stores/index'
 
 type Props = {
   groupId: number

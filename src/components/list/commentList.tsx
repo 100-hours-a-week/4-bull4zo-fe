@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer'
 import { Comment } from '@/api/services/comment/model'
 import { useInfiniteCommentListQuery } from '@/api/services/comment/queries'
 import { commentService } from '@/api/services/comment/service'
-import { CommentItem } from '../comment/commentItem'
+import { CommentItem } from '@/components/index'
 
 interface Props {
   voteId: number

@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useDeleteVoteMutation, useVoteReportReasons } from '@/api/services/vote/queries'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { voteCreateFailMessage } from '@/lib/messageMap'
 import { useModalStore } from '@/stores/modalStore'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
   const navigation = useNavigate()

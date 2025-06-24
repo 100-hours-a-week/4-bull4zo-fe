@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useUserStore } from '@/stores/userStore'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
+import { useUserStore } from '@/stores/index'
 
 export const VoteNoMoreCard = () => {
   const navigation = useNavigate()

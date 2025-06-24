@@ -3,14 +3,21 @@ import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { useInviteCodeMutation } from '@/api/services/group/queries'
+import {
+  Button,
+  Card,
+  CardContent,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  Input,
+} from '@/components/index'
 import { InviteCodeSchema, inviteCodeSchema } from '@/features/user/lib/userSchema'
 import { trackEvent } from '@/lib/trackEvent'
-import { useModalStore } from '@/stores/modalStore'
+import { useModalStore } from '@/stores/index'
 import { filterInviteCode } from '@/utils/validation'
-import { Button } from '../ui/button'
-import { Card, CardContent } from '../ui/card'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
-import { Input } from '../ui/input'
 
 export const AddGroupModal = () => {
   const navigation = useNavigate()

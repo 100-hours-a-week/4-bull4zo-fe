@@ -4,9 +4,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useUserFeedbackMutation } from '@/api/services/user/queries'
 import MESSAGEICON from '@/assets/message.webp'
 import MOA_LOGO from '@/assets/moa_logo.svg'
-import { Icon } from '@/components/Icon/icon'
-import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import {
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  Icon,
+} from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
 import { FeedbackSchema, feedbackSchema } from '../lib/userSchema'
 

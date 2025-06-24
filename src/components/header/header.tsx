@@ -3,10 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 // import { Bell } from 'lucide-react'
 // import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
 import MOA_HOME_ICON from '@/assets/moa_home.webp'
-// import { useSliderStore } from '@/stores/sliderStore'
-import { useUserStore } from '@/stores/userStore'
-import { Icon } from '../Icon/icon'
-import { Button } from '../ui/button'
+import { Button, Icon } from '@/components/index'
+import { useUserStore } from '@/stores/index'
 
 const Header = () => {
   const router = useNavigate()

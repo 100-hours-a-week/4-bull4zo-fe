@@ -1,9 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useDeleteGroupMutation } from '@/api/services/group/queries'
-import { useModalStore } from '@/stores/modalStore'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
+import { useModalStore } from '@/stores/index'
 
 export const DeleteGroupModal = ({ groupId }: { groupId: number }) => {
   const route = useNavigate()

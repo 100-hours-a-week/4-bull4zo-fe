@@ -1,9 +1,7 @@
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import NotFoundPage from '@/app/NotFound'
-import { GroupDropDown } from '@/components/dropdown/groupDropDown'
-import { ResearchList } from '@/components/list/researchList'
-import { LoadingPage } from '@/components/loading/loadingPage'
+import { NotFoundPage } from '@/app/index'
+import { GroupDropDown, LoadingPage, ResearchList } from '@/components/index'
 
 const ResearchPage = () => {
   return (

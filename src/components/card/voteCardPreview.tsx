@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { cn } from '@/lib/utils'
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/index'
 import { formatRelativeTime } from '@/utils/time'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 type Props = {
   content: string

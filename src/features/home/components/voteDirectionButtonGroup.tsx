@@ -2,7 +2,7 @@ import { VoteChoice } from '@/api/services/vote/model'
 import DisLikeIcon from '@/assets/dislike.svg'
 import LikeIcon from '@/assets/like.svg'
 import PassIcon from '@/assets/pass.webp'
-import { Icon } from '@/components/Icon/icon'
+import { Icon } from '@/components/index'
 
 type Props = {
   swipeDir: VoteChoice

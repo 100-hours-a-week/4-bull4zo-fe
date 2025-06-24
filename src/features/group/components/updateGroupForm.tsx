@@ -7,24 +7,27 @@ import { toast } from 'sonner'
 import { authAxiosInstance } from '@/api/axios'
 import { Group } from '@/api/services/group/model'
 import { useUpdateGroupMutation } from '@/api/services/group/queries'
-import { DeleteGroupModal } from '@/components/modal/deleteGroupModal'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
+  Button,
+  Checkbox,
+  DeleteGroupModal,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+  Input,
+  Label,
+  Textarea,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
-import { useModalStore } from '@/stores/modalStore'
+import { useModalStore } from '@/stores/index'
 import { ableManage, ableOwner } from '@/utils/authority'
 import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'

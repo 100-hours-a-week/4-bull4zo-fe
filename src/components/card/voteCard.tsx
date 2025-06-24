@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Vote } from '@/api/services/vote/model'
 import META_ICON from '@/assets/meta_icon.webp'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { cn } from '@/lib/utils'
-import { useGroupStore } from '@/stores/groupStore'
+import { useGroupStore } from '@/stores/index'
 import { formatRelativeTime } from '@/utils/time'
 import { Icon } from '../Icon/icon'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const VoteCard = (props: Partial<Vote>) => {
   const [isImageValid, setIsImageValid] = useState(false)
