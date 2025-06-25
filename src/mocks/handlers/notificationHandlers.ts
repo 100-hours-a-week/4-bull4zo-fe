@@ -22,7 +22,7 @@ const mockNotifications = Array.from({ length: 40 }, (_, i) => {
     type,
     content: typeMap[type],
     read: 0,
-    redirect_url: `https://localhost:5173/vote/${123 - i}`,
+    redirectUrl: `https://localhost:5173/vote/${123 - i}`,
     createdAt,
   }
 })

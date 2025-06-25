@@ -12,8 +12,8 @@ export const NotificationItem = forwardRef<HTMLLIElement, Partial<Notification>>
     if (props.notificationId) {
       mutateAsync(props.notificationId)
 
-      if (props.redirect_url) {
-        window.location.href = props.redirect_url
+      if (props.redirectUrl) {
+        window.location.href = props.redirectUrl
       }
     }
   }
