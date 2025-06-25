@@ -109,7 +109,7 @@ const Overlay = () => {
     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/40 to-transparent rounded-[3.125rem]" />
   )
 }
-// 바디
+// 본문 내용
 const Body = ({ children }: { children: ReactNode }) => {
   const { image } = useCardContext()
   const { isValid } = useImageValidation(image)
@@ -123,7 +123,7 @@ const Body = ({ children }: { children: ReactNode }) => {
   )
 }
 
-export const card = {
+export const VCard = {
   Root,
   Header,
   Author,
