@@ -33,6 +33,7 @@ export const CommentList = ({ voteId }: Props) => {
 
   // 롱폴링 로직
   const hasStartedPolling = useRef(false)
+  const abortControllerRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     if (!data || isPolling.current || hasStartedPolling.current) return
@@ -42,6 +43,7 @@ export const CommentList = ({ voteId }: Props) => {
     isMounted.current = true
     isPolling.current = true
 
+    // 롱 폴링 1회 재시작
     let timer: ReturnType<typeof setTimeout> | undefined
     let hasRetried = false
 
@@ -50,8 +52,13 @@ export const CommentList = ({ voteId }: Props) => {
       const last = all.at(-1)
       const lastCursor = last ? `${last.createdAt}_${last.commentId}` : undefined
 
+      abortControllerRef.current = new AbortController()
+      const signal = abortControllerRef.current.signal
+
       try {
-        const result = await commentService.getLongPollingCommentList(voteId, lastCursor)
+        const result = await commentService.getLongPollingCommentList(voteId, lastCursor, {
+          signal,
+        })
 
         if (result?.comments?.length > 0) {
           setNewComments((prev) => {
@@ -87,8 +94,9 @@ export const CommentList = ({ voteId }: Props) => {
     return () => {
       isMounted.current = false
       isPolling.current = false
+      hasStartedPolling.current = false
       if (timer) clearTimeout(timer)
-      // abortControllerRef.current?.abort()
+      abortControllerRef.current?.abort()
     }
   }, [data, hasNextPage])
 
