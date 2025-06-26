@@ -1,11 +1,11 @@
-import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { CommentCreateRequest, CommentListData } from './model'
 import { commentService } from './service'
 
 // 댓글 무한스크롤 호출
 export const useInfiniteCommentListQuery = (voteId: number, size: number = 10) => {
-  return useInfiniteQuery<CommentListData, AxiosError>({
+  return useSuspenseInfiniteQuery<CommentListData, AxiosError>({
     queryKey: ['comments', voteId],
     queryFn: ({ pageParam }) =>
       commentService.getCommentList(voteId, size, pageParam as string | undefined),
@@ -13,7 +13,6 @@ export const useInfiniteCommentListQuery = (voteId: number, size: number = 10) =
       return lastPage.hasNext ? lastPage.nextCursor : undefined
     },
     initialPageParam: undefined,
-    enabled: !!voteId,
   })
 }
 // 댓글 롱 폴링 호출

@@ -7,25 +7,19 @@ interface Props {
   data: ReturnType<typeof useInfiniteNotificationQuery>['data']
   fetchNextPage: () => void
   hasNextPage: boolean
-  isFetchingNextPage: boolean
 }
 
-export const NotificationList = ({
-  data,
-  fetchNextPage,
-  hasNextPage,
-  isFetchingNextPage,
-}: Props) => {
+export const NotificationList = ({ data, fetchNextPage, hasNextPage }: Props) => {
   const { ref, inView } = useInView({
-    threshold: 1.0,
+    rootMargin: '50px',
     triggerOnce: false,
   })
 
   useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
+    if (inView && hasNextPage) {
       fetchNextPage()
     }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
+  }, [inView, hasNextPage, fetchNextPage])
 
   return (
     <ol className="w-full">

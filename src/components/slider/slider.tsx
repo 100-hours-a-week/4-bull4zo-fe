@@ -42,17 +42,13 @@ export const Slider = () => {
 }
 
 const NotificationSlider = () => {
-  const {
-    data: notifications,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useInfiniteNotificationQuery()
+  const { data: notifications, hasNextPage, fetchNextPage } = useInfiniteNotificationQuery()
 
   return (
-    <div className="flex-1 items-center justify-center flex">
-      {!notifications ? (
-        <p className="font-medium text-lg px-4">
+    <div className="flex-1 justify-center flex">
+      {!notifications ||
+      notifications.pages[notifications.pages.length - 1].notifications.length === 0 ? (
+        <p className="px-4 pt-8">
           아직 알림이 없어요.
           <br />
           투표 결과나 댓글 알림이 여기에 표시돼요!
@@ -60,7 +56,6 @@ const NotificationSlider = () => {
       ) : (
         <NotificationList
           data={notifications}
-          isFetchingNextPage={isFetchingNextPage}
           hasNextPage={hasNextPage}
           fetchNextPage={fetchNextPage}
         />

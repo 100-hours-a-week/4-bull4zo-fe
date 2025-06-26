@@ -10,8 +10,7 @@ interface Props {
 }
 
 export const CommentList = ({ voteId }: Props) => {
-  const { data, hasNextPage, isFetching, fetchNextPage } = useInfiniteCommentListQuery(voteId)
-
+  const { data, hasNextPage, fetchNextPage } = useInfiniteCommentListQuery(voteId)
   const { ref: lastItemRef, inView } = useInView({ threshold: 0 })
 
   const newCommentsRef = useRef<Comment[]>([])
@@ -95,10 +94,10 @@ export const CommentList = ({ voteId }: Props) => {
 
   // 무한 스크롤 처리
   useEffect(() => {
-    if (inView && hasNextPage && !isFetching) {
+    if (inView && hasNextPage) {
       fetchNextPage()
     }
-  }, [inView, hasNextPage, isFetching, fetchNextPage])
+  }, [inView, hasNextPage, fetchNextPage])
 
   return (
     <ul className="mt-4 flex flex-col mx-9 gap-4 mb-16">
