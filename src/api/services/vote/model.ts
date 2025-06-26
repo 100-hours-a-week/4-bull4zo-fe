@@ -79,6 +79,7 @@ export interface ParticipatedVoteResult {
 export interface VoteDetail {
   voteId: number
   groupId: number
+  groupName: string
   authorNickname: string
   content: string
   imageUrl: string

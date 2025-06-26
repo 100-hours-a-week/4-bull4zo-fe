@@ -28,10 +28,6 @@ export const router = createBrowserRouter([
         element: <Navigate to="/home" replace />,
       },
       {
-        path: '/auth/callback',
-        element: <AuthCallback />,
-      },
-      {
         path: '/home',
         element: <HomePage />,
       },
@@ -72,6 +68,10 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/auth/callback',
+    element: <AuthCallback />,
   },
   {
     path: '*',
