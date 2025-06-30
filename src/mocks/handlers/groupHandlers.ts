@@ -322,4 +322,23 @@ export const groupHandlers = [
       { status: 200 },
     )
   }),
+  http.get('/api/v1/groups/:groupId/analysis', ({ params }) => {
+    const { groupId } = params
+
+    return HttpResponse.json({
+      message: 'SUCCESS',
+      data: {
+        groupId: parseInt(groupId as string, 10),
+        groupName: 'KTB',
+        weekStartDate: '2025-01-01',
+        analysis: {
+          summaryText: '이번주 KTB 그룹의 활동은 활발합니다. 많은 투표와 의견 교환이 있었습니다.',
+        },
+        participationStats: {
+          participated: 31.7,
+          notParticipated: 68.3,
+        },
+      },
+    })
+  }),
 ]

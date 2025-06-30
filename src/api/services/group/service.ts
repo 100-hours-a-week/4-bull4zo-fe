@@ -3,6 +3,7 @@ import {
   CreateGroupData,
   CreateGroupPayload,
   Group,
+  GroupAnalysisResponse,
   GroupMemberDeleteResponse,
   GroupMembersResponse,
   GroupRoleChangeRequest,
@@ -97,6 +98,11 @@ export const groupService = {
     const response = await authAxiosInstance.get(
       `/api/v1/groups/${groupId}/votes?${params.toString()}`,
     )
+    return response.data.data
+  },
+  // Get: 그룹 내 리포트 조회
+  async getGroupReports(groupId: number): Promise<GroupAnalysisResponse> {
+    const response = await authAxiosInstance.get(`/api/v1/groups/${groupId}/analysis`)
     return response.data.data
   },
 }
