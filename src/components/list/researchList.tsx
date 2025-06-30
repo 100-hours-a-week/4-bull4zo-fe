@@ -1,11 +1,9 @@
 import { Suspense } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
 import { motion } from 'framer-motion'
 import {
   useCreateVotesInfinityQuery,
   useParticipatedVotesInfinityQuery,
 } from '@/api/services/vote/queries'
-import NotFoundPage from '@/app/NotFound'
 import { VoteList } from '@/components/list/voteList'
 import { Label } from '@/components/ui/label'
 import { trackEvent } from '@/lib/trackEvent'
@@ -63,11 +61,9 @@ export const ResearchList = () => {
           </div>
         ))}
       </div>
-      <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
-        <Suspense fallback={<LoadingPage />}>
-          <VoteList data={data} fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} />
-        </Suspense>
-      </ErrorBoundary>
+      <Suspense fallback={<LoadingPage />}>
+        <VoteList data={data} fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} />
+      </Suspense>
     </section>
   )
 }

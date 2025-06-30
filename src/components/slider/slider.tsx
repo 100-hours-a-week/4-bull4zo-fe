@@ -1,11 +1,20 @@
+import { useEffect } from 'react'
 import { IoClose } from 'react-icons/io5'
+import { useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
+import { useNotificationStore } from '@/stores/notificationStore'
 import { useSliderStore } from '@/stores/sliderStore'
 import { NotificationList } from '../list/notificationList'
 
 export const Slider = () => {
   const { isOpen, close } = useSliderStore()
+  const { clearNotification } = useNotificationStore()
+
+  const handleClose = () => {
+    clearNotification()
+    close()
+  }
 
   return (
     <AnimatePresence>
@@ -17,7 +26,7 @@ export const Slider = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={close}
+              onClick={handleClose}
             />
             <motion.div
               className="w-[80%] max-w-[315px] z-10 h-full bg-white shadow-lg py-4 overflow-y-auto flex flex-col hide-scrollbar "
@@ -28,7 +37,7 @@ export const Slider = () => {
             >
               <div className="flex justify-between items-center mb-4 px-4">
                 <h2 className="text-lg font-semibold">알림</h2>
-                <button className="cursor-pointer" onClick={close} aria-label="닫기">
+                <button className="cursor-pointer" onClick={handleClose} aria-label="닫기">
                   <IoClose size={24} />
                 </button>
               </div>
@@ -42,7 +51,15 @@ export const Slider = () => {
 }
 
 const NotificationSlider = () => {
+  const queryClient = useQueryClient()
   const { data: notifications, hasNextPage, fetchNextPage } = useInfiniteNotificationQuery()
+  const { newNotification } = useNotificationStore()
+
+  useEffect(() => {
+    if (newNotification) {
+      queryClient.refetchQueries({ queryKey: ['notifications'] })
+    }
+  }, [newNotification, queryClient])
 
   return (
     <div className="flex-1 justify-center flex">

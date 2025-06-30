@@ -50,7 +50,7 @@ export const voteCreateFailMessage = {
 }
 
 // 알림 타입별 제목 메세지
-export const typeMap: Record<NotificationType, string> = {
+export const notificationMessageMap: Record<NotificationType, string> = {
   MY_VOTE_CLOSED: '내가 만든 투표 종료',
   SUBMITTED_VOTE_CLOSED: '참여한 투표 종료',
   VOTE_APPROVED: '투표 등록 성공',
