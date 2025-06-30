@@ -1,6 +1,5 @@
 import {
   useMutation,
-  useQuery,
   useQueryClient,
   useSuspenseInfiniteQuery,
   useSuspenseQuery,
@@ -109,10 +108,9 @@ export const useVoteDetailResults = (voteId: string) => {
 }
 // 투표 실패 사유 조회
 export const useVoteReportReasons = (voteId: string) => {
-  return useQuery<VoteReportReason>({
+  return useSuspenseQuery<VoteReportReason>({
     queryKey: ['voteReportReasons', voteId],
     queryFn: () => voteService.getVoteFailReason(voteId),
-    enabled: !!voteId,
   })
 }
 // 투표 수정
@@ -139,15 +137,10 @@ export const useDeleteVoteMutation = (voteId: string) => {
   })
 }
 // Top3 투표 조회
-export const useTop3VotesQuery = (
-  groupId: number,
-  type: TopVoteDay = 'daily',
-  enabled: boolean = true,
-) => {
-  return useQuery({
+export const useTop3VotesQuery = (groupId: number, type: TopVoteDay = 'daily') => {
+  return useSuspenseQuery({
     queryKey: ['top3Votes', groupId, type],
     queryFn: () => voteService.getTop3Votes(groupId, type),
-    enabled,
     staleTime: 1000 * 60 * 60 * 23, // 23h: 매일 오전 9시 재요청
   })
 }

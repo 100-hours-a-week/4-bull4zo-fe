@@ -1,8 +1,9 @@
 import { FaAngleLeft } from 'react-icons/fa6'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Bell } from 'lucide-react'
-import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
+// import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
 import MOA_HOME_ICON from '@/assets/moa_home.webp'
+import { useNotificationStore } from '@/stores/notificationStore'
 import { useSliderStore } from '@/stores/sliderStore'
 import { useUserStore } from '@/stores/userStore'
 import { Icon } from '../Icon/icon'
@@ -12,12 +13,14 @@ const Header = () => {
   const router = useNavigate()
   const isLogin = useUserStore((state) => state.isLogin)
   const { open } = useSliderStore()
+  const { newNotification } = useNotificationStore()
+  const { isOpen } = useSliderStore()
 
-  const { data: notifications } = useInfiniteNotificationQuery(undefined, isLogin)
+  // const { data: notifications } = useInfiniteNotificationQuery(undefined, isLogin)
 
-  const hasUnread = notifications?.pages.slice(0, 1).some((page) => {
-    return page.notifications.some((notification) => notification.read === 0)
-  })
+  // const hasUnread = notifications?.pages.slice(0, 1).some((page) => {
+  //   return page.notifications.some((notification) => notification.read === 0)
+  // })
 
   const location = useLocation()
 
@@ -48,8 +51,23 @@ const Header = () => {
       <div className="mr-4">
         {isLogin ? (
           <div className="relative cursor-pointer" aria-label="알림">
-            <Bell className="cursor-pointer" size={24} onClick={open} />
-            {hasUnread && (
+            <Bell
+              className="cursor-pointer"
+              size={24}
+              onClick={() => {
+                open()
+              }}
+            />
+            {/* {hasUnread && (
+              <span className="absolute -top-1 right-0 flex size-3">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+                <span
+                  className="relative inline-flex size-3 rounded-full bg-red-500"
+                  onClick={open}
+                />
+              </span>
+            )} */}
+            {!isOpen && newNotification && (
               <span className="absolute -top-1 right-0 flex size-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
                 <span

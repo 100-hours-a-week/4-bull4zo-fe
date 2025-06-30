@@ -1,6 +1,6 @@
 import { HttpResponse, http } from 'msw'
 import { NotificationType } from '@/api/services/notification/model'
-import { typeMap } from '@/lib/messageMap'
+import { notificationMessageMap } from '@/lib/messageMap'
 
 const mockNotifications = Array.from({ length: 40 }, (_, i) => {
   const baseTime = new Date('2025-04-25T13:30:00')
@@ -20,7 +20,7 @@ const mockNotifications = Array.from({ length: 40 }, (_, i) => {
   return {
     notificationId: 123 - i,
     type,
-    content: typeMap[type],
+    content: notificationMessageMap[type],
     read: 0,
     redirectUrl: `https://localhost:5173/vote/${123 - i}`,
     createdAt,

@@ -72,11 +72,19 @@ export const GroupCard = (group: Partial<Group>) => {
       </CardHeader>
       <CardContent className="flex flex-col flex-grow justify-between h-full">
         <p className="font-medium mb-7">{group.description}</p>
-        <pre className="font-medium flex items-center text-sm">
+        <pre
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+          className="font-medium flex items-center text-sm cursor-default"
+        >
           초대코드:<span className="font-semibold">{group.inviteCode}</span>
           <button
             type="button"
-            onClick={handleCopy}
+            onClick={(e) => {
+              handleCopy()
+              e.stopPropagation()
+            }}
             className="hover:text-primary ml-2 transition cursor-pointer"
           >
             {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}

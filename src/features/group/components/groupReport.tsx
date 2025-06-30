@@ -14,7 +14,10 @@ export const GroupReport = ({ group }: Props) => {
   return (
     <div className="px-5">
       <h1 className="text-2xl font-bold mb-4">그룹 리포트</h1>
-      <Button className="h-full w-full bg-white text-lg py-3 shadow-md cursor-pointer">
+      <Button
+        onClick={() => route(`/group/${groupId}/report`)}
+        className="h-full w-full bg-white text-lg py-3 shadow-md cursor-pointer"
+      >
         그룹 내 리포트 확인하기
       </Button>
       {ableManage(group.role) && (

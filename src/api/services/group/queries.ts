@@ -6,6 +6,7 @@ import {
 } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
+  GroupAnalysisResponse,
   GroupRoleChangeRequest,
   GroupVoteListResponse,
   MyGroupList,
@@ -151,5 +152,13 @@ export const useGroupVotesInfiniteQuery = (groupId: number, size: number = 10) =
     getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
     staleTime: 1000 * 60 * 15,
     initialPageParam: undefined,
+  })
+}
+// 그룹 내 리포트 조회
+export const useGroupAnalysisQuery = (groupId: number) => {
+  return useSuspenseQuery<GroupAnalysisResponse, AxiosError>({
+    queryKey: ['groupAnalysis', groupId],
+    queryFn: () => groupService.getGroupReports(groupId),
+    staleTime: 1000 * 60 * 60 * 24 * 6,
   })
 }
