@@ -8,9 +8,9 @@ import { formatRelativeTime } from '@/utils/time'
 export const NotificationItem = forwardRef<HTMLLIElement, Partial<Notification>>((props, ref) => {
   const { mutateAsync } = useMutationReadNotification()
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (props.notificationId) {
-      mutateAsync(props.notificationId)
+      await mutateAsync(props.notificationId)
 
       if (props.redirectUrl) {
         window.location.href = props.redirectUrl
