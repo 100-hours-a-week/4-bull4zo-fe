@@ -73,7 +73,17 @@ const Header = ({
   </CardHeader>
 )
 // 작성자
-const Author = ({ name, badge, isAI }: { name: string; badge?: ReactNode; isAI?: boolean }) => (
+const Author = ({
+  name,
+  badge,
+  isAI,
+  children,
+}: {
+  name: string
+  badge?: ReactNode
+  isAI?: boolean
+  children?: ReactNode
+}) => (
   <div className="flex flex-col gap-1">
     <div className="flex flex-row items-center gap-2">
       <CardTitle className="font-pyeojinGothic text-xl line-clamp-1">{name}</CardTitle>
@@ -84,6 +94,7 @@ const Author = ({ name, badge, isAI }: { name: string; badge?: ReactNode; isAI?:
         </div>
       )}
     </div>
+    {children}
   </div>
 )
 // 그룹
