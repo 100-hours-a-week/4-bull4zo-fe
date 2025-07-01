@@ -23,3 +23,12 @@ export type NotificationListResponse = PageNation<'notifications', Notification[
 export interface NotificationReadResponse {
   notificationId: number
 }
+
+export interface NotificationSSEResponse {
+  notificationId: number
+  type: NotificationType
+  content: string
+  isRead: number
+  redirectUrl: string
+  createdAt: string
+}

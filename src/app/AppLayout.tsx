@@ -7,6 +7,7 @@ import { LoadingPage } from '@/components/loading/loadingPage'
 import { Modal } from '@/components/modal/modal'
 import Navigation from '@/components/navigation/navigation'
 import { Slider } from '@/components/slider/slider'
+import { useSSE } from '@/hooks/useSSE'
 import { useModalStore } from '@/stores/modalStore'
 import { useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
@@ -42,6 +43,8 @@ export const AppLayout = () => {
       main.scrollTop = 0
     }
   }, [location.pathname])
+
+  useSSE(accessToken)
 
   return (
     <TokenGate>

@@ -3,7 +3,7 @@ import { AxiosError } from 'axios'
 import { NotificationListResponse } from './model'
 import { notificationService } from './service'
 
-export const useInfiniteNotificationQuery = (size: number = 10, enabled: boolean = true) => {
+export const useInfiniteNotificationQuery = (size: number = 20, enabled: boolean = true) => {
   return useInfiniteQuery<NotificationListResponse, AxiosError>({
     queryKey: ['notifications'],
     queryFn: ({ pageParam }) =>
@@ -14,8 +14,8 @@ export const useInfiniteNotificationQuery = (size: number = 10, enabled: boolean
     enabled,
     initialPageParam: undefined,
     refetchOnWindowFocus: true,
-    refetchIntervalInBackground: true,
-    refetchInterval: 1000 * 5, // 5s
+    // refetchIntervalInBackground: true,
+    // refetchInterval: 1000 * 5,
   })
 }
 export const useMutationReadNotification = () => {
