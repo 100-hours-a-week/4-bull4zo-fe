@@ -133,6 +133,37 @@ const Body = ({ children }: { children: ReactNode }) => {
     </div>
   )
 }
+// card Modal Root
+const ModalRoot = ({ children }: { children: ReactNode }) => (
+  <Card
+    className={cn(
+      'px-4 py-9 w-[80%] h-[30rem] max-h-[75%] flex justify-center bg-primary-gradient-down text-white rounded-[3.125rem] shadow-card relative',
+    )}
+  >
+    {children}
+  </Card>
+)
+// card Modal Header
+const ModalHeader = ({ children }: { children: ReactNode }) => (
+  <CardHeader className={cn('flex flex-col justify-between w-full items-center px-0 text-black')}>
+    {children}
+  </CardHeader>
+)
+// card Modal Title
+const ModalTitle = ({ children }: { children: ReactNode }) => (
+  <CardTitle className="font-unbounded text-2xl">{children}</CardTitle>
+)
+// card Modal Content
+const ModalContent = ({ children }: { children: ReactNode }) => (
+  <CardContent className="flex flex-col justify-around items-center text-black">
+    <div className="w-full flex justify-center gap-4">{children}</div>
+  </CardContent>
+)
+const ModalFooter = ({ children }: { children: ReactNode }) => (
+  <div className="absolute bottom-8 text-[0.75rem] text-center">
+    <p>{children}</p>
+  </div>
+)
 
 export const VCard = {
   Root,
@@ -143,4 +174,9 @@ export const VCard = {
   Content,
   Overlay,
   Body,
+  ModalRoot,
+  ModalHeader,
+  ModalTitle,
+  ModalContent,
+  ModalFooter,
 }
