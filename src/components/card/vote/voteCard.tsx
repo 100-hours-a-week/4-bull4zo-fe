@@ -3,7 +3,7 @@ import META_ICON from '@/assets/meta_icon.webp'
 import { VCard } from '@/components/index'
 import { useGroupStore } from '@/stores/index'
 import { formatRelativeTime } from '@/utils/time'
-import { Icon } from '../Icon/icon'
+import { Icon } from '../../Icon/icon'
 
 export const VoteCard = (props: Partial<Vote>) => {
   const { selectedId: groupId } = useGroupStore()
