@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { toast } from 'sonner'
 import { NotificationSSEResponse } from '@/api/services/notification/model'
@@ -9,9 +10,13 @@ import { useSliderStore } from '@/stores/sliderStore'
 export const useSSE = (accessToken: string | null) => {
   const lastEventIdRef = useRef<string | null>(null)
   const eventSourceRef = useRef<EventSourcePolyfill | null>(null)
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (!accessToken) return
+
+    let idleCallbackId: number | null = null
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
 
     const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
@@ -30,10 +35,14 @@ export const useSSE = (accessToken: string | null) => {
           const { notificationId, type, content, redirectUrl } = JSON.parse(
             event.data,
           ) as NotificationSSEResponse
+
           lastEventIdRef.current = event.lastEventId
 
           const isSliderOpen = useSliderStore.getState().isOpen
           if (!isSliderOpen) {
+            queryClient.refetchQueries({
+              queryKey: ['notifications'],
+            })
             toast(`${notificationMessageMap[type]} 알림이 왔습니다.`, {
               description: content,
               ...(redirectUrl && {
@@ -60,9 +69,17 @@ export const useSSE = (accessToken: string | null) => {
       }
     }
 
-    connect()
+    timeoutId = setTimeout(() => {
+      if ('requestIdleCallback' in window) {
+        idleCallbackId = requestIdleCallback(connect)
+      } else {
+        connect()
+      }
+    }, 1000)
 
     return () => {
+      if (idleCallbackId) cancelIdleCallback(idleCallbackId)
+      if (timeoutId) clearTimeout(timeoutId)
       eventSourceRef.current?.close()
     }
   }, [accessToken])

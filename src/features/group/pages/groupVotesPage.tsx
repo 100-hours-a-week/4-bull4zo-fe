@@ -1,14 +1,18 @@
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
 import { useGroupQuery, useGroupVotesInfiniteQuery } from '@/api/services/group/queries'
+import NotFoundPage from '@/app/NotFound'
 import { VoteList } from '@/components/list/voteList'
 import { LoadingPage } from '@/components/loading/loadingPage'
 
 const GroupVotesPage = () => {
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <GroupVotesPageContent />
-    </Suspense>
+    <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <GroupVotesPageContent />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 export default GroupVotesPage

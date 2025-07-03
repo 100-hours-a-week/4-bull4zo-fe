@@ -1,6 +1,8 @@
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
 import { useVoteDetailInfo, useVoteDetailResults } from '@/api/services/vote/queries'
+import NotFoundPage from '@/app/NotFound'
 import { CommentList } from '@/components/list/commentList'
 import { LoadingPage } from '@/components/loading/loadingPage'
 import { CommentInput } from '../components/commentInput'
@@ -8,9 +10,11 @@ import ResearchDetailInfo from '../components/researchDetailInfo'
 
 const ResearchDetailPage = () => {
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <ResearchDetailPageContent />
-    </Suspense>
+    <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <ResearchDetailPageContent />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 

@@ -1,4 +1,4 @@
-import { CreateGroupForm } from '../components/createGroupForm'
+import { CreateGroupForm } from '@/features/group/components/group/index'
 
 const CreateGroupPage = () => {
   return (

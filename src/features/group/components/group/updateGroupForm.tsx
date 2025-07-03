@@ -28,7 +28,7 @@ import { useModalStore } from '@/stores/modalStore'
 import { ableManage, ableOwner } from '@/utils/authority'
 import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'
-import { UpdateGroupSchema, updateGroupSchema } from '../lib/groupSchema'
+import { UpdateGroupSchema, updateGroupSchema } from '../../lib/groupSchema'
 
 interface Props {
   group: Group

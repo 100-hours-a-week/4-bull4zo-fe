@@ -1,17 +1,13 @@
-import { Suspense, useEffect } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useUserInfoQuery } from '@/api/services/user/queries'
 import Header from '@/components/header/header'
-import { LoadingPage } from '@/components/loading/loadingPage'
+import { SSEManager } from '@/components/manager/sseManager'
 import { Modal } from '@/components/modal/modal'
 import Navigation from '@/components/navigation/navigation'
 import { Slider } from '@/components/slider/slider'
-import { useSSE } from '@/hooks/useSSE'
-import { useModalStore } from '@/stores/modalStore'
 import { useNavigationStore } from '@/stores/navigationStore'
 import { useUserStore } from '@/stores/userStore'
-import NotFoundPage from './NotFound'
 import TokenGate from './TokenGate'
 
 export const AppLayout = () => {
@@ -19,7 +15,6 @@ export const AppLayout = () => {
   const navigation = useNavigate()
   const { setTab } = useNavigationStore()
   const { isLogin, setNickName, accessToken } = useUserStore()
-  const { isOpen } = useModalStore()
 
   const { data: user } = useUserInfoQuery({ enabled: !!accessToken })
 
@@ -44,21 +39,18 @@ export const AppLayout = () => {
     }
   }, [location.pathname])
 
-  useSSE(accessToken)
-
   return (
     <TokenGate>
       <Header />
       <main className="py-[4.25rem] min-h-screen bg-yellow">
-        <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
-          <Suspense fallback={<LoadingPage />}>
-            <Outlet />
-          </Suspense>
-        </ErrorBoundary>
+        {/* <Suspense fallback={<LoadingPage />}> */}
+        <Outlet />
+        {/* </Suspense> */}
       </main>
       <Navigation />
       <Slider />
-      {isOpen && <Modal />}
+      <Modal />
+      <SSEManager />
     </TokenGate>
   )
 }

@@ -11,28 +11,58 @@ interface SvgPieChartProps {
 }
 
 export const PieChart = ({ data, size = 200, radius = 90 }: SvgPieChartProps) => {
-  const total = data.reduce((sum, d) => sum + d.value, 0)
+  const filteredData = data.filter((d) => d.value > 0)
+  const total = filteredData.reduce((sum, d) => sum + d.value, 0)
   const center = size / 2
-  let cumulativeAngle = 0
+
+  if (total === 0) return null
 
   const getCoordinates = (angle: number, customRadius = radius) => {
     const radian = (angle - 90) * (Math.PI / 180)
-    const x = center + customRadius * Math.cos(radian)
-    const y = center + customRadius * Math.sin(radian)
-    return { x, y }
+    return {
+      x: center + customRadius * Math.cos(radian),
+      y: center + customRadius * Math.sin(radian),
+    }
   }
 
-  const segments = data.map((segment) => {
+  let cumulativeAngle = 0
+
+  const segments = filteredData.map((segment) => {
     const valuePercent = segment.value / total
     const startAngle = cumulativeAngle
     const endAngle = cumulativeAngle + valuePercent * 360
     const midAngle = (startAngle + endAngle) / 2
     cumulativeAngle = endAngle
 
-    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0
+    const isFullCircle = valuePercent === 1
+
+    const label = getCoordinates(midAngle, radius * 0.6)
+
+    if (isFullCircle) {
+      return (
+        <g key={segment.name}>
+          <circle cx={center} cy={center} r={radius} fill={segment.color} />
+          <text
+            x={center}
+            y={center}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="12"
+            fontWeight="bold"
+            fill="#000"
+          >
+            {segment.name}
+            <tspan x={center} dy="1.2em">
+              100%
+            </tspan>
+          </text>
+        </g>
+      )
+    }
+
     const start = getCoordinates(startAngle)
     const end = getCoordinates(endAngle)
-    const label = getCoordinates(midAngle, radius * 0.6)
+    const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0
 
     const d = [
       `M ${center} ${center}`,

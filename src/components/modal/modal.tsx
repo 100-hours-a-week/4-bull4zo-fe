@@ -5,6 +5,10 @@ export const Modal = () => {
   const { isOpen, modalContent, closeModal } = useModalStore()
 
   useEffect(() => {
+    if (!isOpen) return
+  }, [isOpen])
+
+  useEffect(() => {
     const main = document.getElementById('main-content')
     if (isOpen && main) {
       main.style.overflow = 'hidden'

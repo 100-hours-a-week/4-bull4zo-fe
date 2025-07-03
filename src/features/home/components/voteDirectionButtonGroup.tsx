@@ -17,18 +17,18 @@ export const VoteDirectionButtonGroup = ({ swipeDir, onSwipe }: Props) => {
   return (
     <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-[50] flex gap-5">
       {(swipeDir === null || swipeDir === '반대') && (
-        <button className={getClass('반대')} onClick={() => onSwipe('반대')}>
-          <Icon src={DisLikeIcon} className="w-16 h-16" />
+        <button aria-label="반대 버튼" className={getClass('반대')} onClick={() => onSwipe('반대')}>
+          <Icon alt="반대" src={DisLikeIcon} className="w-16 h-16" />
         </button>
       )}
       {(swipeDir === null || swipeDir === '기권') && (
-        <button className={getClass('기권')} onClick={() => onSwipe('기권')}>
-          <Icon src={PassIcon} className="w-16 h-16" />
+        <button aria-label="기권 버튼" className={getClass('기권')} onClick={() => onSwipe('기권')}>
+          <Icon alt="기권" src={PassIcon} className="w-16 h-16" />
         </button>
       )}
       {(swipeDir === null || swipeDir === '찬성') && (
-        <button className={getClass('찬성')} onClick={() => onSwipe('찬성')}>
-          <Icon src={LikeIcon} className="w-16 h-16" />
+        <button aria-label="찬성 버튼" className={getClass('찬성')} onClick={() => onSwipe('찬성')}>
+          <Icon alt="찬성" src={LikeIcon} className="w-16 h-16" />
         </button>
       )}
     </div>
