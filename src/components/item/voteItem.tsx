@@ -82,11 +82,9 @@ export const VoteItem = (vote: Props) => {
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
         <div className="flex items-center justify-between text-xs">
           {formatRelativeTime(vote.closedAt as string)}
-          {vote.comments && (
-            <div className="font-semibold flex flex-row items-center gap-1">
-              <FaRegComment /> {vote.comments}
-            </div>
-          )}
+          <div className="font-semibold flex flex-row items-center gap-1">
+            <FaRegComment /> {vote.commentsCount}
+          </div>
         </div>
       )}
       {!['REJECTED', 'PENDING'].includes(vote.voteStatus as string) && (
