@@ -1,16 +1,18 @@
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
 import { useGroupQuery } from '@/api/services/group/queries'
+import NotFoundPage from '@/app/NotFound'
 import { LoadingPage } from '@/components/loading/loadingPage'
-import { GroupMember } from '../components/groupMember'
-import { GroupReport } from '../components/groupReport'
-import { UpdateGroupForm } from '../components/updateGroupForm'
+import { GroupMember, GroupReport, UpdateGroupForm } from '@/features/group/components/group/index'
 
 const ManageGroupPage = () => {
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <ManageGroupPageContent />
-    </Suspense>
+    <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <ManageGroupPageContent />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 

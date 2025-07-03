@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://moagenda.com/sitemap.xml

@@ -14,8 +14,6 @@ export const useInfiniteNotificationQuery = (size: number = 20, enabled: boolean
     enabled,
     initialPageParam: undefined,
     refetchOnWindowFocus: true,
-    // refetchIntervalInBackground: true,
-    // refetchInterval: 1000 * 5,
   })
 }
 export const useMutationReadNotification = () => {

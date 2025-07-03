@@ -2,15 +2,22 @@ import { useGroupAnalysisQuery } from '@/api/services/group/queries'
 import { useTop3VotesQuery } from '@/api/services/vote/queries'
 import { PieChart } from '@/components/chart/pieChart'
 import { VoteItem } from '@/components/item/voteItem'
+import { formatDateTimeDetail } from '@/utils/time'
 
 interface Props {
   data: ReturnType<typeof useGroupAnalysisQuery>['data']
 }
 
 export const ReportContentChart = ({ data }: Props) => {
+  const endDate = new Date(data.weekStartAt)
+  endDate.setDate(endDate.getDate() + 7)
+
   return (
     <div className="px-5">
-      <h1 className="text-xl font-bold mb-4">{data.groupName}</h1>
+      <div className="flex flex-row items-center justify-between mb-4">
+        <h1 className="text-xl font-bold">{data.groupName}</h1>
+        <span className="text-xs">{`${formatDateTimeDetail(data.weekStartAt)} ~ ${formatDateTimeDetail(endDate.toISOString())}`}</span>
+      </div>
       <div>
         <h2 className="text-lg font-medium mb-2">참여율</h2>
         <div className="flex items-center justify-center">
@@ -36,14 +43,6 @@ export const ReportContentVotes = ({ groupId }: { groupId: number }) => {
           <VoteItem key={vote.voteId} rank={idx + 1} {...vote} />
         ))}
       </ul>
-    </div>
-  )
-}
-export const ReportContentAnalysis = ({ data }: Props) => {
-  return (
-    <div className="px-5">
-      <h2 className="text-lg font-medium mb-2">요약</h2>
-      <p className="px-12">{data.analysis.summaryText}</p>
     </div>
   )
 }
