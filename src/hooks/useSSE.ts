@@ -13,6 +13,9 @@ export const useSSE = (accessToken: string | null) => {
   useEffect(() => {
     if (!accessToken) return
 
+    let idleCallbackId: number | null = null
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
+
     const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
     const connect = () => {
@@ -30,6 +33,7 @@ export const useSSE = (accessToken: string | null) => {
           const { notificationId, type, content, redirectUrl } = JSON.parse(
             event.data,
           ) as NotificationSSEResponse
+
           lastEventIdRef.current = event.lastEventId
 
           const isSliderOpen = useSliderStore.getState().isOpen
@@ -60,9 +64,17 @@ export const useSSE = (accessToken: string | null) => {
       }
     }
 
-    connect()
+    timeoutId = setTimeout(() => {
+      if ('requestIdleCallback' in window) {
+        idleCallbackId = requestIdleCallback(connect)
+      } else {
+        connect()
+      }
+    }, 1000)
 
     return () => {
+      if (idleCallbackId) cancelIdleCallback(idleCallbackId)
+      if (timeoutId) clearTimeout(timeoutId)
       eventSourceRef.current?.close()
     }
   }, [accessToken])

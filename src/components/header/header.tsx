@@ -1,7 +1,6 @@
 import { FaAngleLeft } from 'react-icons/fa6'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Bell } from 'lucide-react'
-// import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
 import MOA_HOME_ICON from '@/assets/moa_home.webp'
 import { useNotificationStore } from '@/stores/notificationStore'
 import { useSliderStore } from '@/stores/sliderStore'
@@ -11,16 +10,10 @@ import { Button } from '../ui/button'
 
 const Header = () => {
   const router = useNavigate()
-  const isLogin = useUserStore((state) => state.isLogin)
+  const { isLogin } = useUserStore()
   const { open } = useSliderStore()
   const { newNotification } = useNotificationStore()
   const { isOpen } = useSliderStore()
-
-  // const { data: notifications } = useInfiniteNotificationQuery(undefined, isLogin)
-
-  // const hasUnread = notifications?.pages.slice(0, 1).some((page) => {
-  //   return page.notifications.some((notification) => notification.read === 0)
-  // })
 
   const location = useLocation()
 
@@ -31,7 +24,6 @@ const Header = () => {
   const handleBack = () => {
     router(-1)
   }
-
   return (
     <header className=" fixed w-full max-w-[450px] overflow-hidden shadow-header flex flex-row justify-between items-center z-50 bg-white">
       {showBackButton && (
