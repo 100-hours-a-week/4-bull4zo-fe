@@ -102,9 +102,17 @@ export type GroupVoteListResponse = PageNation<'votes', ParticipatedVote[]> & {
 export type GroupAnalysisResponse = {
   groupId: number
   groupName: string
-  weekStartDate: string
+  weekStartAt: string
   analysis: {
-    summaryText: string
+    overview: {
+      voteSummary: string
+      commentSummary: string
+    }
+    sentiment: {
+      emotion: string
+      topKeywords: string[]
+    }
+    modelReview: string[]
   }
   participationStats: {
     participated: number
