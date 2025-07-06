@@ -2,9 +2,7 @@ import { Suspense } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGroupQuery } from '@/api/services/group/queries'
 import { LoadingPage } from '@/components/loading/loadingPage'
-import { GroupMember } from '../components/groupMember'
-import { GroupReport } from '../components/groupReport'
-import { UpdateGroupForm } from '../components/updateGroupForm'
+import { GroupMember, GroupReport, UpdateGroupForm } from '@/features/group/components/group/index'
 
 const ManageGroupPage = () => {
   return (

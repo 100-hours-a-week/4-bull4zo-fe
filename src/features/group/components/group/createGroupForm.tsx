@@ -22,7 +22,7 @@ import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
 import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'
-import { CreateGroupSchema, createGroupSchema } from '../lib/groupSchema'
+import { CreateGroupSchema, createGroupSchema } from '../../lib/groupSchema'
 
 export const CreateGroupForm = () => {
   const form = useForm<CreateGroupSchema>({
