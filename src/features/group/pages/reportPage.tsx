@@ -1,6 +1,8 @@
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
 import { useGroupAnalysisQuery } from '@/api/services/group/queries'
+import NotFoundPage from '@/app/NotFound'
 import { LoadingPage } from '@/components/loading/loadingPage'
 import {
   ReportContentAnalysis,
@@ -10,9 +12,11 @@ import {
 
 const ReportPage = () => {
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <ReportPageContent />
-    </Suspense>
+    <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <ReportPageContent />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 

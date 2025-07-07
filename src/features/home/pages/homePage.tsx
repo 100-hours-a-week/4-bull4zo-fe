@@ -1,7 +1,9 @@
 import { Suspense, useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { FaQuestion } from 'react-icons/fa'
 import { useUserInfoQuery } from '@/api/services/user/queries'
 import { useInfiniteVotesQuery } from '@/api/services/vote/queries'
+import NotFoundPage from '@/app/NotFound'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
 import { LoadingCard } from '@/components/loading/loadingCard'
 import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
@@ -15,15 +17,17 @@ import { useVoteCardStore } from '../stores/voteCardStore'
 
 const HomePage = () => {
   return (
-    <Suspense
-      fallback={
-        <div className="flex screen-minus-header-nav justify-center items-center">
-          <LoadingCard />
-        </div>
-      }
-    >
-      <HomePageContent />
-    </Suspense>
+    <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+      <Suspense
+        fallback={
+          <div className="flex screen-minus-header-nav justify-center items-center">
+            <LoadingCard />
+          </div>
+        }
+      >
+        <HomePageContent />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 

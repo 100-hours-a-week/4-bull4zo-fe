@@ -1,13 +1,17 @@
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
+import NotFoundPage from '@/app/NotFound'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
 import { LoadingPage } from '@/components/loading/loadingPage'
 import { UpdateVoteForm } from '../components/updateVoteForm'
 
 const UpdatePage = () => {
   return (
-    <Suspense fallback={<LoadingPage />}>
-      <UpdatePageContent />
-    </Suspense>
+    <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <UpdatePageContent />
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 
