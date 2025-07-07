@@ -18,10 +18,14 @@ export const CommentList = ({ voteId }: Props) => {
   const isMounted = useRef(true)
   const isPolling = useRef(false)
 
-  const allComments = useMemo(
-    () => [...(data?.pages.flatMap((page) => page.comments) ?? []), ...newComments],
-    [data, newComments],
-  )
+  const allComments = useMemo(() => {
+    const seen = new Set<number>()
+    return [...(data?.pages.flatMap((page) => page.comments) ?? []), ...newComments].filter((c) => {
+      if (seen.has(c.commentId)) return false
+      seen.add(c.commentId)
+      return true
+    })
+  }, [data, newComments])
 
   const deleteComment = (commentId: number) => {
     setNewComments((prev) => {
