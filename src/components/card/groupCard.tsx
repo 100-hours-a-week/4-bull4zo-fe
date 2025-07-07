@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Check, Copy, EllipsisVertical } from 'lucide-react'
 import { toast } from 'sonner'
 import { Group } from '@/api/services/group/model'
-import { useLeaveGroupMutation } from '@/api/services/group/queries'
+import { groupNameListKey, myGroupsKey, useLeaveGroupMutation } from '@/api/services/group/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
 import { Card, CardContent, CardHeader } from '../ui/card'
@@ -102,10 +103,18 @@ const GroupDotsItem = ({
   groupId: number
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const { mutateAsync } = useLeaveGroupMutation(groupId)
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    ...useLeaveGroupMutation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: myGroupsKey })
+      queryClient.invalidateQueries({ queryKey: groupNameListKey })
+    },
+  })
 
   const handleLeaveGroup = async () => {
-    await mutateAsync()
+    await mutateAsync(groupId)
     toast.success('그룹을 떠났습니다.')
     setOpen(false)
   }

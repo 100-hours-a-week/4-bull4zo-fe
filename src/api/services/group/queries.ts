@@ -1,24 +1,34 @@
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
+  CreateGroupPayload,
   GroupAnalysisResponse,
   GroupRoleChangeRequest,
   GroupVoteListResponse,
+  InviteCodePayload,
   MyGroupList,
   MyGroupNamesData,
   UpdateGroupRequest,
 } from './model'
 import { groupService } from './service'
 
+// 단일 그룹 key
+export const groupKey = (groupId: number) => ['group', groupId]
+// 그룹 멤버 목록 key
+export const groupMembersKey = (groupId: number) => ['groupMembers', groupId]
+// 그룹 투표 목록 key
+export const groupVotesKey = (groupId: number) => ['groupVotes', groupId]
+// 그룹 분석 리포트 key
+export const groupAnalysisKey = (groupId: number) => ['groupAnalysis', groupId]
+// 그룹 이름 목록 key
+export const groupNameListKey = ['groupNameList']
+// 내 그룹 목록 key
+export const myGroupsKey = ['myGroups']
+
 // 그룹 이름 무한스크롤 조회
 export const useInfiniteGroupNameListQuery = (size: number = 10) => {
   return useSuspenseInfiniteQuery<MyGroupNamesData, AxiosError>({
-    queryKey: ['groupNameList'],
+    queryKey: groupNameListKey,
     queryFn: ({ pageParam }) => groupService.groupNameList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
       return lastPage?.hasNext ? lastPage.nextCursor : undefined
@@ -30,7 +40,7 @@ export const useInfiniteGroupNameListQuery = (size: number = 10) => {
 // 그룹 정보 무한스크롤 조회
 export const useInfiniteGroupsQuery = (size: number = 10) => {
   return useSuspenseInfiniteQuery<MyGroupList, Error>({
-    queryKey: ['myGroups'],
+    queryKey: myGroupsKey,
     queryFn: ({ pageParam }) => groupService.getAllGroupList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
       return lastPage?.hasNext ? lastPage.nextCursor : undefined
@@ -40,45 +50,25 @@ export const useInfiniteGroupsQuery = (size: number = 10) => {
   })
 }
 // 초대 코드로 그룹 가입
-export const useInviteCodeMutation = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: groupService.joinGroup,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myGroups'] })
-      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
-    },
-  })
+export const useInviteCodeMutation = {
+  mutationFn: (payload: InviteCodePayload) => {
+    return groupService.joinGroup(payload)
+  },
 }
 // 그룹 생성
-export const useCreateGroupMutation = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: groupService.createGroup,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myGroups'] })
-      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
-    },
-  })
+export const useCreateGroupMutation = {
+  mutationFn: (payload: CreateGroupPayload) => {
+    return groupService.createGroup(payload)
+  },
 }
 // 그룹 탈퇴(본인)
-export const useLeaveGroupMutation = (groupId: number) => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: () => groupService.leaveGroup(groupId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myGroups'] })
-      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
-    },
-  })
+export const useLeaveGroupMutation = {
+  mutationFn: (groupId: number) => groupService.leaveGroup(groupId),
 }
 // 그룹 정보 조회
 export const useGroupQuery = (groupId: number) => {
   return useSuspenseQuery({
-    queryKey: ['group', groupId],
+    queryKey: groupKey(groupId),
     queryFn: () => groupService.getGroup(groupId),
     staleTime: 1000 * 60 * 15,
     retry: 1,
@@ -86,33 +76,18 @@ export const useGroupQuery = (groupId: number) => {
 }
 // 그룹 정보 수정
 export const useUpdateGroupMutation = (groupId: number) => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
+  return {
     mutationFn: (payload: UpdateGroupRequest) => groupService.updateGroup(payload, groupId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['group', groupId] })
-      queryClient.invalidateQueries({ queryKey: ['myGroups'] })
-      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
-    },
-  })
+  }
 }
 // 그룹 삭제
-export const useDeleteGroupMutation = (groupId: number) => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: () => groupService.deleteGroup(groupId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myGroups'] })
-      queryClient.invalidateQueries({ queryKey: ['groupNameList'] })
-    },
-  })
+export const useDeleteGroupMutation = {
+  mutationFn: (groupId: number) => groupService.deleteGroup(groupId),
 }
 // 그룹 멤버 목록 조회
 export const useGroupMembersQuery = (groupId: number) => {
   return useSuspenseQuery({
-    queryKey: ['groupMembers', groupId],
+    queryKey: groupMembersKey(groupId),
     queryFn: () => groupService.getGroupMembers(groupId),
     staleTime: 1000 * 60 * 15,
     retry: 1,
@@ -120,33 +95,21 @@ export const useGroupMembersQuery = (groupId: number) => {
 }
 // 그룹 멤버 역할 변경
 export const useGroupRoleChangeMutation = (groupId: number, userId: number) => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
+  return {
     mutationFn: (payload: GroupRoleChangeRequest) =>
       groupService.updateGroupMemberRole(groupId, userId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['groupMembers', groupId] })
-      queryClient.invalidateQueries({ queryKey: ['group', groupId] })
-    },
-  })
+  }
 }
-// 그룹 멤버 삭제
+// 그룹 멤버 추방
 export const useGroupMemberDeleteMutation = (groupId: number, userId: number) => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
+  return {
     mutationFn: () => groupService.deleteGroupMember(groupId, userId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['groupMembers', groupId] })
-      queryClient.invalidateQueries({ queryKey: ['group', groupId] })
-    },
-  })
+  }
 }
 // 그룹 내 투표 목록 조회
 export const useGroupVotesInfiniteQuery = (groupId: number, size: number = 10) => {
   return useSuspenseInfiniteQuery<GroupVoteListResponse, AxiosError>({
-    queryKey: ['groupVotes', groupId],
+    queryKey: groupVotesKey(groupId),
     queryFn: ({ pageParam }) =>
       groupService.getGroupVotes(groupId, size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
@@ -157,7 +120,7 @@ export const useGroupVotesInfiniteQuery = (groupId: number, size: number = 10) =
 // 그룹 내 리포트 조회
 export const useGroupAnalysisQuery = (groupId: number) => {
   return useSuspenseQuery<GroupAnalysisResponse, AxiosError>({
-    queryKey: ['groupAnalysis', groupId],
+    queryKey: groupAnalysisKey(groupId),
     queryFn: () => groupService.getGroupReports(groupId),
     staleTime: 1000 * 60 * 60 * 24 * 6,
   })

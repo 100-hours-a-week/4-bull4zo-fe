@@ -2,11 +2,17 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { authAxiosInstance } from '@/api/axios'
 import { Group } from '@/api/services/group/model'
-import { useUpdateGroupMutation } from '@/api/services/group/queries'
+import {
+  groupKey,
+  groupNameListKey,
+  myGroupsKey,
+  useUpdateGroupMutation,
+} from '@/api/services/group/queries'
 import { DeleteGroupModal } from '@/components/modal/deleteGroupModal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -48,7 +54,11 @@ export const UpdateGroupForm = ({ group }: Props) => {
     mode: 'onChange',
   })
 
-  const { mutateAsync: updateGroup } = useUpdateGroupMutation(Number(groupId))
+  const queryClient = useQueryClient()
+
+  const { mutateAsync: updateGroup } = useMutation({
+    ...useUpdateGroupMutation(Number(groupId)),
+  })
 
   const [preview, setPreview] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -95,6 +105,10 @@ export const UpdateGroupForm = ({ group }: Props) => {
         },
         {
           onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: groupKey(Number(groupId)) })
+            queryClient.invalidateQueries({ queryKey: myGroupsKey })
+            queryClient.invalidateQueries({ queryKey: groupNameListKey })
+
             toast.success('그룹 정보가 성공적으로 업데이트되었습니다.')
             form.reset()
           },
