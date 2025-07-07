@@ -17,6 +17,7 @@ module.exports = {
         'rename',
         'remove',
         'build',
+        'hotfix',
       ],
     ],
   },
