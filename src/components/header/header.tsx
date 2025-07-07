@@ -15,7 +15,7 @@ const Header = () => {
   const { open } = useSliderStore()
   const { newNotification } = useNotificationStore()
   const { isOpen } = useSliderStore()
-  const { data } = useInfiniteNotificationQuery()
+  const { data } = useInfiniteNotificationQuery(isLogin)
 
   const location = useLocation()
 

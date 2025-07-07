@@ -69,10 +69,14 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
       }
 
       if (voteId) {
-        await updateVote({ groupId, content, imageUrl, imageName, closedAt, anonymous })
+        navigation('/research')
+        closeModal()
+        updateVote({ groupId, content, imageUrl, imageName, closedAt, anonymous })
         toast('투표를 수정했습니다.')
       } else {
-        await mutateAsync({
+        navigation('/research')
+        closeModal()
+        mutateAsync({
           groupId,
           content,
           imageUrl,
@@ -82,8 +86,7 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
         })
         toast('투표를 등록했습니다.')
       }
-      navigation('/research')
-      closeModal()
+
       // eslint-disable-next-line no-unused-vars
     } catch (err: unknown) {
       submit.current = false // 재시도 가능하게

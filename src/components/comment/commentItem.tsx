@@ -2,9 +2,10 @@ import React, { Dispatch, forwardRef, useEffect, useRef, useState } from 'react'
 import { FaUserLarge } from 'react-icons/fa6'
 import { HiDotsVertical } from 'react-icons/hi'
 import { useParams } from 'react-router-dom'
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { Comment } from '@/api/services/comment/model'
-import { useDeleteCommentMutation } from '@/api/services/comment/queries'
+import { Comment, CommentListData } from '@/api/services/comment/model'
+import { commentKey, useDeleteCommentMutation } from '@/api/services/comment/queries'
 import { formatRelativeTime } from '@/utils/time'
 
 interface CommentItemProps extends Partial<Comment> {
@@ -79,7 +80,40 @@ const CommentDotsItem = ({
   // eslint-disable-next-line no-unused-vars
   onDelete?: (commentId: number) => void
 }) => {
-  const { mutateAsync } = useDeleteCommentMutation(voteId)
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    ...useDeleteCommentMutation,
+    onMutate: async (commentId: number) => {
+      await queryClient.cancelQueries({ queryKey: commentKey(voteId) })
+
+      const previousComments = queryClient.getQueryData<InfiniteData<CommentListData>>(
+        commentKey(voteId),
+      )
+
+      queryClient.setQueryData<InfiniteData<CommentListData>>(commentKey(voteId), (old) => {
+        if (!old) return old
+
+        return {
+          ...old,
+          pages: old.pages.map((page) => ({
+            ...page,
+            comments: page.comments.filter((comment) => comment.commentId !== commentId),
+          })),
+        }
+      })
+
+      return { previousComments }
+    },
+    onError: (_err, _variables, context) => {
+      if (context?.previousComments) {
+        queryClient.setQueryData(commentKey(voteId), context.previousComments)
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: commentKey(voteId) })
+    },
+  })
 
   const handleDelete = async () => {
     await mutateAsync(commentId)

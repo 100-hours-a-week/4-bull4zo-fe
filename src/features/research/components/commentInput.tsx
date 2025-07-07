@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { TbSend2 } from 'react-icons/tb'
 import { useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
 import { CommentCreateRequest } from '@/api/services/comment/model'
 import { useCreateCommentMutation } from '@/api/services/comment/queries'
 import { Button } from '@/components/ui/button'
@@ -22,7 +23,9 @@ export const CommentInput = () => {
     },
   })
 
-  const { mutateAsync } = useCreateCommentMutation(Number(voteId))
+  const { mutateAsync } = useMutation({
+    ...useCreateCommentMutation(Number(voteId)),
+  })
   const submitRef = useRef(false)
 
   const onSubmit = async (values: CommentCreateRequest) => {

@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { FaChevronDown } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
-import { GroupMember, GroupRole } from '@/api/services/group/model'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { GroupMember, GroupMembersResponse, GroupRole } from '@/api/services/group/model'
 import {
+  groupKey,
+  groupMembersKey,
   useGroupMemberDeleteMutation,
   useGroupQuery,
   useGroupRoleChangeMutation,
@@ -50,9 +53,57 @@ export const MemberRoleLabel = ({
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const { mutateAsync: changeRole } = useGroupRoleChangeMutation(groupId, member.userId)
-  const { mutateAsync: leaveGroup } = useGroupMemberDeleteMutation(groupId, member.userId)
+  const queryClient = useQueryClient()
+  // 멤버 권한 변경 낙관적 업데이트
+  const { mutateAsync: changeRole } = useMutation({
+    ...useGroupRoleChangeMutation(groupId, member.userId),
+    onMutate: async ({ role }) => {
+      queryClient.cancelQueries({ queryKey: groupMembersKey(groupId) })
 
+      const previous = queryClient.getQueryData<GroupMembersResponse>(groupMembersKey(groupId))
+
+      queryClient.setQueryData<GroupMembersResponse>(groupMembersKey(groupId), (old) => {
+        if (!old) return old
+        return {
+          ...old,
+          members: old.members.map((m) => (m.userId === member.userId ? { ...m, role } : m)),
+        }
+      })
+      return { previous }
+    },
+    onError: (error, variables, context) => {
+      queryClient.setQueryData<GroupMembersResponse>(groupMembersKey(groupId), context?.previous)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: groupMembersKey(groupId) })
+      queryClient.invalidateQueries({ queryKey: groupKey(groupId) })
+    },
+  })
+  // 멤버 추방 낙관적 업데이트
+  const { mutateAsync: leaveGroup } = useMutation({
+    ...useGroupMemberDeleteMutation(groupId, member.userId),
+    onMutate: async () => {
+      queryClient.cancelQueries({ queryKey: groupMembersKey(groupId) })
+
+      const previous = queryClient.getQueryData<GroupMembersResponse>(groupMembersKey(groupId))
+
+      queryClient.setQueryData<GroupMembersResponse>(groupMembersKey(groupId), (old) => {
+        if (!old) return old
+        return {
+          ...old,
+          members: old.members.filter((m) => m.userId !== member.userId),
+        }
+      })
+      return { previous }
+    },
+    onError: (error, variables, context) => {
+      queryClient.setQueryData<GroupMembersResponse>(groupMembersKey(groupId), context?.previous)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: groupMembersKey(groupId) })
+      queryClient.invalidateQueries({ queryKey: groupKey(groupId) })
+    },
+  })
   const toggleDropdown = () => setOpen((prev) => !prev)
   const text = member.role === 'OWNER' ? '소유자' : member.role === 'MANAGER' ? '관리자' : '멤버'
 

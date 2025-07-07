@@ -1,11 +1,14 @@
-import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import { NotificationListResponse } from './model'
 import { notificationService } from './service'
 
-export const useInfiniteNotificationQuery = (size: number = 20, enabled: boolean = true) => {
+// 무한 스크롤 알림 조회 Key
+export const InfiniteNotificationKey = ['notifications']
+
+export const useInfiniteNotificationQuery = (enabled: boolean = true, size: number = 20) => {
   return useInfiniteQuery<NotificationListResponse, AxiosError>({
-    queryKey: ['notifications'],
+    queryKey: InfiniteNotificationKey,
     queryFn: ({ pageParam }) =>
       notificationService.getNotificationList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
@@ -16,10 +19,9 @@ export const useInfiniteNotificationQuery = (size: number = 20, enabled: boolean
     refetchOnWindowFocus: true,
   })
 }
-export const useMutationReadNotification = () => {
-  return useMutation({
-    mutationFn: (notificationId: number) => {
-      return notificationService.readNotification(notificationId)
-    },
-  })
+// 알림 읽기 mutation
+export const useMutationReadNotification = {
+  mutationFn: (notificationId: number) => {
+    return notificationService.readNotification(notificationId)
+  },
 }
