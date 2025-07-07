@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { toast } from 'sonner'
 import { NotificationSSEResponse } from '@/api/services/notification/model'
@@ -9,6 +10,7 @@ import { useSliderStore } from '@/stores/sliderStore'
 export const useSSE = (accessToken: string | null) => {
   const lastEventIdRef = useRef<string | null>(null)
   const eventSourceRef = useRef<EventSourcePolyfill | null>(null)
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     if (!accessToken) return
@@ -38,6 +40,9 @@ export const useSSE = (accessToken: string | null) => {
 
           const isSliderOpen = useSliderStore.getState().isOpen
           if (!isSliderOpen) {
+            queryClient.refetchQueries({
+              queryKey: ['notifications'],
+            })
             toast(`${notificationMessageMap[type]} 알림이 왔습니다.`, {
               description: content,
               ...(redirectUrl && {
