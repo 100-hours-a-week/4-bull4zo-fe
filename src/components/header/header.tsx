@@ -49,7 +49,7 @@ const Header = () => {
       </button>
       <div className="mr-4">
         {isLogin ? (
-          <div className="relative cursor-pointer" aria-label="알림">
+          <div className="relative cursor-pointer">
             <Bell
               className="cursor-pointer"
               size={24}

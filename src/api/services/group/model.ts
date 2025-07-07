@@ -109,7 +109,7 @@ export type GroupAnalysisResponse = {
       commentSummary: string
     }
     sentiment: {
-      emotion: string
+      emotion: string[]
       topKeywords: string[]
     }
     modelReview: string[]

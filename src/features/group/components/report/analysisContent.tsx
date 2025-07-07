@@ -7,13 +7,23 @@ interface Props {
 }
 
 export const ReportContentAnalysis = ({ data }: Props) => {
+  if (!data.analysis) {
+    return null
+  }
+
   return (
     <div className="px-5">
       <h2 className="text-lg font-medium mb-2">요약</h2>
       <div className="flex flex-col gap-4 p-2">
         <div className="flex flex-row gap-4 items-center">
           <ReportContentAnalysisTitle>분위기</ReportContentAnalysisTitle>
-          <ReportContentAnalysisText>{data.analysis.sentiment.emotion}</ReportContentAnalysisText>
+          <div className="flex flex-row gap-2">
+            {data.analysis.sentiment.emotion.map((emotion, idx) => (
+              <Label className="bg-purple-200 px-2 py-1 rounded-[4px]" key={idx}>
+                {emotion}
+              </Label>
+            ))}
+          </div>
         </div>
         <div className="flex flex-row gap-4 items-center">
           <ReportContentAnalysisTitle>키워드</ReportContentAnalysisTitle>

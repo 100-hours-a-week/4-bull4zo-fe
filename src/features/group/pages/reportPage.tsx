@@ -7,7 +7,7 @@ import { LoadingPage } from '@/components/loading/loadingPage'
 import {
   ReportContentAnalysis,
   ReportContentChart,
-  ReportContentVotes,
+  // ReportContentVotes,
 } from '@/features/group/components/report/index'
 
 const ReportPage = () => {
@@ -30,8 +30,8 @@ const ReportPageContent = () => {
   return (
     <article className="py-5 pb-8 min-h-full">
       <ReportContentChart data={data} />
-      <div className="w-full max-w-[450px] my-3 bg-line h-[0.625rem]" />
-      <ReportContentVotes groupId={parseInt(groupId!)} />
+      {/* <div className="w-full max-w-[450px] my-3 bg-line h-[0.625rem]" />
+      <ReportContentVotes groupId={parseInt(groupId!)} /> */}
       <div className="w-full max-w-[450px] my-3 bg-line h-[0.625rem]" />
       <ReportContentAnalysis data={data} />
     </article>
