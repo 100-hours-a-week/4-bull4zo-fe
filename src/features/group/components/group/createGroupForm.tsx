@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { authAxiosInstance } from '@/api/axios'
+import { groupNameListKey, myGroupsKey } from '@/api/services/group/key'
 import { useCreateGroupMutation } from '@/api/services/group/queries'
 import {
   Button,
@@ -22,7 +24,7 @@ import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/index'
 import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'
-import { CreateGroupSchema, createGroupSchema } from '../lib/groupSchema'
+import { CreateGroupSchema, createGroupSchema } from '../../lib/groupSchema'
 
 export const CreateGroupForm = () => {
   const form = useForm<CreateGroupSchema>({
@@ -37,7 +39,11 @@ export const CreateGroupForm = () => {
 
   const { openModal } = useModalStore()
 
-  const { mutateAsync } = useCreateGroupMutation()
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    ...useCreateGroupMutation,
+  })
 
   const [preview, setPreview] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -78,6 +84,8 @@ export const CreateGroupForm = () => {
         { name: values.name, description: values.description, imageUrl, imageName },
         {
           onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+            queryClient.invalidateQueries({ queryKey: groupNameListKey() })
             openModal(<InviteCodeCheckModal code={data.inviteCode} />)
           },
           onSettled: () => {

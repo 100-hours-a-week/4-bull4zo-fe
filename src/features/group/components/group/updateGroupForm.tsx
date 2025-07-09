@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { authAxiosInstance } from '@/api/axios'
+import { groupKey, groupNameListKey, myGroupsKey } from '@/api/services/group/key'
 import { Group } from '@/api/services/group/model'
 import { useUpdateGroupMutation } from '@/api/services/group/queries'
 import {
@@ -31,7 +33,7 @@ import { useModalStore } from '@/stores/index'
 import { ableManage, ableOwner } from '@/utils/authority'
 import { getContentLength } from '@/utils/textLength'
 import { filterAllowedKoreanInput } from '@/utils/validation'
-import { UpdateGroupSchema, updateGroupSchema } from '../lib/groupSchema'
+import { UpdateGroupSchema, updateGroupSchema } from '../../lib/groupSchema'
 
 interface Props {
   group: Group
@@ -51,7 +53,11 @@ export const UpdateGroupForm = ({ group }: Props) => {
     mode: 'onChange',
   })
 
-  const { mutateAsync: updateGroup } = useUpdateGroupMutation(Number(groupId))
+  const queryClient = useQueryClient()
+
+  const { mutateAsync: updateGroup } = useMutation({
+    ...useUpdateGroupMutation(Number(groupId)),
+  })
 
   const [preview, setPreview] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -98,6 +104,10 @@ export const UpdateGroupForm = ({ group }: Props) => {
         },
         {
           onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: groupKey(groupId) })
+            queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+            queryClient.invalidateQueries({ queryKey: groupNameListKey() })
+
             toast.success('그룹 정보가 성공적으로 업데이트되었습니다.')
             form.reset()
           },

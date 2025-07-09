@@ -1,27 +1,31 @@
 import { FaAngleLeft } from 'react-icons/fa6'
 import { useLocation, useNavigate } from 'react-router-dom'
-// import { Bell } from 'lucide-react'
-// import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
+import { Bell } from 'lucide-react'
+import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
 import MOA_HOME_ICON from '@/assets/moa_home.webp'
-import { Button, Icon } from '@/components/index'
-import { useUserStore } from '@/stores/index'
+import { useNotificationStore } from '@/stores/notificationStore'
+import { useSliderStore } from '@/stores/sliderStore'
+import { useUserStore } from '@/stores/userStore'
+import { Icon } from '../Icon/icon'
+import { Button } from '../ui/button'
 
 const Header = () => {
   const router = useNavigate()
-  const isLogin = useUserStore((state) => state.isLogin)
-  // const { open } = useSliderStore()
-
-  // const { data: notifications } = useInfiniteNotificationQuery(undefined, isLogin)
-
-  // const hasUnread = notifications?.pages.slice(0, 1).some((page) => {
-  //   return page.notifications.some((notification) => notification.read === 0)
-  // })
+  const { isLogin } = useUserStore()
+  const { open } = useSliderStore()
+  const { newNotification } = useNotificationStore()
+  const { isOpen } = useSliderStore()
+  const { data } = useInfiniteNotificationQuery(isLogin)
 
   const location = useLocation()
 
   const path = location.pathname
   const excludedPaths = ['/home', '/make', '/research', '/user', '/auth/callback']
   const showBackButton = !excludedPaths.includes(path)
+
+  const hasUnread = data?.pages
+    ?.flatMap((page) => page.notifications)
+    ?.some((notification) => notification.read === 0)
 
   const handleBack = () => {
     router(-1)
@@ -45,9 +49,15 @@ const Header = () => {
       </button>
       <div className="mr-4">
         {isLogin ? (
-          <div className="relative cursor-pointer" aria-label="알림">
-            {/* <Bell className="cursor-pointer" size={24} onClick={open} />
-            {hasUnread && (
+          <div className="relative cursor-pointer">
+            <Bell
+              className="cursor-pointer"
+              size={24}
+              onClick={() => {
+                open()
+              }}
+            />
+            {!isOpen && (newNotification || hasUnread) && (
               <span className="absolute -top-1 right-0 flex size-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
                 <span
@@ -55,7 +65,7 @@ const Header = () => {
                   onClick={open}
                 />
               </span>
-            )} */}
+            )}
           </div>
         ) : (
           <Button

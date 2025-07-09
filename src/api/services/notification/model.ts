@@ -14,7 +14,7 @@ export interface Notification {
   type: NotificationType
   content: string
   read: number // 0: unread, 1: read
-  redirect_url: string
+  redirectUrl: string
   createdAt: string
 }
 
@@ -22,4 +22,13 @@ export type NotificationListResponse = PageNation<'notifications', Notification[
 
 export interface NotificationReadResponse {
   notificationId: number
+}
+
+export interface NotificationSSEResponse {
+  notificationId: number
+  type: NotificationType
+  content: string
+  isRead: number
+  redirectUrl: string
+  createdAt: string
 }

@@ -1,11 +1,14 @@
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-  useSuspenseInfiniteQuery,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
+import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import {
+  createdVotesKey,
+  participatedVotesKey,
+  top3VoteKey,
+  voteDetailKey,
+  voteFailureReasonKey,
+  voteResultKey,
+  votesKey,
+} from './key'
 import {
   CreateVotePayload,
   ParticipatedVoteList,
@@ -15,6 +18,7 @@ import {
   VoteData,
   VoteDetail,
   VoteReportReason,
+  submitVoteRequest,
   voteDetailResult,
 } from './model'
 import { voteService } from './service'
@@ -29,7 +33,7 @@ export const useInfiniteVotesQuery = ({
   const effectiveGroupId = isLogin ? groupId : 1
 
   return useSuspenseInfiniteQuery<VoteData, AxiosError>({
-    queryKey: ['votes', effectiveGroupId as number, effectiveSize],
+    queryKey: votesKey(effectiveGroupId, effectiveSize),
     queryFn: ({ pageParam }) =>
       voteService.getVotes({
         groupId: effectiveGroupId,
@@ -42,26 +46,12 @@ export const useInfiniteVotesQuery = ({
   })
 }
 // 투표 참여
-export const useSubmitVoteMutation = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: voteService.submitVote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['participatedVotes'] })
-    },
-  })
+export const useSubmitVoteMutation = {
+  mutationFn: (payload: submitVoteRequest) => voteService.submitVote(payload),
 }
 // 투표 생성
-export const useCreateVoteMutation = () => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: voteService.createVote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['createdVotes'] })
-    },
-  })
+export const useCreateVoteMutation = {
+  mutationFn: (payload: CreateVotePayload) => voteService.createVote(payload),
 }
 // 참여한 투표 조회
 export const useParticipatedVotesInfinityQuery = ({
@@ -69,7 +59,7 @@ export const useParticipatedVotesInfinityQuery = ({
   size = 10,
 }: ParticipatedVotesQueryOptions) => {
   return useSuspenseInfiniteQuery<ParticipatedVoteList, AxiosError>({
-    queryKey: ['participatedVotes', groupId],
+    queryKey: participatedVotesKey(groupId),
     queryFn: ({ pageParam }) =>
       voteService.getParticipatedVotes({ groupId, cursor: pageParam as string | undefined, size }),
     getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
@@ -83,7 +73,7 @@ export const useCreateVotesInfinityQuery = ({
   size = 10,
 }: ParticipatedVotesQueryOptions) => {
   return useSuspenseInfiniteQuery<ParticipatedVoteList, AxiosError>({
-    queryKey: ['createdVotes', groupId],
+    queryKey: createdVotesKey(groupId),
     queryFn: ({ pageParam }) =>
       voteService.getCreatedVotes({ groupId, cursor: pageParam as string | undefined, size }),
     getNextPageParam: (lastPage) => (lastPage?.hasNext ? lastPage.nextCursor : undefined),
@@ -94,7 +84,7 @@ export const useCreateVotesInfinityQuery = ({
 // 투표 상세 내용 조회
 export const useVoteDetailInfo = (voteId: string) => {
   return useSuspenseQuery<VoteDetail>({
-    queryKey: ['voteDetail', voteId],
+    queryKey: voteDetailKey(voteId),
     queryFn: () => voteService.getVote(voteId),
     staleTime: 1000 * 60 * 1,
   })
@@ -102,52 +92,33 @@ export const useVoteDetailInfo = (voteId: string) => {
 // 투표 상세 결과 조회
 export const useVoteDetailResults = (voteId: string) => {
   return useSuspenseQuery<voteDetailResult>({
-    queryKey: ['voteResult', voteId],
+    queryKey: voteResultKey(voteId),
     queryFn: () => voteService.getVoteResult(voteId),
     staleTime: 1000 * 60 * 1,
   })
 }
 // 투표 실패 사유 조회
 export const useVoteReportReasons = (voteId: string) => {
-  return useQuery<VoteReportReason>({
-    queryKey: ['voteReportReasons', voteId],
+  return useSuspenseQuery<VoteReportReason>({
+    queryKey: voteFailureReasonKey(voteId),
     queryFn: () => voteService.getVoteFailReason(voteId),
-    enabled: !!voteId,
   })
 }
 // 투표 수정
 export const useUpdateVoteMutation = (voteId: string) => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
+  return {
     mutationFn: (payload: CreateVotePayload) => voteService.updateVote(voteId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['createdVotes'] })
-    },
-  })
+  }
 }
 // 투표 삭제
-export const useDeleteVoteMutation = (voteId: string) => {
-  const queryClient = useQueryClient()
-
-  return useMutation({
-    mutationFn: () => voteService.deleteVote(voteId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['createdVotes'] })
-      queryClient.invalidateQueries({ queryKey: ['participatedVotes'] })
-    },
-  })
+export const useDeleteVoteMutation = {
+  mutationFn: (voteId: string) => voteService.deleteVote(voteId),
 }
 // Top3 투표 조회
-export const useTop3VotesQuery = (
-  groupId: number,
-  type: TopVoteDay = 'daily',
-  enabled: boolean = true,
-) => {
-  return useQuery({
-    queryKey: ['top3Votes', groupId, type],
+export const useTop3VotesQuery = (groupId: number, type: TopVoteDay = 'daily') => {
+  return useSuspenseQuery({
+    queryKey: top3VoteKey(groupId, type),
     queryFn: () => voteService.getTop3Votes(groupId, type),
-    enabled,
     staleTime: 1000 * 60 * 60 * 23, // 23h: 매일 오전 9시 재요청
   })
 }

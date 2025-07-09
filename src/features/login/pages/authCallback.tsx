@@ -17,6 +17,7 @@ const AuthCallback = () => {
 
     if (kakaoAuthCode) {
       handleKakaoLogin(kakaoAuthCode)
+      navigate('/home')
     } else {
       toast('로그인에 실패했습니다. 인증 코드가 없습니다.')
       navigate('/login') // 실패시 로그인 페이지로 리디렉션
@@ -48,10 +49,8 @@ const AuthCallback = () => {
       logoutAndResetStores()
       setIsLogin(true)
       setAccessToken(accessToken)
-
-      navigate('/home')
+      // eslint-disable-next-line no-unused-vars
     } catch (e) {
-      console.log(e)
       isDoing.current = false
       setIsLogin(false)
       toast('로그인에 실패했습니다. 다시 시도해주세요!', {

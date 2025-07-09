@@ -1,13 +1,13 @@
 import { useTop3VotesQuery } from '@/api/services/vote/queries'
-import { Label, VoteItem } from '@/components/index'
-import { useGroupStore, useUserStore } from '@/stores/index'
+import { VoteItem } from '@/components/item/voteItem'
+import { Label } from '@/components/ui/label'
 import { formatDateTimeDetail } from '@/utils/time'
 
-export const TopList = () => {
-  const { isLogin } = useUserStore()
-  const { selectedId } = useGroupStore()
-  const { data } = useTop3VotesQuery(selectedId, undefined, isLogin)
+interface Props {
+  data: ReturnType<typeof useTop3VotesQuery>['data']
+}
 
+export const TopList = ({ data }: Props) => {
   const { from, to } = getKSTDateRange()
 
   return (

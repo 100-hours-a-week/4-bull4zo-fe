@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Check, Copy, EllipsisVertical } from 'lucide-react'
 import { toast } from 'sonner'
+import { groupNameListKey, myGroupsKey } from '@/api/services/group/key'
 import { Group } from '@/api/services/group/model'
 import { useLeaveGroupMutation } from '@/api/services/group/queries'
 import { Card, CardContent, CardHeader } from '@/components/index'
@@ -72,11 +74,19 @@ export const GroupCard = (group: Partial<Group>) => {
       </CardHeader>
       <CardContent className="flex flex-col flex-grow justify-between h-full">
         <p className="font-medium mb-7">{group.description}</p>
-        <pre className="font-medium flex items-center text-sm">
+        <pre
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+          className="font-medium flex items-center text-sm cursor-default"
+        >
           초대코드:<span className="font-semibold">{group.inviteCode}</span>
           <button
             type="button"
-            onClick={handleCopy}
+            onClick={(e) => {
+              handleCopy()
+              e.stopPropagation()
+            }}
             className="hover:text-primary ml-2 transition cursor-pointer"
           >
             {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -94,10 +104,18 @@ const GroupDotsItem = ({
   groupId: number
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const { mutateAsync } = useLeaveGroupMutation(groupId)
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    ...useLeaveGroupMutation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+      queryClient.invalidateQueries({ queryKey: groupNameListKey() })
+    },
+  })
 
   const handleLeaveGroup = async () => {
-    await mutateAsync()
+    await mutateAsync(groupId)
     toast.success('그룹을 떠났습니다.')
     setOpen(false)
   }

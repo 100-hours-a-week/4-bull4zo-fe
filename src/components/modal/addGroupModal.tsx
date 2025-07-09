@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { groupNameListKey, myGroupsKey } from '@/api/services/group/key'
 import { useInviteCodeMutation } from '@/api/services/group/queries'
 import {
   Button,
@@ -23,7 +25,15 @@ export const AddGroupModal = () => {
   const navigation = useNavigate()
   const { closeModal } = useModalStore()
 
-  const { mutate } = useInviteCodeMutation()
+  const queryClient = useQueryClient()
+
+  const { mutate } = useMutation({
+    ...useInviteCodeMutation,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+      queryClient.invalidateQueries({ queryKey: groupNameListKey() })
+    },
+  })
 
   const form = useForm<InviteCodeSchema>({
     resolver: zodResolver(inviteCodeSchema),

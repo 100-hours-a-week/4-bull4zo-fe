@@ -1,7 +1,9 @@
 import { useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { authAxiosInstance } from '@/api/axios'
+import { createdVotesKey } from '@/api/services/vote/key'
 import { useCreateVoteMutation, useUpdateVoteMutation } from '@/api/services/vote/queries'
 import { Button, VoteCardPreview } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
@@ -17,12 +19,23 @@ type Props = {
 
 export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonymous }: Props) => {
   const { voteId } = useParams()
-
   const navigation = useNavigate()
-
   const { closeModal } = useModalStore()
-  const { mutateAsync } = useCreateVoteMutation()
-  const { mutateAsync: updateVote } = useUpdateVoteMutation(voteId || '')
+
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    ...useCreateVoteMutation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: createdVotesKey() })
+    },
+  })
+  const { mutateAsync: updateVote } = useMutation({
+    ...useUpdateVoteMutation(voteId ?? ''),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: createdVotesKey() })
+    },
+  })
 
   const submit = useRef<boolean>(false)
 
@@ -68,10 +81,14 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
       }
 
       if (voteId) {
-        await updateVote({ groupId, content, imageUrl, imageName, closedAt, anonymous })
+        navigation('/research')
+        closeModal()
+        updateVote({ groupId, content, imageUrl, imageName, closedAt, anonymous })
         toast('투표를 수정했습니다.')
       } else {
-        await mutateAsync({
+        navigation('/research')
+        closeModal()
+        mutateAsync({
           groupId,
           content,
           imageUrl,
@@ -81,8 +98,7 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
         })
         toast('투표를 등록했습니다.')
       }
-      navigation('/research')
-      closeModal()
+
       // eslint-disable-next-line no-unused-vars
     } catch (err: unknown) {
       submit.current = false // 재시도 가능하게

@@ -1,7 +1,6 @@
 import { VoteDetail, voteDetailResult } from '@/api/services/vote/model'
 import CheckIcon from '@/assets/voteCheckIcon.svg'
 import { Icon, Label } from '@/components/index'
-import { useGroupStore } from '@/stores/index'
 import { formatDateTimeDetail } from '@/utils/time'
 
 interface Props {
@@ -10,8 +9,6 @@ interface Props {
 }
 
 export const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) => {
-  const { groups } = useGroupStore()
-
   const agree = voteResult?.results[0]
   const disAgree = voteResult?.results[1]
 
@@ -19,9 +16,7 @@ export const ResearchDetailInfo = ({ voteDetail, voteResult }: Partial<Props>) =
     <div>
       <section className="mx-9 pb-8">
         <div className="mt-4">
-          <h1 className="text-xs font-semibold">
-            {groups.find((f) => f.groupId === voteDetail?.groupId)?.name}
-          </h1>
+          <h1 className="text-xs font-semibold">{voteDetail?.groupName}</h1>
           <p className="mt-2 text-[1.125rem] font-medium whitespace-pre-line break-all">
             {voteDetail?.content}
           </p>

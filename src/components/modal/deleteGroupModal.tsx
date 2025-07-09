@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { groupNameListKey, myGroupsKey } from '@/api/services/group/key'
 import { useDeleteGroupMutation } from '@/api/services/group/queries'
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { useModalStore } from '@/stores/index'
@@ -8,10 +10,18 @@ export const DeleteGroupModal = ({ groupId }: { groupId: number }) => {
   const route = useNavigate()
   const { closeModal } = useModalStore()
 
-  const { mutateAsync } = useDeleteGroupMutation(groupId)
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    ...useDeleteGroupMutation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+      queryClient.invalidateQueries({ queryKey: groupNameListKey() })
+    },
+  })
 
   const handleSubmit = async () => {
-    await mutateAsync()
+    await mutateAsync(groupId)
     toast.success('그룹이 삭제되었습니다.')
     route('/user')
     closeModal()
