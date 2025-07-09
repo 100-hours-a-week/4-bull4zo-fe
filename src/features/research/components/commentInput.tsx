@@ -6,10 +6,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { CommentCreateRequest } from '@/api/services/comment/model'
 import { useCreateCommentMutation } from '@/api/services/comment/queries'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
+import {
+  Button,
+  Checkbox,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  Textarea,
+} from '@/components/index'
 import { commentSchema } from '../lib/commentSchema'
 
 export const CommentInput = () => {

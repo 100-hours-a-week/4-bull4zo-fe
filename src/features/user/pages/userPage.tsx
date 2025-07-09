@@ -1,10 +1,8 @@
 import { Suspense, useRef } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import NotFoundPage from '@/app/NotFound'
-import { UserGroupList } from '@/components/list/userGroupList'
-import { LoadingPage } from '@/components/loading/loadingPage'
-import { UserCard } from '@/features/user/components/userCard'
-import { UserFeedbackWidget } from '../components/userFeedbackWidget'
+import { NotFoundPage } from '@/app/index'
+import { LoadingPage, UserGroupList } from '@/components/index'
+import { UserCard, UserFeedbackWidget } from '@/features/user/components/index'
 
 const UserPage = () => {
   return (

@@ -7,17 +7,25 @@ import { Check, PencilLine } from 'lucide-react'
 import { userKey } from '@/api/services/user/key'
 import { UserInfo } from '@/api/services/user/model'
 import { useUserLogoutMutation, useUserUpdateMutation } from '@/api/services/user/queries'
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+  Input,
+} from '@/components/index'
 import { ExitUserModal } from '@/components/modal/exitUserModal'
 import { NicknameSchema, nicknameSchema } from '@/features/user/lib/userSchema'
 import { trackEvent } from '@/lib/trackEvent'
-import { useModalStore } from '@/stores/modalStore'
-import { useUserStore } from '@/stores/userStore'
+import { useModalStore, useUserStore } from '@/stores/index'
 import { logoutAndResetStores } from '@/utils/reset'
 import { filterAllowedKoreanInput } from '@/utils/validation'
-import { Button } from '../../../components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/card'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '../../../components/ui/form'
-import { Input } from '../../../components/ui/input'
 
 export const UserCard = () => {
   const { nickname, setNickName } = useUserStore()

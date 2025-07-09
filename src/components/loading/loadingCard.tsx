@@ -1,5 +1,5 @@
 import { SyncLoader } from 'react-spinners'
-import { Card, CardContent } from '../ui/card'
+import { Card, CardContent } from '@/components/index'
 
 export const LoadingCard = () => {
   return (

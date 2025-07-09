@@ -1,9 +1,6 @@
 import { useInfiniteGroupsQuery } from '@/api/services/group/queries'
-import { GroupList } from '@/components/list/groupList'
-import { AddGroupModal } from '@/components/modal/addGroupModal'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { useModalStore } from '@/stores/modalStore'
+import { AddGroupModal, Button, GroupList, Label } from '@/components/index'
+import { useModalStore } from '@/stores/index'
 
 export const UserGroupList = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteGroupsQuery(undefined)

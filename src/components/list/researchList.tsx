@@ -6,10 +6,10 @@ import {
 } from '@/api/services/vote/queries'
 import { VoteList } from '@/components/list/voteList'
 import { Label } from '@/components/ui/label'
+import { useResearchTabStore } from '@/features/research/stores/researchTapStore'
 import { trackEvent } from '@/lib/trackEvent'
-import { useGroupStore } from '@/stores/groupStore'
-import { useResearchTabStore } from '../../features/research/stores/researchTapStore'
-import { LoadingPage } from '../loading/loadingPage'
+import { useGroupStore } from '@/stores/index'
+import { LoadingPage } from '../loading'
 
 export const ResearchList = () => {
   const { index, setIndex } = useResearchTabStore()

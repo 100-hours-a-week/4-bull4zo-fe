@@ -2,14 +2,10 @@ import { memo, useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/queries'
-import { VoteEndCard } from '@/components/card/voteEndCard'
-import { NoVoteAvailAbleModal } from '@/components/modal/noVoteAvailableModal'
-import { useModalStore } from '@/stores/modalStore'
-import { useTutorialStore } from '@/stores/tutorialStore'
-import { useUserStore } from '@/stores/userStore'
+import { NoVoteAvailAbleModal, VoteEndCard } from '@/components/index'
+import { useModalStore, useTutorialStore, useUserStore } from '@/stores/index'
 import { useVoteCardStore } from '../stores/voteCardStore'
-import SwipeCard, { SwipeCardHandle } from './swipCard'
-import { VoteDirectionButtonGroup } from './voteDirectionButtonGroup'
+import { SwipeCard, SwipeCardHandle, VoteDirectionButtonGroup } from './index'
 
 type Props = {
   fetchNextPage: () => void

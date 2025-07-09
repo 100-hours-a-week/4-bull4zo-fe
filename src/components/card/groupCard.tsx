@@ -6,9 +6,9 @@ import { toast } from 'sonner'
 import { groupNameListKey, myGroupsKey } from '@/api/services/group/key'
 import { Group } from '@/api/services/group/model'
 import { useLeaveGroupMutation } from '@/api/services/group/queries'
+import { Card, CardContent, CardHeader } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
-import { Card, CardContent, CardHeader } from '../ui/card'
 
 export const GroupCard = (group: Partial<Group>) => {
   const [copied, setCopied] = useState(false)

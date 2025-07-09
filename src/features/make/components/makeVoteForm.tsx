@@ -2,22 +2,21 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ChevronRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import {
+  Button,
+  Checkbox,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
-import { VoteCardPreviewModal } from '@/features/make/components/voteCardPreviewModal'
+  Textarea,
+} from '@/components/index'
+import { VoteCardPreviewModal } from '@/features/make/components/index'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
-import { useGroupStore } from '@/stores/groupStore'
-import { useModalStore } from '@/stores/modalStore'
+import { useGroupStore, useModalStore } from '@/stores/index'
 import { getContentLength } from '@/utils/textLength'
 import { buildLocalDateTimeString } from '@/utils/time'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'

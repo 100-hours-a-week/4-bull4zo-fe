@@ -1,10 +1,10 @@
 import { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { Vote, VoteChoice, submitVoteRequest } from '@/api/services/vote/model'
-import { VoteCard } from '@/components/card/voteCard'
+import { VoteCard } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
-import { useUserStore } from '@/stores/userStore'
+import { useUserStore } from '@/stores/index'
 import { useVoteCardStore } from '../stores/voteCardStore'
 
 export type SwipeCardHandle = {
@@ -22,7 +22,7 @@ type SwipeCardProps = {
   mutateVote: (variables: submitVoteRequest) => Promise<submitVoteRequest>
 }
 
-const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
+export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
   const { vote, isTop, index, setSwipeDir, mutateVote } = props
 
   const x = useMotionValue(0)
@@ -145,5 +145,3 @@ const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
     </motion.div>
   )
 })
-
-export default SwipeCard

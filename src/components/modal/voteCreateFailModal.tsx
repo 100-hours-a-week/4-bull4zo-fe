@@ -3,10 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { createdVotesKey, participatedVotesKey } from '@/api/services/vote/key'
 import { useDeleteVoteMutation, useVoteReportReasons } from '@/api/services/vote/queries'
+import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { voteCreateFailMessage } from '@/lib/messageMap'
-import { useModalStore } from '@/stores/modalStore'
-import { Button } from '../ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { useModalStore } from '@/stores/index'
 
 export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
   const navigation = useNavigate()

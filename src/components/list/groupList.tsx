@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteGroupsQuery } from '@/api/services/group/queries'
-import { GroupCard } from '../card/groupCard'
+import { GroupCard } from '@/components/index'
 
 type GroupListProps = {
   data: ReturnType<typeof useInfiniteGroupsQuery>['data']
