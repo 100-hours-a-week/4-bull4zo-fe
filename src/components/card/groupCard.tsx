@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Check, Copy, EllipsisVertical } from 'lucide-react'
 import { toast } from 'sonner'
+import { groupNameListKey, myGroupsKey } from '@/api/services/group/key'
 import { Group } from '@/api/services/group/model'
-import { groupNameListKey, myGroupsKey, useLeaveGroupMutation } from '@/api/services/group/queries'
+import { useLeaveGroupMutation } from '@/api/services/group/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
 import { Card, CardContent, CardHeader } from '../ui/card'
@@ -108,8 +109,8 @@ const GroupDotsItem = ({
   const { mutateAsync } = useMutation({
     ...useLeaveGroupMutation,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: myGroupsKey })
-      queryClient.invalidateQueries({ queryKey: groupNameListKey })
+      queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+      queryClient.invalidateQueries({ queryKey: groupNameListKey() })
     },
   })
 

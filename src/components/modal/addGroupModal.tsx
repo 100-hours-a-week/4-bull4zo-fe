@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { groupNameListKey, myGroupsKey, useInviteCodeMutation } from '@/api/services/group/queries'
+import { groupNameListKey, myGroupsKey } from '@/api/services/group/key'
+import { useInviteCodeMutation } from '@/api/services/group/queries'
 import { InviteCodeSchema, inviteCodeSchema } from '@/features/user/lib/userSchema'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
@@ -22,8 +23,8 @@ export const AddGroupModal = () => {
   const { mutate } = useMutation({
     ...useInviteCodeMutation,
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: myGroupsKey })
-      queryClient.invalidateQueries({ queryKey: groupNameListKey })
+      queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+      queryClient.invalidateQueries({ queryKey: groupNameListKey() })
     },
   })
 

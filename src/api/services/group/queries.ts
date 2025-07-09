@@ -1,6 +1,14 @@
 import { useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
 import {
+  groupAnalysisKey,
+  groupKey,
+  groupMembersKey,
+  groupNameListKey,
+  groupVotesKey,
+  myGroupsKey,
+} from './key'
+import {
   CreateGroupPayload,
   GroupAnalysisResponse,
   GroupRoleChangeRequest,
@@ -12,23 +20,10 @@ import {
 } from './model'
 import { groupService } from './service'
 
-// 단일 그룹 key
-export const groupKey = (groupId: number) => ['group', groupId]
-// 그룹 멤버 목록 key
-export const groupMembersKey = (groupId: number) => ['groupMembers', groupId]
-// 그룹 투표 목록 key
-export const groupVotesKey = (groupId: number) => ['groupVotes', groupId]
-// 그룹 분석 리포트 key
-export const groupAnalysisKey = (groupId: number) => ['groupAnalysis', groupId]
-// 그룹 이름 목록 key
-export const groupNameListKey = ['groupNameList']
-// 내 그룹 목록 key
-export const myGroupsKey = ['myGroups']
-
 // 그룹 이름 무한스크롤 조회
 export const useInfiniteGroupNameListQuery = (size: number = 10) => {
   return useSuspenseInfiniteQuery<MyGroupNamesData, AxiosError>({
-    queryKey: groupNameListKey,
+    queryKey: groupNameListKey(),
     queryFn: ({ pageParam }) => groupService.groupNameList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
       return lastPage?.hasNext ? lastPage.nextCursor : undefined
@@ -40,7 +35,7 @@ export const useInfiniteGroupNameListQuery = (size: number = 10) => {
 // 그룹 정보 무한스크롤 조회
 export const useInfiniteGroupsQuery = (size: number = 10) => {
   return useSuspenseInfiniteQuery<MyGroupList, Error>({
-    queryKey: myGroupsKey,
+    queryKey: myGroupsKey(),
     queryFn: ({ pageParam }) => groupService.getAllGroupList(size, pageParam as string | undefined),
     getNextPageParam: (lastPage) => {
       return lastPage?.hasNext ? lastPage.nextCursor : undefined

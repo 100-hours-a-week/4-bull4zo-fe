@@ -1,4 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/queries'
 import { VoteEndCard } from '@/components/card/voteEndCard'
@@ -22,7 +23,9 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
 
   const { cards: cardList } = useVoteCardStore()
   const { isHidden } = useTutorialStore()
-  const { mutateAsync } = useSubmitVoteMutation()
+  const { mutateAsync } = useMutation({
+    ...useSubmitVoteMutation,
+  })
 
   // 남은 카드들을 관리
   const [swipeDir, setSwipeDir] = useState<VoteChoice>(null)

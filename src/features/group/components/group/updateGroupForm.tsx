@@ -6,13 +6,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { authAxiosInstance } from '@/api/axios'
+import { groupKey, groupNameListKey, myGroupsKey } from '@/api/services/group/key'
 import { Group } from '@/api/services/group/model'
-import {
-  groupKey,
-  groupNameListKey,
-  myGroupsKey,
-  useUpdateGroupMutation,
-} from '@/api/services/group/queries'
+import { useUpdateGroupMutation } from '@/api/services/group/queries'
 import { DeleteGroupModal } from '@/components/modal/deleteGroupModal'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -105,9 +101,9 @@ export const UpdateGroupForm = ({ group }: Props) => {
         },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: groupKey(Number(groupId)) })
-            queryClient.invalidateQueries({ queryKey: myGroupsKey })
-            queryClient.invalidateQueries({ queryKey: groupNameListKey })
+            queryClient.invalidateQueries({ queryKey: groupKey(groupId) })
+            queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+            queryClient.invalidateQueries({ queryKey: groupNameListKey() })
 
             toast.success('그룹 정보가 성공적으로 업데이트되었습니다.')
             form.reset()

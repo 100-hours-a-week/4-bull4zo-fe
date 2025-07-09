@@ -4,8 +4,9 @@ import { HiDotsVertical } from 'react-icons/hi'
 import { useParams } from 'react-router-dom'
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { commentKey } from '@/api/services/comment/key'
 import { Comment, CommentListData } from '@/api/services/comment/model'
-import { commentKey, useDeleteCommentMutation } from '@/api/services/comment/queries'
+import { useDeleteCommentMutation } from '@/api/services/comment/queries'
 import { formatRelativeTime } from '@/utils/time'
 
 interface CommentItemProps extends Partial<Comment> {

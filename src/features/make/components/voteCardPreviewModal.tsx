@@ -1,7 +1,9 @@
 import { useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { authAxiosInstance } from '@/api/axios'
+import { createdVotesKey } from '@/api/services/vote/key'
 import { useCreateVoteMutation, useUpdateVoteMutation } from '@/api/services/vote/queries'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/modalStore'
@@ -18,12 +20,23 @@ type Props = {
 
 export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonymous }: Props) => {
   const { voteId } = useParams()
-
   const navigation = useNavigate()
-
   const { closeModal } = useModalStore()
-  const { mutateAsync } = useCreateVoteMutation()
-  const { mutateAsync: updateVote } = useUpdateVoteMutation(voteId || '')
+
+  const queryClient = useQueryClient()
+
+  const { mutateAsync } = useMutation({
+    ...useCreateVoteMutation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: createdVotesKey() })
+    },
+  })
+  const { mutateAsync: updateVote } = useMutation({
+    ...useUpdateVoteMutation(voteId ?? ''),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: createdVotesKey() })
+    },
+  })
 
   const submit = useRef<boolean>(false)
 

@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
-import { Vote, VoteChoice } from '@/api/services/vote/model'
-import { useSubmitVoteMutation } from '@/api/services/vote/queries'
+import { Vote, VoteChoice, submitVoteRequest } from '@/api/services/vote/model'
 import { VoteCard } from '@/components/card/voteCard'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
@@ -19,7 +18,8 @@ type SwipeCardProps = {
   index: number
   // eslint-disable-next-line no-unused-vars
   setSwipeDir: (dir: VoteChoice) => void
-  mutateVote: ReturnType<typeof useSubmitVoteMutation>['mutateAsync']
+  // eslint-disable-next-line no-unused-vars
+  mutateVote: (variables: submitVoteRequest) => Promise<submitVoteRequest>
 }
 
 const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
