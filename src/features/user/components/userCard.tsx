@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Check, PencilLine } from 'lucide-react'
+import { userKey } from '@/api/services/user/key'
+import { UserInfo } from '@/api/services/user/model'
 import { useUserLogoutMutation, useUserUpdateMutation } from '@/api/services/user/queries'
 import { ExitUserModal } from '@/components/modal/exitUserModal'
 import { NicknameSchema, nicknameSchema } from '@/features/user/lib/userSchema'
@@ -22,6 +25,8 @@ export const UserCard = () => {
   const [isEditing, setIsEditing] = useState(false)
   const navigation = useNavigate()
 
+  const queryClient = useQueryClient()
+
   const form = useForm<NicknameSchema>({
     resolver: zodResolver(nicknameSchema),
     defaultValues: {
@@ -35,43 +40,65 @@ export const UserCard = () => {
       form.setValue('nickname', nickname)
     }
   }, [nickname, form])
+  // 유저 닉네임 업데이트
+  const { mutate: userUpdate } = useMutation<
+    UserInfo,
+    unknown,
+    { nickname: string },
+    { previous: UserInfo | undefined }
+  >({
+    ...useUserUpdateMutation,
+    onMutate: async ({ nickname }) => {
+      await queryClient.cancelQueries({ queryKey: userKey() })
 
-  const { mutate: userUpdate } = useUserUpdateMutation()
-  const { mutate: logoutMutate } = useUserLogoutMutation()
+      const previous = queryClient.getQueryData<UserInfo>(userKey())
+      setNickName(nickname)
+
+      queryClient.setQueryData<UserInfo>(userKey(), (old) => {
+        if (!old) return old
+        return { ...old, nickname }
+      })
+
+      return { previous }
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(userKey(), context.previous)
+        setNickName(context?.previous?.nickname)
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: userKey() })
+      trackEvent({
+        cta_id: 'user_nickname_change',
+        action: 'submit',
+        page: location.pathname,
+      })
+    },
+  })
+  // 유저 로그아웃
+  const { mutate: logoutMutate } = useMutation({
+    ...useUserLogoutMutation,
+    onSuccess: () => {
+      logoutAndResetStores()
+      navigation('/login')
+    },
+    onSettled: () => {
+      trackEvent({
+        cta_id: 'logout_click',
+        action: 'click',
+        page: location.pathname,
+      })
+    },
+  })
 
   const onSubmit = () => {
     setIsEditing(false)
-    userUpdate(
-      { nickname: form.getValues('nickname') },
-      {
-        onSuccess: (data) => {
-          setNickName(data.nickname)
-        },
-        onSettled: () => {
-          trackEvent({
-            cta_id: 'user_nickname_change',
-            action: 'submit',
-            page: location.pathname,
-          })
-        },
-      },
-    )
+    userUpdate({ nickname: form.getValues('nickname') })
   }
 
   const logoutHandler = () => {
-    logoutMutate(undefined, {
-      onSuccess: () => {
-        logoutAndResetStores()
-        navigation('/login')
-      },
-      onSettled: () => {
-        trackEvent({
-          cta_id: 'logout_click',
-          action: 'click',
-          page: location.pathname,
-        })
-      },
-    })
+    logoutMutate()
   }
 
   return (

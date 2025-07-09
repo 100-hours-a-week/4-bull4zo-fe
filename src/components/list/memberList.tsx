@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { FaChevronDown } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { groupKey, groupMembersKey } from '@/api/services/group/key'
 import { GroupMember, GroupMembersResponse, GroupRole } from '@/api/services/group/model'
 import {
-  groupKey,
-  groupMembersKey,
   useGroupMemberDeleteMutation,
   useGroupQuery,
   useGroupRoleChangeMutation,
@@ -58,7 +57,7 @@ export const MemberRoleLabel = ({
   const { mutateAsync: changeRole } = useMutation({
     ...useGroupRoleChangeMutation(groupId, member.userId),
     onMutate: async ({ role }) => {
-      queryClient.cancelQueries({ queryKey: groupMembersKey(groupId) })
+      await queryClient.cancelQueries({ queryKey: groupMembersKey(groupId) })
 
       const previous = queryClient.getQueryData<GroupMembersResponse>(groupMembersKey(groupId))
 
@@ -71,7 +70,7 @@ export const MemberRoleLabel = ({
       })
       return { previous }
     },
-    onError: (error, variables, context) => {
+    onError: (_error, _variables, context) => {
       queryClient.setQueryData<GroupMembersResponse>(groupMembersKey(groupId), context?.previous)
     },
     onSettled: () => {
@@ -83,7 +82,7 @@ export const MemberRoleLabel = ({
   const { mutateAsync: leaveGroup } = useMutation({
     ...useGroupMemberDeleteMutation(groupId, member.userId),
     onMutate: async () => {
-      queryClient.cancelQueries({ queryKey: groupMembersKey(groupId) })
+      await queryClient.cancelQueries({ queryKey: groupMembersKey(groupId) })
 
       const previous = queryClient.getQueryData<GroupMembersResponse>(groupMembersKey(groupId))
 
@@ -96,7 +95,7 @@ export const MemberRoleLabel = ({
       })
       return { previous }
     },
-    onError: (error, variables, context) => {
+    onError: (_error, _variables, context) => {
       queryClient.setQueryData<GroupMembersResponse>(groupMembersKey(groupId), context?.previous)
     },
     onSettled: () => {

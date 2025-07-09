@@ -1,10 +1,8 @@
 import { forwardRef } from 'react'
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query'
+import { InfiniteNotificationKey } from '@/api/services/notification/key'
 import { Notification, NotificationListResponse } from '@/api/services/notification/model'
-import {
-  InfiniteNotificationKey,
-  useMutationReadNotification,
-} from '@/api/services/notification/queries'
+import { useReadNotificationMutation } from '@/api/services/notification/queries'
 import { notificationMessageMap } from '@/lib/messageMap'
 import { cn } from '@/lib/utils'
 import { formatRelativeTime } from '@/utils/time'
@@ -13,15 +11,15 @@ export const NotificationItem = forwardRef<HTMLLIElement, Partial<Notification>>
   const queryClient = useQueryClient()
 
   const { mutateAsync } = useMutation({
-    ...useMutationReadNotification,
+    ...useReadNotificationMutation,
     onMutate: async (notificationId) => {
-      await queryClient.cancelQueries({ queryKey: InfiniteNotificationKey })
+      await queryClient.cancelQueries({ queryKey: InfiniteNotificationKey() })
 
       const previous =
-        queryClient.getQueryData<InfiniteData<NotificationListResponse>>(InfiniteNotificationKey)
+        queryClient.getQueryData<InfiniteData<NotificationListResponse>>(InfiniteNotificationKey())
 
       queryClient.setQueryData<InfiniteData<NotificationListResponse>>(
-        InfiniteNotificationKey,
+        InfiniteNotificationKey(),
         (old) => {
           if (!old) return old
           return {
@@ -38,14 +36,14 @@ export const NotificationItem = forwardRef<HTMLLIElement, Partial<Notification>>
 
       return { previous }
     },
-    onError: (error, variables, context) => {
+    onError: (_error, _variables, context) => {
       queryClient.setQueryData<InfiniteData<NotificationListResponse>>(
-        InfiniteNotificationKey,
+        InfiniteNotificationKey(),
         context?.previous,
       )
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: InfiniteNotificationKey })
+      queryClient.invalidateQueries({ queryKey: InfiniteNotificationKey() })
     },
   })
 

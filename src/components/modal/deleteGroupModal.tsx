@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { groupNameListKey, myGroupsKey, useDeleteGroupMutation } from '@/api/services/group/queries'
+import { groupNameListKey, myGroupsKey } from '@/api/services/group/key'
+import { useDeleteGroupMutation } from '@/api/services/group/queries'
 import { useModalStore } from '@/stores/modalStore'
 import { Button } from '../ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
@@ -15,8 +16,8 @@ export const DeleteGroupModal = ({ groupId }: { groupId: number }) => {
   const { mutateAsync } = useMutation({
     ...useDeleteGroupMutation,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: myGroupsKey })
-      queryClient.invalidateQueries({ queryKey: groupNameListKey })
+      queryClient.invalidateQueries({ queryKey: myGroupsKey() })
+      queryClient.invalidateQueries({ queryKey: groupNameListKey() })
     },
   })
 

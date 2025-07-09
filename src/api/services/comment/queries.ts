@@ -1,9 +1,8 @@
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { AxiosError } from 'axios'
+import { commentKey } from './key'
 import { CommentCreateRequest, CommentListData } from './model'
 import { commentService } from './service'
-
-export const commentKey = (voteId: number) => ['comments', voteId]
 
 // 댓글 무한스크롤 호출
 export const useInfiniteCommentListQuery = (voteId: number, size: number = 10) => {
