@@ -4,12 +4,10 @@ import {
   useCreateVotesInfinityQuery,
   useParticipatedVotesInfinityQuery,
 } from '@/api/services/vote/queries'
-import { VoteList } from '@/components/list/voteList'
-import { Label } from '@/components/ui/label'
+import { Label, LoadingPage, VoteList } from '@/components/index'
 import { useResearchTabStore } from '@/features/research/stores/researchTapStore'
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/index'
-import { LoadingPage } from '../loading'
 
 export const ResearchList = () => {
   const { index, setIndex } = useResearchTabStore()

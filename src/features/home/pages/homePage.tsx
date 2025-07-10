@@ -4,7 +4,7 @@ import { FaQuestion } from 'react-icons/fa'
 import { useUserInfoQuery } from '@/api/services/user/queries'
 import { useInfiniteVotesQuery } from '@/api/services/vote/queries'
 import { NotFoundPage } from '@/app/index'
-import { GroupDropDown, LoadingCard, NoVoteAvailAbleModal } from '@/components/index'
+import { GroupDropDown, LoadingCard, NoVoteAvailableModal } from '@/components/index'
 import { useGroupStore, useModalStore, useTutorialStore, useUserStore } from '@/stores/index'
 import { TutorialPage, VoteSwiperFramer } from '../components/index'
 import { useVoteCardStore } from '../stores/voteCardStore'
@@ -42,7 +42,7 @@ const HomePageContent = () => {
 
   const customFetchNextPage = () => {
     if (!isLogin) {
-      openModal(<NoVoteAvailAbleModal />)
+      openModal(<NoVoteAvailableModal />)
       return
     }
     fetchNextPage()

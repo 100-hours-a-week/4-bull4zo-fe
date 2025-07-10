@@ -2,8 +2,8 @@ import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
 import { useGroupAnalysisQuery } from '@/api/services/group/queries'
-import NotFoundPage from '@/app/NotFound'
-import { LoadingPage } from '@/components/loading/loadingPage'
+import { NotFoundPage } from '@/app/NotFound'
+import { LoadingPage } from '@/components/index'
 import {
   ReportContentAnalysis,
   ReportContentChart,

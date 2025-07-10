@@ -2,7 +2,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/queries'
-import { NoVoteAvailAbleModal, VoteEndCard } from '@/components/index'
+import { NoVoteAvailableModal, VoteEndCard } from '@/components/index'
 import { useModalStore, useTutorialStore, useUserStore } from '@/stores/index'
 import { useVoteCardStore } from '../stores/voteCardStore'
 import { SwipeCard, SwipeCardHandle, VoteDirectionButtonGroup } from './index'
@@ -37,7 +37,7 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
     if (isInitializing) return
 
     if (!isLogin && cardList.length === 0 && !isOpen && isHidden) {
-      openModal(<NoVoteAvailAbleModal />)
+      openModal(<NoVoteAvailableModal />)
     } else if (cardList.length <= 3 && isLogin && hasNextPage && !isFetchingNextPage) {
       fetchNextPage()
     }

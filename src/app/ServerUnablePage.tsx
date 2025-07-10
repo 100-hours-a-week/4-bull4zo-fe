@@ -1,4 +1,4 @@
-const ServerUnablePage = () => {
+export const ServerUnablePage = () => {
   return (
     <section className="w-full absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
       <img src="/images/moa_503.svg" className="w-[300px]" alt="로고 이미지" />

@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { QueryProvider } from '@/app/QueryProvider'
 import { useUserStore } from '@/stores/userStore'
-import Header from './header'
+import { Header } from './header'
 
 const mockNavigate = vi.fn()
 vi.mock('react-router-dom', () => ({

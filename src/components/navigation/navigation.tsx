@@ -2,11 +2,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ListCheckIcon, Plus, User } from 'lucide-react'
 import Vote from '@/assets/vote.svg?react'
-import { useModalStore } from '@/stores/modalStore'
-import { Tab, useNavigationStore } from '@/stores/navigationStore'
-import { useUserStore } from '@/stores/userStore'
-import { Icon } from '../Icon/icon'
-import { LoginRequiredCard } from '../modal/loginRequiredModal'
+import { Icon, LoginRequiredCard } from '@/components/index'
+import { Tab, useModalStore, useNavigationStore, useUserStore } from '@/stores/index'
 
 interface NavigationItemProps {
   icon: React.ReactNode
@@ -53,7 +50,7 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
   )
 }
 
-const Navigation = () => {
+export const Navigation = () => {
   return (
     <nav className="flex z-50 flex-row items-center justify-around max-w-[450px] w-full h-[4rem] fixed bottom-0 bg-white">
       <NavigationItem icon={<Icon component={Vote} />} label="home" />
@@ -63,4 +60,3 @@ const Navigation = () => {
     </nav>
   )
 }
-export default Navigation

@@ -1,6 +1,7 @@
 export * from './groupStore'
 export * from './modalStore'
 export * from './navigationStore'
+export * from './notificationStore'
 export * from './scrollStore'
 export * from './sliderStore'
 export * from './tutorialStore'

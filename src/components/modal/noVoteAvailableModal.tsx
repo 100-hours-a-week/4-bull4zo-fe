@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 
-export const NoVoteAvailAbleModal = () => {
+export const NoVoteAvailableModal = () => {
   const navigation = useNavigate()
 
   return (

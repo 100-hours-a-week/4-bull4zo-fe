@@ -4,7 +4,7 @@ import { expect, userEvent, within } from '@storybook/test'
 import { createMemoryHistory } from 'history'
 import { QueryProvider } from '@/app/QueryProvider'
 import { useUserStore } from '@/stores/userStore'
-import Header from './header'
+import { Header } from './header'
 
 interface StoryArgs {
   isLogin: boolean
