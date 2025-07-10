@@ -108,14 +108,6 @@
 }
 
 @font-face {
-  font-family: 'Unbounded';
-  src: url('/font/Unbounded.ttf') format('truetype');
-  font-weight: 200 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
   font-family: 'PyeojinGothic';
   src: url('/font/PyeojinGothic/PyeojinGothic-Light.woff2') format('woff2');
   font-weight: 300;
