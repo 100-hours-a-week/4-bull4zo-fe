@@ -9,7 +9,7 @@ export const voteSchema = z.object({
     .refine((val) => getContentLength(val) <= 100, {
       message: '최대 100자 이하 입니다.',
     }),
-  image: z.union([z.instanceof(File), z.string(), z.undefined()]).refine(
+  image: z.union([z.instanceof(File), z.undefined()]).refine(
     (val) => {
       if (val instanceof File) {
         const isActuallyAFile = val.size > 0 && val.type.startsWith('image/')
