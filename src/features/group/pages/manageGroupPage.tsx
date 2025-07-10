@@ -1,12 +1,20 @@
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
-import { useGroupQuery } from '@/api/services/group/queries'
-import { NotFoundPage } from '@/app/NotFound'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { groupMemberQueryOptions, groupQueryOptions } from '@/api/services/group/queries'
+import { NotFoundPage } from '@/app/page/NotFound'
 import { LoadingPage } from '@/components/loading/loadingPage'
 import { GroupMember, GroupReport, UpdateGroupForm } from '@/features/group/components/group/index'
 
 const ManageGroupPage = () => {
+  const { groupId } = useParams()
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    queryClient.prefetchQuery(groupMemberQueryOptions(Number(groupId)))
+  }, [queryClient, groupId])
+
   return (
     <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
       <Suspense fallback={<LoadingPage />}>
@@ -18,7 +26,7 @@ const ManageGroupPage = () => {
 
 const ManageGroupPageContent = () => {
   const { groupId } = useParams()
-  const { data: group } = useGroupQuery(Number(groupId))
+  const { data: group } = useSuspenseQuery(groupQueryOptions(Number(groupId)))
 
   if (!group) return
 

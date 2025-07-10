@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { EventSourcePolyfill } from 'event-source-polyfill'
 import { toast } from 'sonner'
 import { NotificationSSEResponse } from '@/api/services/notification/model'
+import { createdVotesKey, top3VoteKey } from '@/api/services/vote/key'
 import { notificationMessageMap } from '@/lib/messageMap'
 import { useNotificationStore } from '@/stores/notificationStore'
 import { useSliderStore } from '@/stores/sliderStore'
@@ -54,6 +55,12 @@ export const useSSE = (accessToken: string | null) => {
                 },
               }),
             })
+            if (type === 'VOTE_APPROVED' || type === 'VOTE_REJECTED') {
+              queryClient.refetchQueries({ queryKey: createdVotesKey() })
+            }
+            if (type === 'TOP3_UPDATED') {
+              queryClient.refetchQueries({ queryKey: top3VoteKey() })
+            }
           }
 
           useNotificationStore.getState().setNotification(notificationId)

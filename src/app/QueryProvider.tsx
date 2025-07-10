@@ -11,7 +11,7 @@ const errorHandler = (error: any) => {
 
   if (status === 400 || status === 403 || status === 404 || status === 409) {
     const userMessage = messageMap[message] || '서버측의 오류가 발생했습니다.'
-    toast(userMessage)
+    toast(userMessage.message, { id: userMessage.toastId })
   }
 }
 

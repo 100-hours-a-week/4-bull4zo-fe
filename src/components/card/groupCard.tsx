@@ -10,26 +10,10 @@ import { Card, CardContent, CardHeader } from '@/components/index'
 import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
 
-export const GroupCard = (group: Partial<Group>) => {
-  const [copied, setCopied] = useState(false)
+export const GroupCard = React.memo(function GroupCard(group: Partial<Group>) {
   const [open, setOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
   const router = useNavigate()
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(group.inviteCode as string)
-    toast('초대코드 복사 완료')
-
-    trackEvent({
-      cta_id: 'code_copy',
-      action: 'copy',
-      page: location.pathname,
-    })
-
-    setCopied(true)
-
-    setTimeout(() => setCopied(false), 2000)
-  }
 
   const toggleMenu = () => setOpen((prev) => !prev)
 
@@ -81,21 +65,12 @@ export const GroupCard = (group: Partial<Group>) => {
           className="font-medium flex items-center text-sm cursor-default"
         >
           초대코드:<span className="font-semibold">{group.inviteCode}</span>
-          <button
-            type="button"
-            onClick={(e) => {
-              handleCopy()
-              e.stopPropagation()
-            }}
-            className="hover:text-primary ml-2 transition cursor-pointer"
-          >
-            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-          </button>
+          <CopyButton inviteCode={group.inviteCode} />
         </pre>
       </CardContent>
     </Card>
   )
-}
+})
 const GroupDotsItem = ({
   groupId,
   setOpen,
@@ -131,3 +106,39 @@ const GroupDotsItem = ({
     </div>
   )
 }
+
+const CopyButton = React.memo(function CopyButton({
+  inviteCode,
+}: {
+  inviteCode: string | undefined
+}) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(inviteCode as string)
+    toast('초대코드 복사 완료')
+
+    trackEvent({
+      cta_id: 'code_copy',
+      action: 'copy',
+      page: location.pathname,
+    })
+
+    setCopied(true)
+
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        handleCopy()
+        e.stopPropagation()
+      }}
+      className="hover:text-primary ml-2 transition cursor-pointer"
+    >
+      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+    </button>
+  )
+})

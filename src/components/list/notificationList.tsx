@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
+import { InfiniteData } from '@tanstack/react-query'
+import { NotificationListResponse } from '@/api/services/notification/model'
 import { NotificationItem } from '@/components/index'
 
 interface Props {
-  data: ReturnType<typeof useInfiniteNotificationQuery>['data']
+  data: InfiniteData<NotificationListResponse>
   fetchNextPage: () => void
   hasNextPage: boolean
 }

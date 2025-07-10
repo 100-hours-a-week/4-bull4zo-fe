@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { useParticipatedVotesInfinityQuery } from '@/api/services/vote/queries'
+import { InfiniteData } from '@tanstack/react-query'
+import { ParticipatedVoteList } from '@/api/services/vote/model'
 import { VoteItem } from '@/components/index'
 import { ScrollKeys, useScrollStore } from '@/stores/index'
 
 type VoteListProps = {
-  data: ReturnType<typeof useParticipatedVotesInfinityQuery>['data']
+  data: InfiniteData<ParticipatedVoteList>
   fetchNextPage: () => void
   hasNextPage: boolean
 }

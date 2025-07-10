@@ -9,32 +9,9 @@ import { cn } from '@/lib/utils'
 import { useModalStore } from '@/stores/index'
 import { formatRelativeTime } from '@/utils/time'
 
-interface Props extends Partial<ParticipatedVote> {
-  rank?: number
-}
+interface Props extends Partial<ParticipatedVote> {}
 
-const rankMap = {
-  1: {
-    label: '🥇',
-    medalText: '금메달',
-    bgColor: 'bg-[#FFE28A]',
-    textColor: 'text-[#9A6A00]',
-  },
-  2: {
-    label: '🥈',
-    medalText: '은메달',
-    bgColor: 'bg-[#D6E4F0]',
-    textColor: 'text-[#5A6D84]',
-  },
-  3: {
-    label: '🥉',
-    medalText: '동메달',
-    bgColor: 'bg-[#F9D3B4]',
-    textColor: 'text-[#B35B2A]',
-  },
-}
-
-export const VoteItem = (vote: Props) => {
+export const VoteItem = React.memo(function VoteItem(vote: Props) {
   const navigation = useNavigate()
   const { openModal } = useModalStore()
 
@@ -62,18 +39,15 @@ export const VoteItem = (vote: Props) => {
           'bg-red-200': vote.voteStatus === 'REJECTED',
           'bg-zinc-200 cursor-not-allowed': vote.voteStatus === 'PENDING',
         },
-        vote.rank && `${rankMap[vote.rank as keyof typeof rankMap].bgColor}`,
       )}
     >
       <div className="flex flex-row justify-between relative">
         <Label
           className={cn(
             'font-medium text-lg line-clamp-2',
-            vote.rank && `${rankMap[vote.rank as keyof typeof rankMap].textColor}`,
             vote.voteStatus === 'PENDING' ? 'cursor-not-allowed' : 'cursor-pointer',
           )}
         >
-          {vote.rank && `${rankMap[vote.rank as keyof typeof rankMap].label} `}
           {vote.content}
         </Label>
         {vote.voteStatus && <VoteStatusLabel status={vote.voteStatus} />}
@@ -113,7 +87,7 @@ export const VoteItem = (vote: Props) => {
       )}
     </li>
   )
-}
+})
 
 const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status }) => {
   const [open, setOpen] = useState(false)

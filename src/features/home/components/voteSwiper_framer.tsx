@@ -1,11 +1,11 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/queries'
 import { NoVoteAvailableModal, VoteEndCard } from '@/components/index'
 import { useModalStore, useTutorialStore, useUserStore } from '@/stores/index'
 import { useVoteCardStore } from '../stores/voteCardStore'
-import { SwipeCard, SwipeCardHandle, VoteDirectionButtonGroup } from './index'
+import { SwipeCardHandle, SwipeCardMemo, VoteDirectionButtonGroup } from './index'
 
 type Props = {
   fetchNextPage: () => void
@@ -55,6 +55,26 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
 
   const topCardRef = useRef<SwipeCardHandle>(null)
 
+  // Keyboard 스와이프
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!topCardRef.current) return
+
+      if (event.key === 'ArrowLeft') {
+        topCardRef.current.swipe('반대')
+      } else if (event.key === 'ArrowRight') {
+        topCardRef.current.swipe('찬성')
+      } else if (event.key === 'ArrowUp') {
+        topCardRef.current.swipe('기권')
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+
   if (cardList.length === 0)
     return (
       <div className="h-full w-full flex justify-center items-center">
@@ -68,7 +88,7 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
         const isTop = index === 0
 
         return (
-          <SwipeCard
+          <SwipeCardMemo
             key={vote.voteId}
             vote={vote}
             isTop={isTop}
@@ -86,4 +106,4 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
     </div>
   )
 }
-export default memo(VoteSwiperFramer)
+export default React.memo(VoteSwiperFramer)
