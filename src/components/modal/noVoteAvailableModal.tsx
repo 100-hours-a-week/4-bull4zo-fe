@@ -11,9 +11,7 @@ export const NoVoteAvailableModal = () => {
     >
       <CardHeader className="flex flex-row px-0 justify-center items-center">
         <div className="flex flex-row gap-1 ">
-          <CardTitle className="font-unbounded text-2xl text-center">
-            로그인이 필요합니다.
-          </CardTitle>
+          <CardTitle className="text-2xl text-center">로그인이 필요합니다.</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-center items-center gap-5">

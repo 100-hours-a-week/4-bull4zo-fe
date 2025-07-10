@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { useInfiniteGroupsQuery } from '@/api/services/group/queries'
+import { InfiniteData } from '@tanstack/react-query'
+import { MyGroupList } from '@/api/services/group/model'
 import { GroupCard } from '@/components/index'
 
 type GroupListProps = {
-  data: ReturnType<typeof useInfiniteGroupsQuery>['data']
+  data: InfiniteData<MyGroupList>
   fetchNextPage: () => void
   hasNextPage: boolean
   isFetchingNextPage: boolean

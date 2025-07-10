@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { ChevronRight } from 'lucide-react'
-import { useVoteDetailInfo } from '@/api/services/vote/queries'
+import { voteDetailQueryOptions } from '@/api/services/vote/queries'
 import {
   Button,
   Checkbox,
@@ -33,7 +34,7 @@ export const UpdateVoteForm = () => {
   const [minDateTime, setMinDateTime] = useState('')
   const [maxDateTime, setMaxDateTime] = useState('')
 
-  const { data: editData } = useVoteDetailInfo(voteId ?? '')
+  const { data: editData } = useSuspenseQuery(voteDetailQueryOptions(voteId as string))
 
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),
@@ -149,7 +150,7 @@ export const UpdateVoteForm = () => {
                     />
                     <button
                       type="button"
-                      className="font-medium font-unbounded cursor-pointer"
+                      className="font-medium cursor-pointer"
                       onClick={() => {
                         field.onChange(!field.value)
                       }}
@@ -173,7 +174,7 @@ export const UpdateVoteForm = () => {
                     <div className="relative">
                       <input
                         type="file"
-                        accept="image/png, image/jpeg, image/jpg"
+                        accept="image/png, image/jpeg, image/jpg, image/webp"
                         className="hidden"
                         id={id}
                         onChange={(e) => {

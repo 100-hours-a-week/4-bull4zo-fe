@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { createdVotesKey, participatedVotesKey } from '@/api/services/vote/key'
-import { useDeleteVoteMutation, useVoteReportReasons } from '@/api/services/vote/queries'
+import { useDeleteVoteMutation, voteReportReasonQueryOptions } from '@/api/services/vote/queries'
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { voteCreateFailMessage } from '@/lib/messageMap'
 import { useModalStore } from '@/stores/index'
@@ -13,7 +13,7 @@ export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
 
   const queryClient = useQueryClient()
 
-  const { data } = useVoteReportReasons(voteId.toString())
+  const { data } = useSuspenseQuery(voteReportReasonQueryOptions(voteId.toString()))
   const { mutateAsync } = useMutation({
     ...useDeleteVoteMutation,
     onSuccess: () => {
@@ -37,9 +37,7 @@ export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
     >
       <CardHeader className="flex flex-row px-0 justify-center items-center">
         <div className="flex flex-row gap-1 ">
-          <CardTitle className="font-unbounded text-2xl text-center">
-            투표 생성에 실패했어요.
-          </CardTitle>
+          <CardTitle className="text-2xl text-center">투표 생성에 실패했어요.</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-center items-center gap-5">

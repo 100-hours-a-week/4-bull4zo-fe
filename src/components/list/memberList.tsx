@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { FaChevronDown } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { groupKey, groupMembersKey } from '@/api/services/group/key'
 import { GroupMember, GroupMembersResponse, GroupRole } from '@/api/services/group/model'
 import {
+  groupQueryOptions,
   useGroupMemberDeleteMutation,
-  useGroupQuery,
   useGroupRoleChangeMutation,
 } from '@/api/services/group/queries'
 import { ableManage } from '@/utils/authority'
@@ -18,7 +18,7 @@ interface Props {
 
 export const MemberList = ({ members, isLoading }: Props) => {
   const { groupId } = useParams()
-  const { data: group } = useGroupQuery(Number(groupId))
+  const { data: group } = useSuspenseQuery(groupQueryOptions(Number(groupId)))
 
   if (isLoading) return
   if (members.length === 0) return <p className="text-gray-500">멤버가 없습니다.</p>

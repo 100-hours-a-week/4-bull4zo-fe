@@ -10,7 +10,7 @@ interface NavigationItemProps {
   label: Tab
 }
 
-const NavigationItem = ({ icon, label }: NavigationItemProps) => {
+const NavigationItem = React.memo(function NavigationItem({ icon, label }: NavigationItemProps) {
   const tab = useNavigationStore((state) => state.tab)
   const navigation = useNavigate()
 
@@ -48,9 +48,9 @@ const NavigationItem = ({ icon, label }: NavigationItemProps) => {
       />
     </button>
   )
-}
+})
 
-export const Navigation = () => {
+export const Navigation = React.memo(function Navigation() {
   return (
     <nav className="flex z-50 flex-row items-center justify-around max-w-[450px] w-full h-[4rem] fixed bottom-0 bg-white">
       <NavigationItem icon={<Icon component={Vote} />} label="home" />
@@ -59,4 +59,4 @@ export const Navigation = () => {
       <NavigationItem icon={<User />} label="user" />
     </nav>
   )
-}
+})

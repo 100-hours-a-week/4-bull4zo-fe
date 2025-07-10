@@ -1,22 +1,18 @@
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
-import { AxiosError } from 'axios'
 import { commentKey } from './key'
 import { CommentCreateRequest, CommentListData } from './model'
 import { commentService } from './service'
 
-// 댓글 무한스크롤 호출
-export const useInfiniteCommentListQuery = (voteId: number, size: number = 10) => {
-  return useSuspenseInfiniteQuery<CommentListData, AxiosError>({
-    queryKey: commentKey(voteId),
-    queryFn: ({ pageParam }) =>
-      commentService.getCommentList(voteId, size, pageParam as string | undefined),
-    getNextPageParam: (lastPage) => {
-      return lastPage.hasNext ? lastPage.nextCursor : undefined
-    },
-    initialPageParam: undefined,
-  })
-}
-// 댓글 생성 호출
+// 댓글 리스트 조회 options
+export const infiniteCommentQueryOptions = (voteId: number, size: number = 10) => ({
+  queryKey: commentKey(voteId),
+  queryFn: ({ pageParam }: { pageParam?: string }) =>
+    commentService.getCommentList(voteId, size, pageParam as string | undefined),
+  getNextPageParam: (lastPage: CommentListData) => {
+    return lastPage.hasNext ? lastPage.nextCursor : undefined
+  },
+  initialPageParam: undefined,
+})
+// 댓글 생성 mutation
 export const useCreateCommentMutation = (voteId: number) => {
   return {
     mutationFn: (payload: CommentCreateRequest) => {
@@ -24,7 +20,7 @@ export const useCreateCommentMutation = (voteId: number) => {
     },
   }
 }
-// 댓글 삭제 호출
+// 댓글 삭제 mutation
 export const useDeleteCommentMutation = {
   mutationFn: (commentId: number) => {
     return commentService.deleteComment(commentId)

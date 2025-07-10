@@ -20,6 +20,21 @@ export const Modal = () => {
     }
   }, [isOpen])
 
+  // keyboard 이벤트 추가
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeModal()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isOpen, closeModal])
+
   if (!isOpen) return null
 
   return (

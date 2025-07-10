@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { Comment } from '@/api/services/comment/model'
-import { useInfiniteCommentListQuery } from '@/api/services/comment/queries'
+import { infiniteCommentQueryOptions } from '@/api/services/comment/queries'
 import { commentService } from '@/api/services/comment/service'
 import { CommentItem } from '@/components/index'
 
@@ -10,7 +11,9 @@ interface Props {
 }
 
 export const CommentList = ({ voteId }: Props) => {
-  const { data, hasNextPage, fetchNextPage } = useInfiniteCommentListQuery(voteId)
+  const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
+    infiniteCommentQueryOptions(voteId),
+  )
   const { ref: lastItemRef, inView } = useInView({ threshold: 0 })
 
   const newCommentsRef = useRef<Comment[]>([])

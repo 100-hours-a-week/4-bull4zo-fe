@@ -63,7 +63,7 @@ const AuthCallback = () => {
     }
   }
 
-  return <div></div>
+  return <div />
 }
 
 export default AuthCallback

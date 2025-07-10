@@ -4,11 +4,11 @@ pnpm lint-staged
 
 BRANCH=$(git symbolic-ref --short HEAD)
 
-if echo "$BRANCH" | grep -Eq '^(feature|refactor|chore|bugfix|hotfix|release)/|^develop$|^main$'; then
+if echo "$BRANCH" | grep -Eq '^(feature|refactor|chore|bugfix|hotfix|release|cicd)/|^develop$|^main$'; then
   echo "✅ 브랜치 이름 검증 통과: $BRANCH"
 else
   echo "❌ 잘못된 브랜치 이름입니다: '$BRANCH'"
-  echo "ℹ️ 브랜치는 'feature/', 'refactor/', 'chore/', 'bugfix/', 'hotfix/', 'release/', 'develop', 'main' 중 하나로 시작해야 합니다."
+  echo "ℹ️ 브랜치는 'feature/', 'refactor/', 'chore/', 'bugfix/', 'hotfix/', 'release/', 'cicd/', 'develop', 'main' 중 하나로 시작해야 합니다."
   exit 1
 fi
 

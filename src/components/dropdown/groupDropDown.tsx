@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { forwardRef, memo, useEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useLocation } from 'react-router-dom'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
-import { useInfiniteGroupNameListQuery } from '@/api/services/group/queries'
+import { infiniteGroupNameListQueryOptions } from '@/api/services/group/queries'
 import {
   Button,
   DropdownMenu,
@@ -14,12 +15,12 @@ import {
 import { trackEvent } from '@/lib/trackEvent'
 import { useGroupStore } from '@/stores/index'
 
-export const GroupDropDown = () => {
+export const GroupDropDown = React.memo(function GroupDropDown() {
   const { groups, setId, setGroups, selectedId } = useGroupStore()
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
-    useInfiniteGroupNameListQuery()
+    useSuspenseInfiniteQuery(infiniteGroupNameListQueryOptions())
 
   const selectRef = useRef<HTMLDivElement | null>(null)
 
@@ -48,14 +49,6 @@ export const GroupDropDown = () => {
 
   const selectedGroup = groups.find((g) => g.groupId === selectedId)
 
-  // useEffect(() => {
-  //   if (open) {
-  //     setTimeout(() => {
-  //       selectRef.current?.focus()
-  //     }, 0)
-  //   }
-  // }, [open])
-
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild style={{ padding: 0, paddingLeft: '12px' }}>
@@ -81,33 +74,51 @@ export const GroupDropDown = () => {
         onCloseAutoFocus={(e) => e.preventDefault()}
         data-testid="group-dropdown-content"
       >
-        <DropdownMenuRadioGroup
-          value={selectedId.toString()}
-          onValueChange={(val) => {
-            setId(parseInt(val))
-            trackEvent({
-              cta_id: 'group_dropdown_select',
-              action: 'select',
-              page: location.pathname,
-            })
-          }}
-          data-testid="group-dropdown-group"
-        >
-          {groups.map((group) => (
-            <DropdownMenuRadioItem
-              key={group.groupId}
-              value={group.groupId.toString()}
-              data-testid={`group-item-${group.groupId}`}
-              className="cursor-pointer"
-              ref={group.groupId === selectedId ? selectRef : undefined}
-              tabIndex={0}
-            >
-              {group.name}
-            </DropdownMenuRadioItem>
-          ))}
-          <div ref={loadMoreRef} />
-        </DropdownMenuRadioGroup>
+        {open && (
+          <DropdownMenuRadioGroup
+            value={selectedId.toString()}
+            onValueChange={(val) => {
+              setId(parseInt(val))
+              trackEvent({
+                cta_id: 'group_dropdown_select',
+                action: 'select',
+                page: location.pathname,
+              })
+            }}
+            data-testid="group-dropdown-group"
+          >
+            {groups.map((group) => (
+              <GroupItem
+                key={group.groupId}
+                group={group}
+                isSelected={group.groupId === selectedId}
+                ref={selectRef}
+              />
+            ))}
+            <div ref={loadMoreRef} />
+          </DropdownMenuRadioGroup>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   )
+})
+
+type GroupItemProps = {
+  group: { groupId: number; name: string }
+  isSelected: boolean
 }
+
+export const GroupItem = memo(
+  forwardRef<HTMLDivElement, GroupItemProps>(({ group, isSelected }, ref) => (
+    <DropdownMenuRadioItem
+      value={group.groupId.toString()}
+      data-testid={`group-item-${group.groupId}`}
+      className="cursor-pointer"
+      ref={isSelected ? ref : undefined}
+      tabIndex={0}
+    >
+      {group.name}
+    </DropdownMenuRadioItem>
+  )),
+  (prev, next) => prev.group.groupId === next.group.groupId && prev.isSelected === next.isSelected,
+)

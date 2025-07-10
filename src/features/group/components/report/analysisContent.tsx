@@ -1,9 +1,9 @@
 import React from 'react'
-import { useGroupAnalysisQuery } from '@/api/services/group/queries'
+import { GroupAnalysisResponse } from '@/api/services/group/model'
 import { Label } from '@/components/index'
 
 interface Props {
-  data: ReturnType<typeof useGroupAnalysisQuery>['data']
+  data: GroupAnalysisResponse
 }
 
 export const ReportContentAnalysis = ({ data }: Props) => {

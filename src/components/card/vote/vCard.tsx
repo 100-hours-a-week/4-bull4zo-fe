@@ -151,7 +151,7 @@ const ModalHeader = ({ children }: { children: ReactNode }) => (
 )
 // card Modal Title
 const ModalTitle = ({ children }: { children: ReactNode }) => (
-  <CardTitle className="font-unbounded text-2xl">{children}</CardTitle>
+  <CardTitle className="text-2xl">{children}</CardTitle>
 )
 // card Modal Content
 const ModalContent = ({ children }: { children: ReactNode }) => (

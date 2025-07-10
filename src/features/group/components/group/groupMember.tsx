@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { useParams } from 'react-router-dom'
-import { useGroupMembersQuery } from '@/api/services/group/queries'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { groupMemberQueryOptions } from '@/api/services/group/queries'
 import { Input, MemberList } from '@/components/index'
 
 export const GroupMember = () => {
   const { groupId } = useParams()
-  const { data } = useGroupMembersQuery(Number(groupId))
+  const { data } = useSuspenseQuery(groupMemberQueryOptions(Number(groupId)))
 
   const [search, setSearch] = useState('')
 
