@@ -12,7 +12,7 @@ export const TopList = ({ data }: Props) => {
   return (
     <section className="px-7 py-4">
       <div className="flex items-center justify-between">
-        <Label className="text-2xl font-unbounded">Top3</Label>
+        <Label className="text-2xl">Top3</Label>
         <Label className=" text-xs opacity-50">{`${formatDateTimeDetail(from)} ~ ${formatDateTimeDetail(to)}`}</Label>
       </div>
       {data ? (

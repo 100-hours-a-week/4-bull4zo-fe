@@ -50,7 +50,7 @@ export const ResearchList = () => {
             )}
             <Label
               onClick={() => onClickHandler(i)}
-              className={`relative items-center justify-center z-10 cursor-pointer text-center text-sm sm:text-lg font-unbounded px-4 py-2 w-full ${
+              className={`relative items-center justify-center z-10 cursor-pointer text-center text-sm sm:text-lg px-4 py-2 w-full ${
                 index === i ? 'text-white font-bold' : 'text-black font-light'
               }`}
             >

@@ -34,9 +34,7 @@ export const DeleteGroupModal = ({ groupId }: { groupId: number }) => {
     >
       <CardHeader className="flex flex-row px-0 justify-center items-center">
         <div className="flex flex-row gap-1 ">
-          <CardTitle className="font-unbounded text-2xl text-center">
-            그룹을 삭제하시겠습니까?
-          </CardTitle>
+          <CardTitle className="text-2xl text-center">그룹을 삭제하시겠습니까?</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col justify-center items-center gap-5">

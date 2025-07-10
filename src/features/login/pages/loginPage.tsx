@@ -16,7 +16,7 @@ const LoginPage = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-[80vh] gap-[10vh]">
-      <div className="flex flex-col items-center justify-center font-unbounded">
+      <div className="flex flex-col items-center justify-center">
         <h1 className="text-[3rem] font-semibold">MOA</h1>
         <p className="text-[2rem]">모두의 Agenda</p>
       </div>
