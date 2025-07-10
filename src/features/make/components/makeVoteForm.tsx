@@ -18,7 +18,7 @@ import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
 import { useGroupStore, useModalStore } from '@/stores/index'
 import { getContentLength } from '@/utils/textLength'
-import { buildLocalDateTimeString } from '@/utils/time'
+import { buildLocalDateTimeString, convertToKstISOString } from '@/utils/time'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 
 export const MakeVoteForm = () => {
@@ -80,7 +80,7 @@ export const MakeVoteForm = () => {
     sevenDaysLater.setDate(now.getDate() + 7)
 
     const toInputFormat = (date: Date) => {
-      return date.toISOString().slice(0, 16)
+      return convertToKstISOString(date.toISOString()).slice(0, 16)
     }
 
     setMinDateTime(toInputFormat(now))
@@ -177,7 +177,9 @@ export const MakeVoteForm = () => {
                           }
                         }}
                       >
-                        <span>{fileName ? fileName : '이미지 올리기'}</span>
+                        <span className="max-w-[250px] truncate">
+                          {fileName ? fileName : '이미지 올리기'}
+                        </span>
                         {fileName && (
                           <span
                             onClick={(e) => {

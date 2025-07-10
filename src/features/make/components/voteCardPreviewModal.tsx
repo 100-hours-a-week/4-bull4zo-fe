@@ -83,12 +83,12 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
       if (voteId) {
         navigation('/research')
         closeModal()
-        updateVote({ groupId, content, imageUrl, imageName, closedAt, anonymous })
+        await updateVote({ groupId, content, imageUrl, imageName, closedAt, anonymous })
         toast('투표를 수정했습니다.')
       } else {
         navigation('/research')
         closeModal()
-        mutateAsync({
+        await mutateAsync({
           groupId,
           content,
           imageUrl,
