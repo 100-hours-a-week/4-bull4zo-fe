@@ -20,14 +20,14 @@ import { trackEvent } from '@/lib/trackEvent'
 import { cn } from '@/lib/utils'
 import { useGroupStore, useModalStore } from '@/stores/index'
 import { getContentLength } from '@/utils/textLength'
-import { buildLocalDateTimeString } from '@/utils/time'
+import { buildLocalDateTimeString, convertToKstISOString } from '@/utils/time'
 import { VoteSchema, voteSchema } from '../lib/makeVoteSchema'
 
 export const UpdateVoteForm = () => {
   const { voteId } = useParams()
 
-  const { selectedId, setId } = useGroupStore()
   const { openModal } = useModalStore()
+  const { setId } = useGroupStore()
 
   const [fileName, setFileName] = useState<string | null>(null)
   const [minDateTime, setMinDateTime] = useState('')
@@ -38,7 +38,7 @@ export const UpdateVoteForm = () => {
   const form = useForm<VoteSchema>({
     resolver: zodResolver(voteSchema),
     defaultValues: {
-      groupId: selectedId,
+      groupId: 1,
       content: '',
       image: undefined,
       closedAt: buildLocalDateTimeString({ days: 1 }),
@@ -56,7 +56,8 @@ export const UpdateVoteForm = () => {
       page: location.pathname,
     })
 
-    const imageToUse = data.image
+    const image = data.image
+    const imageToUse = image instanceof File ? image : editData?.imageUrl
 
     openModal(
       <VoteCardPreviewModal
@@ -71,14 +72,11 @@ export const UpdateVoteForm = () => {
 
   // form에 그룹 id 반영
   useEffect(() => {
-    if (selectedId) {
-      form.setValue('groupId', selectedId)
+    if (editData) {
+      setId(editData.groupId)
+      form.setValue('groupId', editData.groupId)
     }
-  }, [selectedId, form])
-  // 선택한 그룹이 "전체"일 경우 "공개"로 자동 변경
-  useEffect(() => {
-    if (selectedId === 0) setId(1)
-  }, [selectedId, setId])
+  }, [editData, form, setId])
   // 타임 캘린더의 선택 가능을 오늘 + 7일까지로 제한
   useEffect(() => {
     const now = new Date()
@@ -86,9 +84,8 @@ export const UpdateVoteForm = () => {
     sevenDaysLater.setDate(now.getDate() + 7)
 
     const toInputFormat = (date: Date) => {
-      return date.toISOString().slice(0, 16)
+      return convertToKstISOString(date.toISOString()).slice(0, 16)
     }
-
     setMinDateTime(toInputFormat(now))
     setMaxDateTime(toInputFormat(sevenDaysLater))
   }, [])
@@ -100,10 +97,8 @@ export const UpdateVoteForm = () => {
         content: editData.content,
         closedAt: editData.closedAt,
         anonymous: editData.authorNickname.includes('익명'),
-        image: editData.imageUrl,
       })
       if (editData.imageUrl) {
-        form.setValue('image', editData.imageUrl)
         setFileName(editData.imageName)
       }
     }
@@ -199,7 +194,9 @@ export const UpdateVoteForm = () => {
                           }
                         }}
                       >
-                        <span>{fileName ? fileName : '이미지 올리기'}</span>
+                        <span className="truncate max-w-[250px]">
+                          {fileName ? fileName : '이미지 올리기'}
+                        </span>
                         {fileName && (
                           <span
                             onClick={(e) => {
@@ -252,7 +249,7 @@ export const UpdateVoteForm = () => {
                 form.formState.isValid ? 'bg-primary text-white' : 'bg-gray-300',
               )}
             >
-              '수정'
+              수정
               <ChevronRight />
             </Button>
           </div>
