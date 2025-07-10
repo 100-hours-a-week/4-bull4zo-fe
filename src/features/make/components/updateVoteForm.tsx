@@ -149,7 +149,7 @@ export const UpdateVoteForm = () => {
                     />
                     <button
                       type="button"
-                      className="font-medium font-unbounded cursor-pointer"
+                      className="font-medium cursor-pointer"
                       onClick={() => {
                         field.onChange(!field.value)
                       }}

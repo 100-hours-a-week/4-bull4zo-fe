@@ -1,7 +1,4 @@
 @layer utilities {
-  .font-unbounded {
-    font-family: 'Unbounded', sans-serif;
-  }
   .font-pyeojinGothic {
     font-family: 'PyeojinGothic', sans-serif;
   }

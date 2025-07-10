@@ -13,7 +13,7 @@ export const LoginRequiredCard = () => {
     >
       <CardHeader className="flex flex-row px-0 justify-center items-center">
         <div className="flex flex-row gap-1 ">
-          <CardTitle className="font-unbounded text-2xl text-center">
+          <CardTitle className="text-2xl text-center">
             로그인 후 이용할 수 있는 <br /> 페이지 입니다.
           </CardTitle>
         </div>
