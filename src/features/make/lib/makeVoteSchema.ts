@@ -13,8 +13,8 @@ export const voteSchema = z.object({
     (val) => {
       if (val instanceof File) {
         const isActuallyAFile = val.size > 0 && val.type.startsWith('image/')
-        const isValidType = ['image/png', 'image/jpeg'].includes(val.type)
-        const isValidExtension = /\.(png|jpe?g)$/i.test(val.name)
+        const isValidType = ['image/png', 'image/jpeg', 'image/webp'].includes(val.type)
+        const isValidExtension = /\.(png|jpe?g|webp)$/i.test(val.name)
         const isValidSize = val.size <= 10 * 1024 * 1024 // 10MB
         const isValidImage = isActuallyAFile && isValidType && isValidExtension && isValidSize
 

@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { createdVotesKey, participatedVotesKey } from '@/api/services/vote/key'
-import { useDeleteVoteMutation, useVoteReportReasons } from '@/api/services/vote/queries'
+import { useDeleteVoteMutation, voteReportReasonQueryOptions } from '@/api/services/vote/queries'
 import { Button, Card, CardContent, CardHeader, CardTitle } from '@/components/index'
 import { voteCreateFailMessage } from '@/lib/messageMap'
 import { useModalStore } from '@/stores/index'
@@ -13,7 +13,7 @@ export const VoteCreateFailModal = ({ voteId }: { voteId: number }) => {
 
   const queryClient = useQueryClient()
 
-  const { data } = useVoteReportReasons(voteId.toString())
+  const { data } = useSuspenseQuery(voteReportReasonQueryOptions(voteId.toString()))
   const { mutateAsync } = useMutation({
     ...useDeleteVoteMutation,
     onSuccess: () => {

@@ -1,8 +1,9 @@
 import { Suspense } from 'react'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import {
-  useCreateVotesInfinityQuery,
-  useParticipatedVotesInfinityQuery,
+  infinityCreateVotesQueryOptions,
+  infinityParticipatedVotesQueryOptions,
 } from '@/api/services/vote/queries'
 import { Label, LoadingPage, VoteList } from '@/components/index'
 import { useResearchTabStore } from '@/features/research/stores/researchTapStore'
@@ -13,13 +14,13 @@ export const ResearchList = () => {
   const { index, setIndex } = useResearchTabStore()
   const { selectedId } = useGroupStore()
 
-  const participatedQuery = useParticipatedVotesInfinityQuery({
-    groupId: selectedId,
-  })
+  const participatedQuery = useSuspenseInfiniteQuery(
+    infinityParticipatedVotesQueryOptions({ groupId: selectedId }),
+  )
 
-  const myVotesQuery = useCreateVotesInfinityQuery({
-    groupId: selectedId,
-  })
+  const myVotesQuery = useSuspenseInfiniteQuery(
+    infinityCreateVotesQueryOptions({ groupId: selectedId }),
+  )
 
   const data = index === 0 ? participatedQuery.data : myVotesQuery.data
   const fetchNextPage = index === 0 ? participatedQuery.fetchNextPage : myVotesQuery.fetchNextPage

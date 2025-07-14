@@ -1,8 +1,10 @@
 import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FaQuestion } from 'react-icons/fa'
-import { useUserInfoQuery } from '@/api/services/user/queries'
-import { useInfiniteVotesQuery } from '@/api/services/vote/queries'
+import { useQuery, useQueryClient, useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { infiniteGroupNameListQueryOptions } from '@/api/services/group/queries'
+import { userQueryOptions } from '@/api/services/user/queries'
+import { infiniteVotesQueryOptions } from '@/api/services/vote/queries'
 import { NotFoundPage } from '@/app/index'
 import { GroupDropDown, LoadingCard, NoVoteAvailableModal } from '@/components/index'
 import { useGroupStore, useModalStore, useTutorialStore, useUserStore } from '@/stores/index'
@@ -10,6 +12,14 @@ import { TutorialPage, VoteSwiperFramer } from '../components/index'
 import { useVoteCardStore } from '../stores/voteCardStore'
 
 const HomePage = () => {
+  const { isLogin } = useUserStore()
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    if (!isLogin) return
+    queryClient.prefetchInfiniteQuery(infiniteGroupNameListQueryOptions())
+  }, [queryClient, isLogin])
+
   return (
     <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
       <Suspense
@@ -30,11 +40,10 @@ export default HomePage
 const HomePageContent = () => {
   const { isLogin, setIsLogin, setNickName } = useUserStore()
   const { selectedId: groupId } = useGroupStore()
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteVotesQuery({
-    groupId,
-    isLogin,
-  })
-  const { data: user } = useUserInfoQuery({ enabled: isLogin })
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
+    infiniteVotesQueryOptions({ groupId, isLogin }),
+  )
+  const { data: user } = useQuery(userQueryOptions({ enabled: isLogin }))
 
   const { openModal } = useModalStore()
   const { isHidden, open } = useTutorialStore()

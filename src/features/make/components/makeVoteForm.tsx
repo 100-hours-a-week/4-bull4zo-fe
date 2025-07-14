@@ -156,7 +156,7 @@ export const MakeVoteForm = () => {
                     <div className="relative">
                       <input
                         type="file"
-                        accept="image/png, image/jpeg, image/jpg"
+                        accept="image/png, image/jpeg, image/jpg, image/webp"
                         className="hidden"
                         id={id}
                         onChange={(e) => {

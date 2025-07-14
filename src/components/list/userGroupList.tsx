@@ -1,9 +1,12 @@
-import { useInfiniteGroupsQuery } from '@/api/services/group/queries'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { infiniteGroupQueryOptions } from '@/api/services/group/queries'
 import { AddGroupModal, Button, GroupList, Label } from '@/components/index'
 import { useModalStore } from '@/stores/index'
 
 export const UserGroupList = () => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteGroupsQuery(undefined)
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useSuspenseInfiniteQuery(
+    infiniteGroupQueryOptions(),
+  )
   const { openModal } = useModalStore()
 
   return (
