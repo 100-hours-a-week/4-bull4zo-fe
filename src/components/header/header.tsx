@@ -1,7 +1,8 @@
 import { FaAngleLeft } from 'react-icons/fa6'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { Bell } from 'lucide-react'
-import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
+import { infiniteNotificationQueryOptions } from '@/api/services/notification/queries'
 import MOA_HOME_ICON from '@/assets/moa_home.webp'
 import { Button, Icon } from '@/components/index'
 import { useNotificationStore, useSliderStore, useUserStore } from '@/stores/index'
@@ -12,7 +13,7 @@ export const Header = () => {
   const { open } = useSliderStore()
   const { newNotification } = useNotificationStore()
   const { isOpen } = useSliderStore()
-  const { data } = useInfiniteNotificationQuery(isLogin)
+  const { data } = useInfiniteQuery(infiniteNotificationQueryOptions(isLogin))
 
   const location = useLocation()
 

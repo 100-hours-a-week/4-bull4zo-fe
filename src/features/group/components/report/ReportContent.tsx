@@ -1,10 +1,11 @@
-import { useGroupAnalysisQuery } from '@/api/services/group/queries'
-import { useTop3VotesQuery } from '@/api/services/vote/queries'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { GroupAnalysisResponse } from '@/api/services/group/model'
+import { top3VotesQueryOptions } from '@/api/services/vote/queries'
 import { PieChart, VoteItem } from '@/components/index'
 import { formatDateTimeDetail } from '@/utils/time'
 
 interface Props {
-  data: ReturnType<typeof useGroupAnalysisQuery>['data']
+  data: GroupAnalysisResponse
 }
 
 export const ReportContentChart = ({ data }: Props) => {
@@ -32,7 +33,7 @@ export const ReportContentChart = ({ data }: Props) => {
   )
 }
 export const ReportContentVotes = ({ groupId }: { groupId: number }) => {
-  const { data } = useTop3VotesQuery(groupId, 'weekly')
+  const { data } = useSuspenseQuery(top3VotesQueryOptions(groupId, 'weekly'))
 
   return (
     <div className="px-5">

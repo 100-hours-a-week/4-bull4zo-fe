@@ -19,12 +19,7 @@ export type GroupRole = 'OWNER' | 'MANAGER' | 'MEMBER'
 
 export type MyGroupNamesData = PageNation<'groups', GroupName[]>
 
-export interface MyGroupList {
-  groups: Group[]
-  nextCursor: string | null
-  hasNext: boolean
-  size: number
-}
+export type MyGroupList = PageNation<'groups', Group[]>
 
 export interface InviteCodePayload {
   inviteCode: string
@@ -84,15 +79,6 @@ export interface GroupRoleChangeResponse {
 export interface GroupMemberDeleteResponse {
   userId: number
 }
-
-// export interface GroupVote {
-//   voteId: number
-//   groupId: number
-//   content: string
-//   createdAt: string
-//   closedAt: string
-//   results: ParticipatedVoteResult
-// }
 
 export type GroupVoteListResponse = PageNation<'votes', ParticipatedVote[]> & {
   groupId: number

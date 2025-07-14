@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useLocation } from 'react-router-dom'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
 import { ChevronDown } from 'lucide-react'
-import { useInfiniteGroupNameListQuery } from '@/api/services/group/queries'
+import { infiniteGroupNameListQueryOptions } from '@/api/services/group/queries'
 import {
   Button,
   DropdownMenu,
@@ -19,7 +20,7 @@ export const GroupDropDown = () => {
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetchingNextPage, isError } =
-    useInfiniteGroupNameListQuery()
+    useSuspenseInfiniteQuery(infiniteGroupNameListQueryOptions())
 
   const selectRef = useRef<HTMLDivElement | null>(null)
 
@@ -47,14 +48,6 @@ export const GroupDropDown = () => {
   }, [open, inView, fetchNextPage, hasNextPage, isFetchingNextPage])
 
   const selectedGroup = groups.find((g) => g.groupId === selectedId)
-
-  // useEffect(() => {
-  //   if (open) {
-  //     setTimeout(() => {
-  //       selectRef.current?.focus()
-  //     }, 0)
-  //   }
-  // }, [open])
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

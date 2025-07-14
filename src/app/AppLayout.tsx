@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useUserInfoQuery } from '@/api/services/user/queries'
+import { useQuery } from '@tanstack/react-query'
+import { userQueryOptions } from '@/api/services/user/queries'
 import { TokenGate } from '@/app/index'
 import { Header, Modal, Navigation, SSEManager, Slider } from '@/components/index'
 import { useNavigationStore, useUserStore } from '@/stores/index'
@@ -11,7 +12,7 @@ export const AppLayout = () => {
   const { setTab } = useNavigationStore()
   const { isLogin, setNickName, accessToken } = useUserStore()
 
-  const { data: user } = useUserInfoQuery({ enabled: !!accessToken })
+  const { data: user } = useQuery(userQueryOptions({ enabled: !!accessToken }))
 
   useEffect(() => {
     if (user?.nickname) {

@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { IoClose } from 'react-icons/io5'
-import { useQueryClient } from '@tanstack/react-query'
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useInfiniteNotificationQuery } from '@/api/services/notification/queries'
+import { infiniteNotificationQueryOptions } from '@/api/services/notification/queries'
 import { NotificationList } from '@/components/index'
 import { useNotificationStore, useSliderStore } from '@/stores/index'
 
@@ -51,7 +51,11 @@ export const Slider = () => {
 
 const NotificationSlider = () => {
   const queryClient = useQueryClient()
-  const { data: notifications, hasNextPage, fetchNextPage } = useInfiniteNotificationQuery()
+  const {
+    data: notifications,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery(infiniteNotificationQueryOptions())
   const { newNotification } = useNotificationStore()
 
   useEffect(() => {

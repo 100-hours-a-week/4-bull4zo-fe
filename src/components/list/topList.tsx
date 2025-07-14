@@ -1,9 +1,9 @@
-import { useTop3VotesQuery } from '@/api/services/vote/queries'
+import { Top3VoteResponse } from '@/api/services/vote/model'
 import { Label, VoteItem } from '@/components/index'
 import { formatDateTimeDetail } from '@/utils/time'
 
 interface Props {
-  data: ReturnType<typeof useTop3VotesQuery>['data']
+  data: Top3VoteResponse
 }
 
 export const TopList = ({ data }: Props) => {
