@@ -10,7 +10,7 @@ const App = () => {
     <AppProvider>
       <div className="layout justify-center lg:justify-normal">
         <div className="hidden lg:block max-w-[40vw] ml-[5vw]">
-          <img src={MOA} alt="로고 설명 이미지" />
+          <img width={1117} height={678} src={MOA} alt="로고 설명 이미지" />
         </div>
         <div id="main-content" className="main-content">
           <RouterProvider router={router} />
