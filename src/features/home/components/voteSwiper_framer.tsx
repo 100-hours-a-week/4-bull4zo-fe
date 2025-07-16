@@ -1,11 +1,11 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { VoteChoice } from '@/api/services/vote/model'
 import { useSubmitVoteMutation } from '@/api/services/vote/queries'
 import { NoVoteAvailableModal, VoteEndCard } from '@/components/index'
 import { useModalStore, useTutorialStore, useUserStore } from '@/stores/index'
 import { useVoteCardStore } from '../stores/voteCardStore'
-import { SwipeCard, SwipeCardHandle, VoteDirectionButtonGroup } from './index'
+import { SwipeCardHandle, SwipeCardMemo, VoteDirectionButtonGroup } from './index'
 
 type Props = {
   fetchNextPage: () => void
@@ -88,7 +88,7 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
         const isTop = index === 0
 
         return (
-          <SwipeCard
+          <SwipeCardMemo
             key={vote.voteId}
             vote={vote}
             isTop={isTop}
@@ -106,4 +106,4 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
     </div>
   )
 }
-export default memo(VoteSwiperFramer)
+export default React.memo(VoteSwiperFramer)

@@ -28,8 +28,9 @@ import { logoutAndResetStores } from '@/utils/reset'
 import { filterAllowedKoreanInput } from '@/utils/validation'
 
 export const UserCard = () => {
-  const { nickname, setNickName } = useUserStore()
-  const { openModal } = useModalStore()
+  const nickname = useUserStore((s) => s.nickname)
+  const setNickName = useUserStore((s) => s.setNickName)
+  const openModal = useModalStore((s) => s.openModal)
   const [isEditing, setIsEditing] = useState(false)
   const navigation = useNavigate()
 

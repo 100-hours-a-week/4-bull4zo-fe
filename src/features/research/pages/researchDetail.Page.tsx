@@ -2,6 +2,7 @@ import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { infiniteCommentQueryOptions } from '@/api/services/comment/queries'
 import { voteDetailQueryOptions, voteResultQueryOptions } from '@/api/services/vote/queries'
 import { NotFoundPage } from '@/app/index'
 import { CommentList, LoadingPage } from '@/components/index'
@@ -14,6 +15,7 @@ const ResearchDetailPage = () => {
   useEffect(() => {
     queryClient.prefetchQuery(voteDetailQueryOptions(voteId as string))
     queryClient.prefetchQuery(voteResultQueryOptions(voteId as string))
+    queryClient.prefetchInfiniteQuery(infiniteCommentQueryOptions(voteId as string))
   }, [queryClient, voteId])
 
   return (

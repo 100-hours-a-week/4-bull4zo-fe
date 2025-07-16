@@ -9,16 +9,18 @@ import { useNavigationStore, useUserStore } from '@/stores/index'
 export const AppLayout = () => {
   const location = useLocation()
   const navigation = useNavigate()
-  const { setTab } = useNavigationStore()
-  const { isLogin, setNickName, accessToken } = useUserStore()
+  const setTab = useNavigationStore((state) => state.setTab)
+  const isLogin = useUserStore((state) => state.isLogin)
+  const setNickname = useUserStore((state) => state.setNickName)
+  const accessToken = useUserStore((state) => state.accessToken)
 
   const { data: user } = useQuery(userQueryOptions({ enabled: !!accessToken }))
 
   useEffect(() => {
     if (user?.nickname) {
-      setNickName(user.nickname)
+      setNickname(user.nickname)
     }
-  }, [user, setNickName])
+  }, [user, setNickname])
 
   useEffect(() => {
     setTab(location.pathname)
@@ -37,7 +39,7 @@ export const AppLayout = () => {
 
   return (
     <TokenGate>
-      <Header />
+      <Header path={location.pathname} />
       <main className="py-[4.25rem] min-h-screen bg-yellow">
         {/* <Suspense fallback={<LoadingPage />}> */}
         <Outlet />

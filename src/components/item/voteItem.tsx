@@ -34,7 +34,7 @@ const rankMap = {
   },
 }
 
-export const VoteItem = (vote: Props) => {
+export const VoteItem = React.memo(function VoteItem(vote: Props) {
   const navigation = useNavigate()
   const { openModal } = useModalStore()
 
@@ -113,7 +113,7 @@ export const VoteItem = (vote: Props) => {
       )}
     </li>
   )
-}
+})
 
 const VoteStatusLabel: React.FC<{ status: ParticipatedVoteStatus }> = ({ status }) => {
   const [open, setOpen] = useState(false)
