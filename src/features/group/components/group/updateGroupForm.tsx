@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -300,13 +300,7 @@ export const UpdateGroupForm = ({ group }: Props) => {
           </div>
           {ableManage(group?.role) && (
             <div className="flex justify-center items-center">
-              <Button
-                className={`py-1 h-full text-lg ${form.formState.isValid && 'bg-primary text-white'}`}
-                type="submit"
-                disabled={!form.formState.isValid}
-              >
-                변경사항 저장
-              </Button>
+              <SubmitButton isValid={form.formState.isValid} />
             </div>
           )}
           {ableOwner(group?.role) && (
@@ -314,7 +308,6 @@ export const UpdateGroupForm = ({ group }: Props) => {
               <button
                 type="button"
                 className="text-sm underline text-gray cursor-pointer"
-                disabled={!form.formState.isValid}
                 onClick={() => {
                   openModal(<DeleteGroupModal groupId={Number(groupId)} />)
                 }}
@@ -328,3 +321,14 @@ export const UpdateGroupForm = ({ group }: Props) => {
     </div>
   )
 }
+const SubmitButton = React.memo(function SubmitButton({ isValid }: { isValid: boolean }) {
+  return (
+    <Button
+      className={`py-1 h-full text-lg ${isValid ? 'bg-primary text-white' : 'bg-gray text-gray-500'}`}
+      type="submit"
+      disabled={!isValid}
+    >
+      변경사항 저장
+    </Button>
+  )
+})

@@ -21,7 +21,7 @@ describe('Header 컴포넌트', () => {
   it('로그아웃 상태면 버튼 보이고 클릭 시 /login', () => {
     render(
       <QueryProvider>
-        <Header />
+        <Header path="/home" />
       </QueryProvider>,
     )
     const btn = screen.getByRole('button', { name: '로그인' })

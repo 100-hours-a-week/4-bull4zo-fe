@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
 import { Vote, VoteChoice, submitVoteRequest } from '@/api/services/vote/model'
 import { VoteCard } from '@/components/index'
@@ -22,7 +22,7 @@ type SwipeCardProps = {
   mutateVote: (variables: submitVoteRequest) => Promise<submitVoteRequest>
 }
 
-export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref) => {
+const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>(function SwipeCard(props, ref) {
   const { vote, isTop, index, setSwipeDir, mutateVote } = props
 
   const x = useMotionValue(0)
@@ -145,3 +145,5 @@ export const SwipeCard = forwardRef<SwipeCardHandle, SwipeCardProps>((props, ref
     </motion.div>
   )
 })
+
+export const SwipeCardMemo = React.memo(SwipeCard)

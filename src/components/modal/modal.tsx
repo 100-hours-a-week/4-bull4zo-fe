@@ -33,7 +33,7 @@ export const Modal = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [closeModal])
+  }, [isOpen, closeModal])
 
   if (!isOpen) return null
 

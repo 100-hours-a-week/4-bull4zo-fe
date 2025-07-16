@@ -14,59 +14,63 @@ interface CommentItemProps extends Partial<Comment> {
   onDelete?: (commentId: number) => void
 }
 
-export const CommentItem = forwardRef<HTMLLIElement, CommentItemProps>((comment, ref) => {
-  const { voteId } = useParams()
+export const CommentItem = React.memo(
+  forwardRef<HTMLLIElement, CommentItemProps>(function CommentItem(comment, ref) {
+    const { voteId } = useParams()
 
-  const [open, setOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
+    const [open, setOpen] = useState(false)
+    const menuRef = useRef<HTMLDivElement>(null)
 
-  const toggleMenu = () => setOpen((prev) => !prev)
+    const toggleMenu = () => setOpen((prev) => !prev)
 
-  useEffect(() => {
-    const handleClickOutSide = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setOpen(false)
+    useEffect(() => {
+      const handleClickOutSide = (e: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+          setOpen(false)
+        }
       }
-    }
-    document.addEventListener('mousedown', handleClickOutSide)
+      document.addEventListener('mousedown', handleClickOutSide)
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutSide)
-    }
-  }, [])
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutSide)
+      }
+    }, [])
 
-  return (
-    <li ref={ref} className="list-none flex flex-col gap-1 ">
-      <div className="flex flex-row items-center justify-between">
-        <div className="flex flex-row items-center gap-1">
-          <FaUserLarge className="text-gray-300" />
-          <h1 className="text-sm font-semibold">{comment.authorNickname}</h1>
-        </div>
-        <div className="relative" ref={menuRef}>
-          <button onClick={toggleMenu} aria-label="댓글 메뉴 열기">
-            <HiDotsVertical size={16} />
-          </button>
-          {open && (
-            <CommentDotsItem
-              isMine={comment.isMine!}
-              commentId={comment.commentId!}
-              voteId={Number(voteId)}
-              setOpen={setOpen}
-              onDelete={comment.onDelete}
-            />
+    return (
+      <li ref={ref} className="list-none flex flex-col gap-1 ">
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center gap-1">
+            <FaUserLarge className="text-gray-300" />
+            <h1 className="text-sm font-semibold">{comment.authorNickname}</h1>
+          </div>
+          {comment.isMine && (
+            <div className="relative" ref={menuRef}>
+              <button onClick={toggleMenu} aria-label="댓글 메뉴 열기">
+                <HiDotsVertical size={16} />
+              </button>
+              {open && (
+                <CommentDotsItem
+                  isMine={comment.isMine!}
+                  commentId={comment.commentId!}
+                  voteId={Number(voteId)}
+                  setOpen={setOpen}
+                  onDelete={comment.onDelete}
+                />
+              )}
+            </div>
           )}
         </div>
-      </div>
-      <p className=" whitespace-pre-line mb-1">{comment.content}</p>
-      <span className="text-xs text-gray">
-        {formatRelativeTime(comment.createdAt!).includes('종료')
-          ? '0분 전'
-          : formatRelativeTime(comment.createdAt!)}
-      </span>
-      <hr className="border-t border-gray-300 mt-4" />
-    </li>
-  )
-})
+        <p className=" whitespace-pre-line mb-1">{comment.content}</p>
+        <span className="text-xs text-gray">
+          {formatRelativeTime(comment.createdAt!).includes('종료')
+            ? '0분 전'
+            : formatRelativeTime(comment.createdAt!)}
+        </span>
+        <hr className="border-t border-gray-300 mt-4" />
+      </li>
+    )
+  }),
+)
 const CommentDotsItem = ({
   isMine,
   commentId,

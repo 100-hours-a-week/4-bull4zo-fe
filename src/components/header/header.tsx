@@ -1,5 +1,6 @@
+import React from 'react'
 import { FaAngleLeft } from 'react-icons/fa6'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Bell } from 'lucide-react'
 import { infiniteNotificationQueryOptions } from '@/api/services/notification/queries'
@@ -7,17 +8,18 @@ import MOA_HOME_ICON from '@/assets/moa_home.webp'
 import { Button, Icon } from '@/components/index'
 import { useNotificationStore, useSliderStore, useUserStore } from '@/stores/index'
 
-export const Header = () => {
+interface Props {
+  path: string
+}
+
+export const Header = React.memo(function Header({ path }: Props) {
   const router = useNavigate()
-  const { isLogin } = useUserStore()
-  const { open } = useSliderStore()
-  const { newNotification } = useNotificationStore()
-  const { isOpen } = useSliderStore()
+  const isLogin = useUserStore((s) => s.isLogin)
+  const open = useSliderStore((s) => s.open)
+  const newNotification = useNotificationStore((s) => s.newNotification)
+  const isOpen = useSliderStore((s) => s.isOpen)
   const { data } = useInfiniteQuery(infiniteNotificationQueryOptions(isLogin))
 
-  const location = useLocation()
-
-  const path = location.pathname
   const excludedPaths = ['/home', '/make', '/research', '/user', '/auth/callback']
   const showBackButton = !excludedPaths.includes(path)
 
@@ -78,4 +80,4 @@ export const Header = () => {
       </div>
     </header>
   )
-}
+})
