@@ -15,6 +15,21 @@ export const Slider = () => {
     close()
   }
 
+  // keyboard 이벤트 추가
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        handleClose()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  })
+
   return (
     <AnimatePresence>
       {isOpen && (
