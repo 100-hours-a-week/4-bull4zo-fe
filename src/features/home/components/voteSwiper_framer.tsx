@@ -55,6 +55,26 @@ export const VoteSwiperFramer = ({ fetchNextPage, hasNextPage, isFetchingNextPag
 
   const topCardRef = useRef<SwipeCardHandle>(null)
 
+  // Keyboard 스와이프
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!topCardRef.current) return
+
+      if (event.key === 'ArrowLeft') {
+        topCardRef.current.swipe('반대')
+      } else if (event.key === 'ArrowRight') {
+        topCardRef.current.swipe('찬성')
+      } else if (event.key === 'ArrowUp') {
+        topCardRef.current.swipe('기권')
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
+
   if (cardList.length === 0)
     return (
       <div className="h-full w-full flex justify-center items-center">

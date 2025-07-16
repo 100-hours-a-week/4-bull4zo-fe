@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
@@ -6,6 +6,7 @@ import { authAxiosInstance } from '@/api/axios'
 import { createdVotesKey } from '@/api/services/vote/key'
 import { useCreateVoteMutation, useUpdateVoteMutation } from '@/api/services/vote/queries'
 import { Button, VoteCardPreview } from '@/components/index'
+import { useResearchTabStore } from '@/features/research/stores/researchTapStore'
 import { trackEvent } from '@/lib/trackEvent'
 import { useModalStore } from '@/stores/index'
 
@@ -21,6 +22,7 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
   const { voteId } = useParams()
   const navigation = useNavigate()
   const { closeModal } = useModalStore()
+  const { setIndex } = useResearchTabStore()
 
   const queryClient = useQueryClient()
 
@@ -81,11 +83,13 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
       }
 
       if (voteId) {
+        setIndex(1)
         navigation('/research')
         closeModal()
         await updateVote({ groupId, content, imageUrl, imageName, closedAt, anonymous })
         toast('투표를 수정했습니다.')
       } else {
+        setIndex(1)
         navigation('/research')
         closeModal()
         await mutateAsync({
@@ -110,6 +114,20 @@ export const VoteCardPreviewModal = ({ groupId, content, image, closedAt, anonym
       })
     }
   }
+  // keyboard 이벤츠 추가
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault()
+        closeModal()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  })
 
   return (
     <div className="flex flex-col justify-center items-center h-full w-[100svw] max-w-[450px] gap-4">
