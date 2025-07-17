@@ -26,9 +26,9 @@ export const TopList = ({ data }: Props) => {
         </ul>
       ) : (
         <div className="mt-4 flex flex-col px-7 cursor-pointer font-medium bg-white py-8 min-h-26 rounded-[30px] gap-4 shadow-lg">
-          😴 지금 너무 조용해요
+          🕊️ 오늘은 조용한 하루예요.
           <br />
-          지금 당장 참여해 볼까요?
+          지금 투표를 만들어 오늘의 주인공이 되어보세요!
         </div>
       )}
     </section>
