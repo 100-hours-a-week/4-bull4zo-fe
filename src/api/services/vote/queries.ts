@@ -11,7 +11,6 @@ import {
   CreateVotePayload,
   ParticipatedVoteList,
   ParticipatedVotesQueryOptions,
-  TopVoteDay,
   UseInfiniteVotesQueryOptions,
   VoteData,
   submitVoteRequest,
@@ -105,8 +104,8 @@ export const useDeleteVoteMutation = {
   mutationFn: (voteId: string) => voteService.deleteVote(voteId),
 }
 // Top3 투표 조회 options
-export const top3VotesQueryOptions = (groupId: number, type: TopVoteDay = 'daily') => ({
-  queryKey: top3VoteKey(groupId, type),
-  queryFn: () => voteService.getTop3Votes(groupId, type),
+export const top3VotesQueryOptions = (groupId: number) => ({
+  queryKey: top3VoteKey(groupId),
+  queryFn: () => voteService.getTop3Votes(groupId),
   staleTime: 1000 * 60 * 60 * 23, // 23h: 매일 오전 9시 재요청
 })

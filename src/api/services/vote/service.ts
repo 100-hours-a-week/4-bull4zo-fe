@@ -3,7 +3,6 @@ import {
   CreateVotePayload,
   ParticipatedVoteList,
   Top3VoteResponse,
-  TopVoteDay,
   UseInfiniteVotesRequest,
   VoteData,
   VoteDetail,
@@ -82,11 +81,10 @@ export const voteService = {
     return response.data.data
   },
   // GET: Top3 투표 조회
-  async getTop3Votes(groupId: number, type: TopVoteDay): Promise<Top3VoteResponse> {
+  async getTop3Votes(groupId: number): Promise<Top3VoteResponse> {
     const params = new URLSearchParams()
 
     if (groupId) params.append('groupId', groupId.toString())
-    if (type) params.append('type', type)
 
     const response = await authAxiosInstance.get(`/api/v1/votes/top?${params.toString()}`)
     return response.data.data

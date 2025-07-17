@@ -1,13 +1,13 @@
 import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import {
   infinityCreateVotesQueryOptions,
   infinityParticipatedVotesQueryOptions,
-  // top3VotesQueryOptions,
+  top3VotesQueryOptions,
 } from '@/api/services/vote/queries'
 import { NotFoundPage } from '@/app/NotFound'
-// import { useParams } from 'react-router-dom'
+import { TopList } from '@/components'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
 import { ResearchList } from '@/components/list/researchList'
 import { LoadingPage } from '@/components/loading/loadingPage'
@@ -36,17 +36,17 @@ const ResearchPage = () => {
 export default ResearchPage
 
 const ResearchPageContent = () => {
-  // const { groupId } = useParams()
+  const groupId = useGroupStore((s) => s.selectedId)
 
-  // const { data } = useSuspenseQuery(top3VotesQueryOptions(parseInt(groupId!), undefined))
+  const { data } = useSuspenseQuery(top3VotesQueryOptions(groupId))
 
   return (
     <article className="min-h-full">
       <div className="pl-4 py-3">
         <GroupDropDown />
       </div>
-      {/* <div className="bg-gray w-full h-[0.625rem] mt-1" />
-      <TopList data={data} /> */}
+      <div className="bg-line w-full h-[0.625rem] mt-1" />
+      <TopList data={data} />
       <div className="bg-line w-full h-[0.625rem] mt-1" />
       <ResearchList />
     </article>
