@@ -11,7 +11,7 @@ export const ResearchPage = React.lazy(() => import('@/features/research/pages/r
 export const ResearchDetailPage = React.lazy(
   () => import('@/features/research/pages/researchDetail.Page'),
 )
-export const CreateGroupPage = React.lazy(() => import('@/features/group/pages/createGrupPage'))
+export const CreateGroupPage = React.lazy(() => import('@/features/group/pages/createGroupPage'))
 export const ManageGroupPage = React.lazy(() => import('@/features/group/pages/manageGroupPage'))
 export const GroupVotesPage = React.lazy(() => import('@/features/group/pages/groupVotesPage'))
 export const UserPage = React.lazy(() => import('@/features/user/pages/userPage'))
