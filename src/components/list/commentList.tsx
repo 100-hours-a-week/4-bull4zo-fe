@@ -12,7 +12,7 @@ interface Props {
 
 export const CommentList = ({ voteId }: Props) => {
   const { data, hasNextPage, fetchNextPage } = useSuspenseInfiniteQuery(
-    infiniteCommentQueryOptions(voteId.toString()),
+    infiniteCommentQueryOptions(voteId),
   )
   const { ref: lastItemRef, inView } = useInView({ threshold: 0 })
 

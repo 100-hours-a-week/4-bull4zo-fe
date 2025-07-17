@@ -15,7 +15,7 @@ const ResearchDetailPage = () => {
   useEffect(() => {
     queryClient.prefetchQuery(voteDetailQueryOptions(voteId as string))
     queryClient.prefetchQuery(voteResultQueryOptions(voteId as string))
-    queryClient.prefetchInfiniteQuery(infiniteCommentQueryOptions(voteId as string))
+    queryClient.prefetchInfiniteQuery(infiniteCommentQueryOptions(Number(voteId)))
   }, [queryClient, voteId])
 
   return (

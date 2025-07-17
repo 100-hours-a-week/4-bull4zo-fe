@@ -1,6 +1,7 @@
 import { Top3VoteResponse } from '@/api/services/vote/model'
-import { Label, VoteItem } from '@/components/index'
+import { Label } from '@/components/index'
 import { formatDateTimeDetail } from '@/utils/time'
+import { RankItem } from '../item/rankItem'
 
 interface Props {
   data: Top3VoteResponse
@@ -14,13 +15,13 @@ export const TopList = ({ data }: Props) => {
   return (
     <section className="px-7 py-4">
       <div className="flex items-center justify-between">
-        <Label className="text-2xl font-semibold">오늘의 랭킹</Label>
-        <Label className=" text-xs opacity-50">{`${formatDateTimeDetail(from)} ~ ${formatDateTimeDetail(to)}`}</Label>
+        <Label className="text-lg sm:text-xl font-semibold">🔥 지금 뜨는 인기 투표</Label>
+        <Label className="text-xs sm:text-xs opacity-50">{`${formatDateTimeDetail(from)} ~ ${formatDateTimeDetail(to)}`}</Label>
       </div>
       {data.topVotes.length > 0 ? (
         <ul className="flex flex-col gap-4 pt-4">
           {data.topVotes.map((vote, idx) => (
-            <VoteItem key={vote.voteId} rank={idx + 1} {...vote} />
+            <RankItem key={vote.voteId} rank={idx + 1} {...vote} />
           ))}
         </ul>
       ) : (

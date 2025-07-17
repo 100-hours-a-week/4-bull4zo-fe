@@ -3,10 +3,10 @@ import { CommentCreateRequest, CommentListData } from './model'
 import { commentService } from './service'
 
 // 댓글 리스트 조회 options
-export const infiniteCommentQueryOptions = (voteId: string, size: number = 10) => ({
+export const infiniteCommentQueryOptions = (voteId: number, size: number = 10) => ({
   queryKey: commentKey(voteId),
   queryFn: ({ pageParam }: { pageParam?: string }) =>
-    commentService.getCommentList(Number(voteId), size, pageParam as string | undefined),
+    commentService.getCommentList(voteId, size, pageParam as string | undefined),
   getNextPageParam: (lastPage: CommentListData) => {
     return lastPage.hasNext ? lastPage.nextCursor : undefined
   },
