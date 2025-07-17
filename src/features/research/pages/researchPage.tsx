@@ -6,7 +6,7 @@ import {
   infinityParticipatedVotesQueryOptions,
   top3VotesQueryOptions,
 } from '@/api/services/vote/queries'
-import { NotFoundPage } from '@/app/NotFound'
+import { NotFoundPage } from '@/app/page/NotFound'
 import { TopList } from '@/components'
 import { GroupDropDown } from '@/components/dropdown/groupDropDown'
 import { ResearchList } from '@/components/list/researchList'

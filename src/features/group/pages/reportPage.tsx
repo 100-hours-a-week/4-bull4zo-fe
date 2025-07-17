@@ -3,7 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { useParams } from 'react-router-dom'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { groupAnalysisQueryOptions } from '@/api/services/group/queries'
-import { NotFoundPage } from '@/app/NotFound'
+import { NotFoundPage } from '@/app/page/NotFound'
 import { LoadingPage } from '@/components/index'
 import {
   ReportContentAnalysis,

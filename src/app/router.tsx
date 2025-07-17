@@ -16,7 +16,7 @@ export const ManageGroupPage = React.lazy(() => import('@/features/group/pages/m
 export const GroupVotesPage = React.lazy(() => import('@/features/group/pages/groupVotesPage'))
 export const UserPage = React.lazy(() => import('@/features/user/pages/userPage'))
 export const AuthCallback = React.lazy(() => import('@/features/login/pages/authCallback'))
-export const NotFoundPage = React.lazy(() => import('@/app/NotFound'))
+export const NotFoundPage = React.lazy(() => import('@/app/page/NotFound'))
 export const ReportPage = React.lazy(() => import('@/features/group/pages/reportPage'))
 
 export const router = createBrowserRouter([

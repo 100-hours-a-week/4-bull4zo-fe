@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { infiniteCommentQueryOptions } from '@/api/services/comment/queries'
 import { voteDetailQueryOptions, voteResultQueryOptions } from '@/api/services/vote/queries'
-import { NotFoundPage } from '@/app/index'
+import { NotAccessPage } from '@/app/page/NotAccessPage'
 import { CommentList, LoadingPage } from '@/components/index'
 import { CommentInput, ResearchDetailInfo } from '../components/index'
 
@@ -19,7 +19,7 @@ const ResearchDetailPage = () => {
   }, [queryClient, voteId])
 
   return (
-    <ErrorBoundary fallbackRender={() => <NotFoundPage />}>
+    <ErrorBoundary fallbackRender={() => <NotAccessPage />}>
       <Suspense fallback={<LoadingPage />}>
         <ResearchDetailPageContent />
       </Suspense>
