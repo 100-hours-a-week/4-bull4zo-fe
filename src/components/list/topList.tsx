@@ -1,16 +1,14 @@
-import { Top3VoteResponse } from '@/api/services/vote/model'
+import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { top3VotesQueryOptions } from '@/api/services/vote/queries'
 import { Label } from '@/components/index'
+import { useGroupStore } from '@/stores'
 import { formatDateTimeDetail } from '@/utils/time'
 import { RankItem } from '../item/rankItem'
 
-interface Props {
-  data: Top3VoteResponse
-}
-
-export const TopList = ({ data }: Props) => {
+export const TopList = () => {
   const { from, to } = getKSTDateRange()
-
-  if (!data) return
 
   return (
     <section className="px-7 py-4">
@@ -18,6 +16,21 @@ export const TopList = ({ data }: Props) => {
         <Label className="text-lg sm:text-xl font-semibold">🔥 지금 뜨는 인기 투표</Label>
         <Label className="text-xs sm:text-xs opacity-50">{`${formatDateTimeDetail(from)} ~ ${formatDateTimeDetail(to)}`}</Label>
       </div>
+      <ErrorBoundary fallbackRender={() => <ErrorWidget />}>
+        <Suspense fallback={<NonDataWidget />}>
+          <RankVotes />
+        </Suspense>
+      </ErrorBoundary>
+    </section>
+  )
+}
+const RankVotes = () => {
+  const groupId = useGroupStore((s) => s.selectedId)
+
+  const { data } = useSuspenseQuery(top3VotesQueryOptions(groupId))
+
+  return (
+    <>
       {data.topVotes.length > 0 ? (
         <ul className="flex flex-col gap-4 pt-4">
           {data.topVotes.map((vote, idx) => (
@@ -25,15 +38,26 @@ export const TopList = ({ data }: Props) => {
           ))}
         </ul>
       ) : (
-        <div className="mt-4 flex flex-col px-7 cursor-pointer font-medium bg-white py-8 min-h-26 rounded-[30px] gap-4 shadow-lg">
-          🕊️ 오늘은 조용한 하루예요.
-          <br />
-          지금 투표를 만들어 오늘의 주인공이 되어보세요!
-        </div>
+        <NonDataWidget />
       )}
-    </section>
+    </>
   )
 }
+
+const NonDataWidget = () => (
+  <div className="mt-4 flex flex-col px-7 cursor-pointer font-medium bg-white py-8 min-h-26 rounded-[30px] gap-4 shadow-lg">
+    🕊️ 오늘은 조용한 하루예요.
+    <br />
+    지금 투표를 만들어 오늘의 주인공이 되어보세요!
+  </div>
+)
+const ErrorWidget = () => (
+  <div className="mt-4 flex flex-col px-7 cursor-pointer font-medium bg-white py-8 min-h-26 rounded-[30px] gap-4 shadow-lg">
+    😢 에러가 발생했어요.
+    <br />
+    잠시 후 다시 시도해 주세요.
+  </div>
+)
 
 // 현재 컴포넌트에서만 쓰이는 시간 변환 함수
 const getKSTDateRange = () => {
