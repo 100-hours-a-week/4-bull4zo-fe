@@ -1,11 +1,12 @@
 import React from 'react'
+import { FaRegComment } from 'react-icons/fa6'
 import { MdHowToVote } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
-import { ParticipatedVote } from '@/api/services/vote/model'
+import { Top3VoteData } from '@/api/services/vote/model'
 import { Label } from '@/components/index'
 import { cn } from '@/lib/utils'
 
-interface Props extends Partial<ParticipatedVote> {
+interface Props extends Partial<Top3VoteData> {
   rank: number
 }
 
@@ -33,8 +34,6 @@ const rankMap = {
 export const RankItem = React.memo(function RankItem(vote: Props) {
   const navigation = useNavigate()
 
-  const total = vote.results?.reduce((acc, cur) => acc + cur.count, 0) || 0
-
   return (
     <li
       onClick={() => {
@@ -55,14 +54,25 @@ export const RankItem = React.memo(function RankItem(vote: Props) {
           {`${rankMap[vote.rank as keyof typeof rankMap].label} `}
           {vote.content}
         </Label>
-        <div
-          className={cn(
-            'flex flex-row items-center gap-1',
-            `${rankMap[vote.rank as keyof typeof rankMap].textColor}`,
-          )}
-        >
-          <MdHowToVote />
-          {total}
+        <div className="flex flex-row gap-2 text-xs">
+          <div
+            className={cn(
+              'flex flex-row items-center gap-[2px]',
+              `${rankMap[vote.rank as keyof typeof rankMap].textColor}`,
+            )}
+          >
+            <MdHowToVote />
+            {vote.responsesCount}
+          </div>
+          <div
+            className={cn(
+              'flex flex-row items-center gap-[2px]',
+              `${rankMap[vote.rank as keyof typeof rankMap].textColor}`,
+            )}
+          >
+            <FaRegComment />
+            {vote.commentsCount}
+          </div>
         </div>
       </div>
     </li>

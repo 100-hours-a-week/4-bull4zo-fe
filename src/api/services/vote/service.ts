@@ -86,7 +86,7 @@ export const voteService = {
 
     if (groupId) params.append('groupId', groupId.toString())
 
-    const response = await authAxiosInstance.get(`/api/v1/votes/top?${params.toString()}`)
+    const response = await authAxiosInstance.get(`/api/v2/votes/top?${params.toString()}`)
     return response.data.data
   },
 }

@@ -108,5 +108,13 @@ export interface Top3VoteResponse {
   type: TopVoteDay
   rankedFrom: string
   rankedTo: string
-  topVotes: ParticipatedVote[]
+  topVotes: Top3VoteData[]
+}
+
+export interface Top3VoteData {
+  voteId: number
+  groupId: number
+  content: string
+  responsesCount: number
+  commentsCount: number
 }
