@@ -37,26 +37,34 @@ export const TopList = ({ data }: Props) => {
 
 // 현재 컴포넌트에서만 쓰이는 시간 변환 함수
 const getKSTDateRange = () => {
+  // const now = new Date('2025-07-18T08:59:00')
+  // const now = new Date('2025-07-17T23:59:00Z')
+
   const now = new Date()
 
-  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)
+  const nowUTC = new Date(now.getTime() + 9 * 60 * 60 * 1000)
 
-  const to =
-    now < todayMidnight ? todayMidnight : new Date(todayMidnight.getTime() + 24 * 60 * 60 * 1000)
+  const yyyy = nowUTC.getUTCFullYear()
+  const MM = nowUTC.getUTCMonth()
+  const dd = nowUTC.getUTCDate()
 
-  const from = new Date(to.getTime() - 24 * 60 * 60 * 1000)
+  const todayNineAMKST = Date.UTC(yyyy, MM, dd, 0, 0, 0)
+  const todayNineAM = new Date(todayNineAMKST)
 
-  const format = (d: Date) => {
-    const yyyy = d.getFullYear()
-    const MM = String(d.getMonth() + 1).padStart(2, '0')
-    const dd = String(d.getDate()).padStart(2, '0')
-    const hh = String(d.getHours()).padStart(2, '0')
-    const mm = String(d.getMinutes()).padStart(2, '0')
-    return `${yyyy}-${MM}-${dd} ${hh}:${mm}`
+  let from, to
+
+  if (nowUTC.getUTCHours() < 9) {
+    to = todayNineAM
+    from = new Date(todayNineAM.getTime() - 24 * 60 * 60 * 1000)
+  } else {
+    from = todayNineAM
+    to = new Date(todayNineAM.getTime() + 24 * 60 * 60 * 1000)
   }
 
+  const formatUTC = (d: Date) => d.toISOString().slice(0, 16).replace('T', ' ')
+
   return {
-    from: format(from),
-    to: format(to),
+    from: formatUTC(from),
+    to: formatUTC(to),
   }
 }
