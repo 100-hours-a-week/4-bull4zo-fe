@@ -3,7 +3,7 @@ name: React CI/CD - AWS Prod
 on:
   push:
     branches:
-      - main
+      # - main
 
 jobs:
   deploy:

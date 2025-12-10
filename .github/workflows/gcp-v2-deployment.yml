@@ -4,9 +4,9 @@ on:
   push:
     branches:
       # - main
-      - develop
-      - release/**
-      - cicd/**
+      # - develop
+      # - release/**
+      # - cicd/**
 
 jobs:
   build-and-deploy:

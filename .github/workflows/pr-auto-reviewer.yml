@@ -3,8 +3,8 @@ name: Auto assign reviewer
 on:
   pull_request:
     branches:
-      - main
-      - dev
+      # - main
+      # - dev
 
 
 permissions:
