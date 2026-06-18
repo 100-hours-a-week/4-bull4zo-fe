@@ -1,6 +1,6 @@
 # MOA (모두의 Agenda)
 
-<img width="250" height="250" alt="Image" src="https://github.com/user-attachments/assets/dad99664-f2f0-4658-8c91-7dc5ee583238" />
+<img width="500" height="281" alt="모아 배너" src="https://github.com/user-attachments/assets/0c32d517-5b6e-48d7-afa5-ed1ae4ddc155" />
 
 > 스와이프를 통해 다양한 투표에 참여해보세요!
 
